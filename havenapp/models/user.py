@@ -6,7 +6,6 @@ from django.utils.timezone import now
 
 
 class UserModel(models.Model):
-    id = models.IntegerField(primary_key=True)
     email = models.CharField(max_length=255, unique=True)
     username = models.CharField(max_length=100)
     password_hash = models.CharField(max_length=128)
