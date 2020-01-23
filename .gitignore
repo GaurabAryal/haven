@@ -58,3 +58,6 @@ docs/_build/
 
 haven/
 rand_test/
+
+# Code Editors
+.vscode/
