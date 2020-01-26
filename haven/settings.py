@@ -25,10 +25,9 @@ SECRET_KEY = 'fz8zw9pq%5iuow0g2eft@#kpm-_on0=eiei+t%1z^2sazt+@ma'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
+
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', '159.203.36.23']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -51,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'src.urls'
+ROOT_URLCONF = 'haven.urls'
 
 TEMPLATES = [
     {
@@ -69,23 +68,18 @@ TEMPLATES = [
     },
 ]
 
-
-
-
-WSGI_APPLICATION = 'src.wsgi.application'
-
+WSGI_APPLICATION = 'haven.wsgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': '127.0.0.1',
+        'USER': 'havenuser',
+        'PASSWORD': 'ponnumon',
         'NAME': 'haven',
-        'USER': 'gaurabaryal'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -107,7 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 GRAPHENE = {
-    'SCHEMA': 'src.schema.schema',
+    'SCHEMA': 'haven.schema.schema',
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ],
@@ -137,3 +131,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
