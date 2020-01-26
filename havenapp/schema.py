@@ -1,6 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
-from .models import UserModel
+# from .models import UserModel
+from django.contrib.auth import get_user_model
 
 
 # Create Input Object Types
@@ -13,7 +14,7 @@ class UserInput(graphene.InputObjectType):
 
 class UserType(DjangoObjectType):
     class Meta:
-        model = UserModel
+        model = get_user_model()
 
 
 class CreateUser(graphene.Mutation):
@@ -24,7 +25,8 @@ class CreateUser(graphene.Mutation):
 
     @staticmethod
     def mutate(root, info, input=None):
-        user_instance = UserModel(username=input.username, email=input.email, active=True)
+        user_instance = get_user_model()(username=input.username, email=input.email)
+        user_instance.set_password(input.password)
         user_instance.save()
         return CreateUser(user=user_instance)
 
@@ -35,7 +37,15 @@ class Mutation(graphene.ObjectType):
 
 class Query(graphene.ObjectType):
     users = graphene.List(UserType)
+    curr_user = graphene.Field(UserType)
 
-    @staticmethod
     def resolve_users(self, info, **kwargs):
-        return UserModel.objects.all()
+        return get_user_model().objects.all()
+
+    def resolve_curr_user(self, info):
+        user = info.conext.user
+        if user.is_anonymous:
+            raise Exception('Not logged in!')
+
+        return user
+
