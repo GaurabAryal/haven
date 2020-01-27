@@ -25,7 +25,7 @@ SECRET_KEY = 'fz8zw9pq%5iuow0g2eft@#kpm-_on0=eiei+t%1z^2sazt+@ma'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['haven-266301.appspot.com', '127.0.0.1']
 
 
 # Application definition
@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'src.urls'
+ROOT_URLCONF = 'haven.urls'
 
 TEMPLATES = [
     {
@@ -72,19 +72,45 @@ TEMPLATES = [
 
 
 
-WSGI_APPLICATION = 'src.wsgi.application'
+WSGI_APPLICATION = 'haven.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'haven',
-        'USER': 'gaurabaryal'
+if os.getenv('GAE_APPLICATION', None):
+    # Running on production App Engine, so connect to Google Cloud SQL using
+    # the unix socket at /cloudsql/<your-cloudsql-connection string>
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'HOST': '/cloudsql/haven-266301:us-central1:haven-instance',
+            'USER': 'haven-user',
+            'PASSWORD': 'ponnumon',
+            'NAME': 'haven',
+        }
     }
-}
+else:
+    # Running locally so connect to either a local MySQL instance or connect to
+    # Cloud SQL via the proxy. To start the proxy via command line:
+    #
+    #     $ cloud_sql_proxy -instances=[INSTANCE_CONNECTION_NAME]=tcp:3306
+    #
+    # See https://cloud.google.com/sql/docs/mysql-connect-proxy
+    DATABASES = {
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        #     'HOST': '34.70.134.74',
+        #     'USER': 'haven-user',
+        #     'PASSWORD': 'ponnumon',
+        #     'NAME': 'haven',
+        # }
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'haven',
+            'USER': 'gaurabaryal'
+        }
+    }
 
 
 # Password validation
@@ -107,7 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 GRAPHENE = {
-    'SCHEMA': 'src.schema.schema',
+    'SCHEMA': 'haven.schema.schema',
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ],
@@ -137,3 +163,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static'
