@@ -56,8 +56,10 @@ docs/_build/
 *.DS_Store
 *.idea
 
-haven/
 rand_test/
 
 # Code Editors
 .vscode/
+
+# Assets
+static/
