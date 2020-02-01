@@ -1,3 +1,13 @@
+.button-wrapper {
+  position: relative;
+}
+
+.error-message {
+  position: absolute;
+  color: #EA5635;
+  top: -30px;
+}
+
 .page-container {
   width: 100%;
   max-width: 700px;

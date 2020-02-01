@@ -135,7 +135,7 @@ export default class LoginPage extends React.Component {
                   }
                 />
               </div>
-              <div className="spacing-bottom--md">
+              <div className="spacing-bottom--lg">
                 <TextInput
                   label="Password"
                   value={password}
@@ -153,18 +153,20 @@ export default class LoginPage extends React.Component {
               >
                 Show password eye picture icon thing
               </button> */}
-              <Button
-                variant="primary"
-                disabled={error}
-                isFullWidth={true}
-                onClick={() => this.login(mutation)}
-              >
-                {isLogin ? 'Sign in' : 'Sign up'}
-              </Button>
+              <div class="button-wrapper">
+                {error ? <p class="error-message">Please enter valid fields</p> : null}
+                <Button
+                  variant="primary"
+                  disabled={error}
+                  isFullWidth={true}
+                  onClick={() => this.login(mutation)}
+                >
+                  {isLogin ? 'Sign in' : 'Sign up'}
+                </Button>
+              </div>
 
-              {error ? <div>Please enter valid fields</div> : null}
               {isLogin ? (
-                <div className="text-align--center spacing-top--md color--grey text--md">
+                <div className="text-align--center spacing-top--sm color--grey text--md">
                   Don't have an account?{' '}
                   <a onClick={() => this.setState({ isLogin: false })}>
                     Sign up

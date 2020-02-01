@@ -8,7 +8,7 @@ export default function Button(props) {
     <button
       class={props.isFullWidth ? `button button--full-width button--${props.variant}` : `button button--${props.variant}`}
       disabled={props.error}
-      onClick={() => props.onClick}
+      onClick={props.onClick}
     >
       {props.children}
     </button>
