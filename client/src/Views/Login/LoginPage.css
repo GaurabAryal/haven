@@ -1,4 +1,25 @@
-.loginPage-container {
-    display: flex;
-    flex-direction: column;
+.page-container {
+  width: 100%;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-container__heading {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form__name {
+  display: flex;
+  width: 100%;
 }

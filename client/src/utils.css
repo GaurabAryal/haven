@@ -1,0 +1,86 @@
+/* Reusable Utility Classes */
+
+.center--horizontally {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.text-align--center {
+  text-align: center;
+}
+
+/* Only use for metadata such as time stamps */
+.text--xs {
+  font-size: 14px;
+}
+
+.text--sm {
+  font-size: 16px;
+}
+
+/* Default text size */
+.text--md {
+  font-size: 18px;
+}
+
+.font-weight--regular {
+  font-weight: 400;
+}
+
+.font-weight--semi-bold {
+  font-weight: 500;
+}
+
+.font-weight--bold {
+  font-weight: 700;
+}
+
+.heading--sm {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.heading--md {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.heading--lg {
+  font-size: 36px;
+}
+
+.color--grey {
+  color: #555;
+}
+
+.spacing-bottom--xs {
+  margin-bottom: 10px;
+}
+
+.spacing-bottom--sm {
+  margin-bottom: 15px;
+}
+
+.spacing-bottom--md {
+  margin-bottom: 30px;
+}
+
+.spacing-bottom--lg {
+  margin-bottom: 60px;
+}
+
+.spacing-top--xs {
+  margin-top: 10px;
+}
+
+.spacing-top--sm {
+  margin-top: 15px;
+}
+
+.spacing-top--md {
+  margin-top: 30px;
+}
+
+.spacing-top--lg {
+  margin-top: 60px;
+}
