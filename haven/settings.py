@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'graphene_django',
     'havenapp',
+    'havenapp.schema'
 ]
 
 MIDDLEWARE = [
