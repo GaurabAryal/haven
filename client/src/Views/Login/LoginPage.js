@@ -153,8 +153,8 @@ export default class LoginPage extends React.Component {
               >
                 Show password eye picture icon thing
               </button> */}
-              <div class="button-wrapper">
-                {error ? <p class="error-message">Please enter valid fields</p> : null}
+              <div className="button-wrapper">
+                {error ? <p className="error-message">Please enter valid fields</p> : null}
                 <Button
                   variant="primary"
                   disabled={error}
@@ -173,7 +173,7 @@ export default class LoginPage extends React.Component {
                   </a>
                 </div>
               ) : (
-                <div className="text-align--center spacing-top--md color--grey text--md">
+                <div className="text-align--center spacing-top--md spacing-bottom--md color--grey text--md">
                   Already have an account?{' '}
                   <a onClick={() => this.setState({ isLogin: true })}>
                     Log in
