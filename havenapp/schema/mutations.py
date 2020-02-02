@@ -1,8 +1,9 @@
 import graphene
+from graphql import GraphQLError
 from django.contrib.auth import get_user_model
 
 from .inputs import UserInput, ProfileInput
-from .types import UserType, ProfileType
+from .types import UserNode, ProfileNode
 from havenapp.models import Profile
 
 # Mutation class to Create a User
@@ -10,7 +11,7 @@ class CreateUser(graphene.Mutation):
     class Arguments:
         user_input = UserInput(required=True)
 
-    user = graphene.Field(UserType)
+    user = graphene.Field(UserNode)
 
     def mutate(self, info, user_input=None):
         user = get_user_model()(
@@ -29,12 +30,12 @@ class CreateProfile(graphene.Mutation):
     class Arguments:
         profile_input = ProfileInput(required=True)
     
-    profile = graphene.Field(ProfileType)
+    profile = graphene.Field(ProfileNode)
 
     def mutate(self, info, profile_input=None):
         curr_user = info.context.user
         if curr_user.is_anonymous:
-            raise Exception('User must be logged in!')
+            raise GraphqlError('User must be logged in!')
 
         # Create profile object
         profile = Profile(

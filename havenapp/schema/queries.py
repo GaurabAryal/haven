@@ -1,15 +1,16 @@
 import graphene
+from graphql import GraphQLError
 from django.contrib.auth import get_user_model
 from havenapp.models import Profile
 
-from .types import UserType, ProfileType
+from .types import UserNode, ProfileNode
 
 # Query
 class Query(graphene.AbstractType):
-    users = graphene.List(UserType)
-    me = graphene.Field(UserType)
+    users = graphene.List(UserNode)
+    me = graphene.Field(UserNode)
 
-    profiles = graphene.List(ProfileType)
+    profiles = graphene.List(ProfileNode)
 
     def resolve_profiles(self, info, **kwargs):
         return Profile.objects.all()
@@ -20,6 +21,6 @@ class Query(graphene.AbstractType):
     def resolve_me(self, info):
         user = info.context.user
         if user.is_anonymous:
-            raise Exception('Not logged in!')
+            raise GraphQLError('User is not logged in!')
 
         return user
