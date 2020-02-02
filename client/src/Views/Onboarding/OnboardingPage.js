@@ -9,9 +9,11 @@ import { ReactComponent as HavenLogo } from './images/haven-logo-small.svg';
 
 export default class OnboardingContainer extends React.Component {
   state = {
-    step: 1,
-    matchmakingData: {},
-    profileData: {},
+    step: 2,
+    image: null,
+    imageUrl: '',
+    bio: '',
+    interests: '',
   };
 
   goToNextStep = () => {
@@ -25,12 +27,41 @@ export default class OnboardingContainer extends React.Component {
   goToPrevStep = () => {
     this.setState(prevState => {
       return {
-        step: prevState.step--,
+        step: prevState.step - 1,
       };
     });
   };
 
+  onUploadImage = files => {
+    const image = files[0];
+    this.setState({ image, imageUrl: URL.createObjectURL(image) });
+  };
+
+  onSubmit = () => {
+    this.goToNextStep();
+  };
+
+  onInputChange = (inputType, value) => {
+    this.setState({ [inputType]: value });
+  };
+
   render() {
+<<<<<<< HEAD
+    if (this.state.step === 1) {
+      return <MatchmakingScreen goToNextStep={this.goToNextStep} />;
+    } else if (this.state.step === 2) {
+      return (
+        <ProfileScreen
+          onSubmit={this.onSubmit}
+          onInputChange={this.onInputChange}
+          onUploadImage={this.onUploadImage}
+          imageUrl={this.state.imageUrl}
+          goToPrevStep={this.goToPrevStep}
+        />
+      );
+    }
+    return <WaitingScreen />;
+=======
     return (
       <div className="onboarding-page-container">
         <div className="haven-logo text-align--center spacing-top--lg spacing-bottom--md">
@@ -54,5 +85,6 @@ export default class OnboardingContainer extends React.Component {
         }
       </div>
     );
+>>>>>>> f0a5fbffd96e2d95b8301d91d9a07a56a6d5e9a0
   }
 }
