@@ -1,13 +1,16 @@
 import React from 'react';
+
 import MatchmakingScreen from './components/MatchmakingScreen/MatchmakingScreen';
 import ProfileScreen from './components/ProfileScreen/ProfileScreen';
 import WaitingScreen from './components/WaitingScreen/WaitingScreen';
 
 export default class OnboardingContainer extends React.Component {
   state = {
-    step: 1,
-    matchmakingData: {},
-    profileData: {},
+    step: 2,
+    image: null,
+    imageUrl: '',
+    bio: '',
+    interests: '',
   };
 
   goToNextStep = () => {
@@ -21,9 +24,22 @@ export default class OnboardingContainer extends React.Component {
   goToPrevStep = () => {
     this.setState(prevState => {
       return {
-        step: prevState.step--,
+        step: prevState.step - 1,
       };
     });
+  };
+
+  onUploadImage = files => {
+    const image = files[0];
+    this.setState({ image, imageUrl: URL.createObjectURL(image) });
+  };
+
+  onSubmit = () => {
+    this.goToNextStep();
+  };
+
+  onInputChange = (inputType, value) => {
+    this.setState({ [inputType]: value });
   };
 
   render() {
@@ -32,7 +48,10 @@ export default class OnboardingContainer extends React.Component {
     } else if (this.state.step === 2) {
       return (
         <ProfileScreen
-          goToNextStep={this.goToNextStep}
+          onSubmit={this.onSubmit}
+          onInputChange={this.onInputChange}
+          onUploadImage={this.onUploadImage}
+          imageUrl={this.state.imageUrl}
           goToPrevStep={this.goToPrevStep}
         />
       );

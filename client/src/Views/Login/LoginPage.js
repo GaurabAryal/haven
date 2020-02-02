@@ -1,6 +1,6 @@
 import React from 'react';
-import 'src/App.css'
-import 'src/utils.css'
+import 'src/App.css';
+import 'src/utils.css';
 import './LoginPage.css';
 import TextInput from 'src/components/TextInput/TextInput';
 import Button from 'src/components/Button/Button';
@@ -83,7 +83,6 @@ export default class LoginPage extends React.Component {
       firstName,
       lastName,
       error,
-      showPassword,
     } = this.state;
 
     return (
@@ -95,9 +94,9 @@ export default class LoginPage extends React.Component {
         {mutation => (
           <div className="page-container">
             <div className="haven-logo center--horizontally spacing-top--lg">
-              <HavenLogo/>
+              <HavenLogo />
             </div>
-          <h1 className="page-container__heading heading--lg text-align--center">
+            <h1 className="page-container__heading heading--lg text-align--center">
               Connect with caregivers of people with dementia and find
               your community
             </h1>
@@ -123,7 +122,7 @@ export default class LoginPage extends React.Component {
                       this.onInputChange('lastName', e.target.value)
                     }
                   />
-              </div>
+                </div>
               )}
 
               <div className="spacing-bottom--sm">
@@ -153,8 +152,12 @@ export default class LoginPage extends React.Component {
               >
                 Show password eye picture icon thing
               </button> */}
-              <div class="button-wrapper">
-                {error ? <p class="error-message">Please enter valid fields</p> : null}
+              <div className="button-wrapper">
+                {error ? (
+                  <p className="error-message">
+                    Please enter valid fields
+                  </p>
+                ) : null}
                 <Button
                   variant="primary"
                   disabled={error}
@@ -168,7 +171,9 @@ export default class LoginPage extends React.Component {
               {isLogin ? (
                 <div className="text-align--center spacing-top--sm color--grey text--md">
                   Don't have an account?{' '}
-                  <a onClick={() => this.setState({ isLogin: false })}>
+                  <a
+                    onClick={() => this.setState({ isLogin: false })}
+                  >
                     Sign up
                   </a>
                 </div>
