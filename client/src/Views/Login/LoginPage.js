@@ -123,7 +123,7 @@ export default class LoginPage extends React.Component {
                       this.onInputChange('lastName', e.target.value)
                     }
                   />
-              </div>
+                </div>
               )}
 
               <div className="spacing-bottom--sm">
