@@ -1,15 +1,14 @@
 import graphene
 import graphql_jwt
 
+import havenapp.schema.queries
+import havenapp.schema.mutations
 
-from havenapp import schema
-
-
-class Query(schema.Query, graphene.ObjectType):
+class Query(havenapp.schema.queries.Query, graphene.ObjectType):
     pass
 
 
-class Mutation(schema.Mutation, graphene.ObjectType):
+class Mutation(havenapp.schema.mutations.Mutation, graphene.ObjectType):
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
