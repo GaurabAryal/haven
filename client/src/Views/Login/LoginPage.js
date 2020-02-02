@@ -138,6 +138,7 @@ export default class LoginPage extends React.Component {
               <div className="spacing-bottom--lg">
                 <TextInput
                   label="Password"
+                  type="password"
                   value={password}
                   onChange={e =>
                     this.onInputChange('password', e.target.value)

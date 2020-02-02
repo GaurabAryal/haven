@@ -4,7 +4,6 @@ import 'src/utils.css'
 import './Button.css';
 
 export default function Button(props) {
-  console.log(props.isFullWidth)
   return (
     <button
       className={props.isFullWidth ? `button button--full-width button--${props.variant}` : `button button--${props.variant}`}
