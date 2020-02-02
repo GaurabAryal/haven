@@ -94,7 +94,7 @@ export default class LoginPage extends React.Component {
       >
         {mutation => (
           <div className="page-container">
-            <div className="haven-logo center--horizontally spacing-top--lg">
+            <div className="haven-logo center--horizontally spacing-top--md">
               <HavenLogo/>
             </div>
           <h1 className="page-container__heading heading--lg text-align--center">

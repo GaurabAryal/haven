@@ -67,8 +67,6 @@ export default class MatchmakingScreen extends React.Component {
 
     const isLocationFilled = Boolean(city && country);
 
-    console.log("what'", isLocationFilled, city, country);
-
     return (
       isFieldsFilled &&
       ((isLocationPreferred.yes && isLocationFilled) ||
