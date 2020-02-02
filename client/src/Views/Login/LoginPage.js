@@ -93,7 +93,7 @@ export default class LoginPage extends React.Component {
       >
         {mutation => (
           <div className="page-container">
-            <div className="haven-logo center--horizontally spacing-top--lg">
+            <div className="haven-logo center--horizontally spacing-top--md">
               <HavenLogo />
             </div>
             <h1 className="page-container__heading heading--lg text-align--center">
@@ -137,6 +137,7 @@ export default class LoginPage extends React.Component {
               <div className="spacing-bottom--lg">
                 <TextInput
                   label="Password"
+                  type="password"
                   value={password}
                   onChange={e =>
                     this.onInputChange('password', e.target.value)
@@ -178,7 +179,7 @@ export default class LoginPage extends React.Component {
                   </a>
                 </div>
               ) : (
-                <div className="text-align--center spacing-top--md color--grey text--md">
+                <div className="text-align--center spacing-top--md spacing-bottom--md color--grey text--md">
                   Already have an account?{' '}
                   <a onClick={() => this.setState({ isLogin: true })}>
                     Log in

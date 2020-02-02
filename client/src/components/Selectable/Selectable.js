@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ReactComponent as CheckmarkBadge } from 'src/Views/Onboarding/images/check-badge.svg';
 import './Selectable.css';
 
 export default function Selectable(props) {
   return props.children ? (
     <div
-      className={props.isSelected ? 'selected' : 'notSelected'}
+      className={props.isSelected ? 'selectable selectable--selected' : 'selectable'}
       onClick={props.onClick}
     >
+      <div className="checkmark-badge">
+        <CheckmarkBadge/>
+      </div>
       {props.children}
     </div>
   ) : null;

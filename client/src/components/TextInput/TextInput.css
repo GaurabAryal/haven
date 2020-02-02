@@ -1,3 +1,8 @@
+.form__name {
+  display: flex;
+  width: 100%;
+}
+
 .text-input-container {
   display: flex;
   flex-direction: column;
@@ -28,8 +33,11 @@ input {
   padding-right: 10px;
   border: 1px solid #aaa;
   border-radius: 5px;
+  transition-property: border-color background-color;
+  transition-duration: 150ms;
 }
 
 input:focus {
-
+  border-color: #525EC8;
+  background-color: #F6F7FF;
 }

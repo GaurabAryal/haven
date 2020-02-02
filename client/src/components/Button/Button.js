@@ -6,8 +6,8 @@ import './Button.css';
 export default function Button(props) {
   return (
     <button
-      class={props.isFullWidth ? `button button--full-width button--${props.variant}` : `button button--${props.variant}`}
-      disabled={props.error}
+      className={props.isFullWidth ? `button button--full-width button--${props.variant}` : `button button--${props.variant}`}
+      disabled={props.disabled}
       onClick={props.onClick}
     >
       {props.children}
@@ -18,7 +18,7 @@ export default function Button(props) {
 Button.propTypes = {
   variant: PropTypes.oneOf(['primary', 'secondary']).isRequired,
   children: PropTypes.string.isRequired,
-  error: PropTypes.bool,
+  disabled: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
   isFullWidth: PropTypes.bool,
 };
