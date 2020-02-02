@@ -84,3 +84,13 @@
 .spacing-top--lg {
   margin-top: 60px;
 }
+
+.button-wrapper {
+  position: relative;
+}
+
+.error-message {
+  position: absolute;
+  color: #EA5635;
+  top: -30px;
+}

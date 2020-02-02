@@ -12,6 +12,13 @@ h4 {
   margin-bottom: 0;
 }
 
+textarea,
+select,
+input,
+button {
+  outline: none;
+}
+
 /* Auto generated */
 .App {
   text-align: center;

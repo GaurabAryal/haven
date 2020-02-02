@@ -23,7 +23,15 @@
 }
 
 .button--secondary {
-  background-color: #E9EAF5;
+  background-color: #F6F7FF;
   border-color: #525EC8;
   color: #525EC8;
 }
+
+.button:disabled {
+  border-color: #bbb;
+  background-color: #bbb;
+  cursor: not-allowed;
+}
+
+.button:disabled
