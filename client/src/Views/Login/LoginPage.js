@@ -171,19 +171,21 @@ export default class LoginPage extends React.Component {
 
               {isLogin ? (
                 <div className="text-align--center spacing-top--sm color--grey text--md">
-                  Don't have an account?{' '}
-                  <a
+                  Don&apos;t have an account?{' '}
+                  <span
                     onClick={() => this.setState({ isLogin: false })}
                   >
                     Sign up
-                  </a>
+                  </span>
                 </div>
               ) : (
                 <div className="text-align--center spacing-top--md spacing-bottom--md color--grey text--md">
                   Already have an account?{' '}
-                  <a onClick={() => this.setState({ isLogin: true })}>
+                  <span
+                    onClick={() => this.setState({ isLogin: true })}
+                  >
                     Log in
-                  </a>
+                  </span>
                 </div>
               )}
             </div>

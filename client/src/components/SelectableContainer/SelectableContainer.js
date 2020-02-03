@@ -8,7 +8,11 @@ export default function SelectableContainer(props) {
       {Object.entries(props.options).map(
         ([option, label]) => (
           <Selectable
-            isSelected={props.value[option]}
+            isSelected={
+              props.multiselect
+                ? props.value[option]
+                : props.value === option
+            }
             onClick={() => props.onSelect(option)}
             key={option}
           >
@@ -22,7 +26,7 @@ export default function SelectableContainer(props) {
 }
 
 SelectableContainer.propTypes = {
-  value: PropTypes.object.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   options: PropTypes.object.isRequired,
   multiselect: PropTypes.bool,
   onSelect: PropTypes.func,

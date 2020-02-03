@@ -9,9 +9,14 @@ import { ReactComponent as HavenLogo } from './images/haven-logo-small.svg';
 
 export default class OnboardingContainer extends React.Component {
   state = {
-    step: 2,
+    step: 1,
     image: null,
     imageUrl: '',
+    position: '',
+    preferences: {},
+    isLocationPreferred: '',
+    city: '',
+    country: '',
     bio: '',
     interests: '',
   };
@@ -55,7 +60,15 @@ export default class OnboardingContainer extends React.Component {
           Step {this.state.step} of 2
         </h1>
         {this.state.step === 1 && (
-          <MatchmakingScreen goToNextStep={this.goToNextStep} />
+          <MatchmakingScreen
+            goToNextStep={this.goToNextStep}
+            onInputChange={this.onInputChange}
+            position={this.state.position}
+            preferences={this.state.preferences}
+            isLocationPreferred={this.state.isLocationPreferred}
+            city={this.state.city}
+            country={this.state.country}
+          />
         )}
         {this.state.step === 2 && (
           <ProfileScreen
