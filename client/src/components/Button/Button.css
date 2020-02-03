@@ -6,6 +6,8 @@
   border: 1px solid inherit;
   font-size: 16px;
   font-weight: 500;
+  transition-property: background-color color;
+  transition-duration: 150ms;
 }
 
 .button:hover {
@@ -22,6 +24,10 @@
   color: #fff;
 }
 
+.button--primary:hover {
+  background-color: #414DB7;
+}
+
 .button--secondary {
   background-color: #F6F7FF;
   border-color: #525EC8;
@@ -33,5 +39,3 @@
   background-color: #bbb;
   cursor: not-allowed;
 }
-
-.button:disabled

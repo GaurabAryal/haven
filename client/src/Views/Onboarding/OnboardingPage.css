@@ -3,5 +3,35 @@
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 100px;
+  margin-bottom: 0;
+}
+
+.step-counter-wrapper {
+  display: flex;
+}
+
+.step-counter {
+  transform: translateX(-66px);
+  transition: transform 500ms;
+}
+
+.arrow-left {
+  opacity: 0;
+  margin-right: 40px;
+  margin-top: 1px;
+  transition-property: opacity transform;
+  transition-duration: 300ms;
+}
+
+.arrow-left:hover {
+  transform: translateX(-5px);
+  cursor: pointer;
+}
+
+.step-counter--with-back-button .arrow-left {
+  opacity: 1;
+}
+
+.step-counter--with-back-button .step-counter {
+  transform: translateX(0);
 }

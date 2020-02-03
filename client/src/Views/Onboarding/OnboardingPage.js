@@ -6,6 +6,7 @@ import ProfileScreen from './components/ProfileScreen/ProfileScreen';
 import WaitingScreen from './components/WaitingScreen/WaitingScreen';
 import './OnboardingPage.css';
 import { ReactComponent as HavenLogo } from './images/haven-logo-small.svg';
+import { ReactComponent as ArrowLeft } from './images/arrow-left.svg';
 
 export default class OnboardingContainer extends React.Component {
   state = {
@@ -56,9 +57,18 @@ export default class OnboardingContainer extends React.Component {
         <div className="haven-logo text-align--center spacing-top--lg spacing-bottom--md">
           <HavenLogo />
         </div>
-        <h1 className="heading--md spacing-bottom--md">
-          Step {this.state.step} of 2
-        </h1>
+        <div className={
+          this.state.step > 1 ?
+          "step-counter--with-back-button step-counter-wrapper spacing-bottom--md" :
+          "step-counter-wrapper spacing-bottom--md"
+        }>
+          <div className="arrow-left" onClick={this.goToPrevStep}>
+            <ArrowLeft/>
+          </div>
+          <h1 className="step-counter heading--md">
+            Step {this.state.step} of 2
+          </h1>
+        </div>
         {this.state.step === 1 && (
           <MatchmakingScreen
             goToNextStep={this.goToNextStep}

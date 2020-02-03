@@ -179,7 +179,7 @@ export default class LoginPage extends React.Component {
                   </span>
                 </div>
               ) : (
-                <div className="text-align--center spacing-top--md spacing-bottom--md color--grey text--md">
+                <div className="text-align--center spacing-top--sm spacing-bottom--md color--grey text--md">
                   Already have an account?{' '}
                   <span
                     onClick={() => this.setState({ isLogin: true })}
