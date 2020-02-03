@@ -1,29 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class OnboardingContainer extends React.Component {
-  state = {
-    step: 1,
-    matchmakingData: {},
-    profileData: {},
-  };
-
-  goToNextStep = () => {
-    this.setState(prevState => {
-      return {
-        step: prevState.step++,
-      };
-    });
-  };
-
-  goToPrevStep = () => {
-    this.setState(prevState => {
-      return {
-        step: prevState.step--,
-      };
-    });
-  };
-
-  render() {
-    return <div />;
-  }
+export default function WaitingScreen(props) {
+  return (
+    <div>
+      <div>Hang tight {props.firstName}!</div>
+      <div>
+        We&apos;re currently looking for the perfect group match for
+        you. We&apos;ll email you once you&apos;ve been added to it.
+      </div>
+      <div>SPINNING THING</div>
+    </div>
+  );
 }
+
+WaitingScreen.propTypes = {
+  firstName: PropTypes.string,
+};

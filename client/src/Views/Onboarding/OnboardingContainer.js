@@ -3,6 +3,6 @@ import OnboardingPage from './OnboardingPage';
 
 export default class OnboardingContainer extends React.Component {
   render() {
-    return <OnboardingPage />;
+    return <OnboardingPage firstName="James" />;
   }
 }
