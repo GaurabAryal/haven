@@ -21,6 +21,7 @@
 /* Default text size */
 .text--md {
   font-size: 18px;
+  line-height: 1.4;
 }
 
 .font-weight--regular {
