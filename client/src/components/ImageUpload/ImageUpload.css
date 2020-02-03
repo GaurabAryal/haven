@@ -1,7 +1,23 @@
-.onboarding_Dropzone {
-    width: 153px;
-    height: 153px;
-    border: 1px solid black;
+.onboarding-dropzone {
+    width: 150px;
+    height: 150px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+}
+
+.onboarding-dropzone:hover {
+  cursor: pointer;
+}
+
+.onboarding-dropzone--no-image {
+  border: 1px solid #888;
+}
+
+.onboarding-dropzone--no-image .select-image {
+  /* add styles for hover choose new image (make it like messenger group chat picture) */
 }
 
 .plsFit {

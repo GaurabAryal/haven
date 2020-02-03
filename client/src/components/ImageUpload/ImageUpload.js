@@ -4,6 +4,7 @@ import Img from 'react-fix-image-orientation';
 
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
+import { ReactComponent as PlusIcon } from 'src/components/ImageUpload/images/plus-large.svg';
 
 export default class ImageUpload extends React.Component {
   render() {
@@ -11,19 +12,23 @@ export default class ImageUpload extends React.Component {
 
     return (
       <Dropzone
-        className="onboarding_Dropzone"
+        className="onboarding-dropzone"
         onDrop={this.props.onUpload}
         accept="image/*"
         multiple={false}
       >
         {({ getRootProps, getInputProps }) => (
           <section>
-            <div className="onboarding_Dropzone" {...getRootProps()}>
+            <div className={
+              imageUrl ?
+              "onboarding-dropzone" :
+              "onboarding-dropzone onboarding-dropzone--no-image"
+            } {...getRootProps()}>
               <input {...getInputProps()} />
               {imageUrl ? (
                 <Img className="plsFit" src={imageUrl} />
               ) : (
-                <p>+</p>
+                <PlusIcon/>
               )}
             </div>
           </section>
