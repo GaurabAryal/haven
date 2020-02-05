@@ -48,6 +48,16 @@ export default class OnboardingPage extends React.Component {
   };
 
   onSubmit = () => {
+    const { position, bio, interests, city, country } = this.state;
+
+    this.props.createProfile({
+      position,
+      bio,
+      interests,
+      city,
+      country,
+    });
+
     this.goToNextStep();
   };
 
@@ -108,4 +118,5 @@ export default class OnboardingPage extends React.Component {
 
 OnboardingPage.propTypes = {
   firstName: PropTypes.string,
+  createProfile: PropTypes.string,
 };

@@ -1,8 +1,6 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import './App.css';
-import LoginPage from './Views/Login/LoginPage';
-import OnboardingContainer from './Views/Onboarding/OnboardingContainer';
 import ApolloClient from 'apollo-boost';
 import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
@@ -11,9 +9,11 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
 } from 'react-router-dom';
-import { AUTH_TOKEN } from 'src/constants';
+
+import PrivateRoute from 'src/components/PrivateRoute/PrivateRoute';
+import LoginPage from './Views/Login/LoginPage';
+import OnboardingContainer from './Views/Onboarding/OnboardingContainer';
 
 const httpLink = createHttpLink({
   uri: 'http://159.203.36.23/graphql/',
@@ -38,27 +38,6 @@ const client = new ApolloClient({
 
 function Test() {
   return <div>test</div>;
-}
-
-function PrivateRoute({ component: Component, ...rest }) {
-  const authToken = localStorage.getItem(AUTH_TOKEN);
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        authToken ? (
-          <Component {...props} />
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: props.location },
-            }}
-          />
-        )
-      }
-    />
-  );
 }
 
 function App() {
