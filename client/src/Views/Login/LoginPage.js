@@ -11,22 +11,37 @@ import PropTypes from 'prop-types';
 
 import { AUTH_TOKEN } from 'src/constants';
 
-const LOGIN_MUTATION = gql`
-  mutation LoginMutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+const REGISTER_MUTATION = gql`
+  mutation RegisterMutation(
+    $firstName: String!
+    $lastName: String!
+    $email: String!
+    $password: String!
+  ) {
+    register(
+      userInput: {
+        email: $email
+        password: $password
+        firstName: $firstName
+        lastName: $lastName
+      }
+    ) {
+      user {
+        id
+        email
+        password
+      }
+    }
+
+    login(username: $email, password: $password) {
       token
     }
   }
 `;
 
-const SIGNUP_MUTATION = gql`
-  mutation SignupMutation(
-    $email: String!
-    $password: String!
-    $firstName: String!
-    $lastName: String!
-  ) {
-    signup(email: $email, password: $password) {
+const LOGIN_MUTATION = gql`
+  mutation LoginMutation($email: String!, $password: String!) {
+    login(username: $email, password: $password) {
       token
     }
   }
@@ -87,7 +102,7 @@ export default class LoginPage extends React.Component {
 
     return (
       <Mutation
-        mutation={isLogin ? LOGIN_MUTATION : SIGNUP_MUTATION}
+        mutation={isLogin ? LOGIN_MUTATION : REGISTER_MUTATION}
         variables={{ email, password, firstName, lastName }}
         onCompleted={data => this._confirm(data)}
       >
