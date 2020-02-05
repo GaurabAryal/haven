@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Mutation } from '@apollo/react-components';
-import { gql, graphql, compose } from 'react-apollo';
+import { graphql } from '@apollo/react-hoc';
+import { compose } from 'recompose';
+import gql from 'graphql-tag';
 
 import OnboardingPage from './OnboardingPage';
 

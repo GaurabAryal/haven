@@ -1,7 +1,7 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 import './App.css';
-import ApolloClient from 'apollo-boost';
+import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -16,7 +16,7 @@ import LoginPage from './Views/Login/LoginPage';
 import OnboardingContainer from './Views/Onboarding/OnboardingContainer';
 
 const httpLink = createHttpLink({
-  uri: 'http://159.203.36.23/graphql/',
+  uri: 'http://159.203.36.23/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {

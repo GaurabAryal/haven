@@ -20,7 +20,7 @@ const REGISTER_MUTATION = gql`
   ) {
     register(
       userInput: {
-        email: $firstName
+        email: $email
         password: $password
         firstName: $firstName
         lastName: $lastName
@@ -33,7 +33,7 @@ const REGISTER_MUTATION = gql`
       }
     }
 
-    login(email: $email, password: $password) {
+    login(username: $email, password: $password) {
       token
     }
   }
@@ -41,7 +41,7 @@ const REGISTER_MUTATION = gql`
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+    login(username: $email, password: $password) {
       token
     }
   }

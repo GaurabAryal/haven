@@ -30,5 +30,5 @@ export default function PrivateRoute({
 
 PrivateRoute.propTypes = {
   location: PropTypes.object,
-  component: PropTypes.node,
+  component: PropTypes.any,
 };
