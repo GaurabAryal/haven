@@ -16,7 +16,7 @@ import {
 import { AUTH_TOKEN } from 'src/constants';
 
 const httpLink = createHttpLink({
-  uri: 'https://haven-266301.appspot.com/graphql/',
+  uri: 'http://159.203.36.23/graphql/',
 });
 
 const authLink = setContext((_, { headers }) => {
