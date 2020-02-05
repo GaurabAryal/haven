@@ -2,7 +2,6 @@ import graphene
 
 # Create Input Object Types
 class UserInput(graphene.InputObjectType):
-    username = graphene.String(required=True)
     email = graphene.String(required=True)
     password = graphene.String(required=True)
     first_name = graphene.String(required=True)
