@@ -6,22 +6,25 @@ from .inputs import UserInput, ProfileInput
 from .types import UserNode, ProfileNode
 from havenapp.models import Profile
 
-# Mutation class to Create a User
-class CreateUser(graphene.Mutation):
+# Mutation class to register user
+class Register(graphene.Mutation):
     class Arguments:
         user_input = UserInput(required=True)
 
     user = graphene.Field(UserNode)
 
     def mutate(self, info, user_input=None):
-        user = get_user_model()(
-            username=user_input.username,
-            email=user_input.email,
-            first_name=user_input.first_name,
-            last_name=user_input.last_name,
-        )
-        user.set_password(user_input.password)
-        user.save()
+        try:
+            user = get_user_model()(
+                username=user_input.username,
+                email=user_input.email,
+                first_name=user_input.first_name,
+                last_name=user_input.last_name,
+            )
+            user.set_password(user_input.password)
+            user.save()
+        except Exception:
+            raise GraphQLError("")
 
         return CreateUser(user=user)
 

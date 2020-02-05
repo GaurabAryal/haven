@@ -26,7 +26,12 @@ const SIGNUP_MUTATION = gql`
     $firstName: String!
     $lastName: String!
   ) {
-    signup(email: $email, password: $password) {
+    createUser(userInput: {
+      email: $email, 
+      password: $password
+      firstName: $firstName, 
+      lastName: $lastName
+    }) {
       token
     }
   }
