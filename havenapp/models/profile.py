@@ -5,5 +5,8 @@ from django.contrib.auth.models import User
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     position = models.CharField(max_length=50)
-    bio = models.TextField(blank=True, null=True)
-    interests = models.TextField(blank=True, null=True)
+    bio = models.TextField(null=True)
+    interests = models.TextField(null=True)
+    country = models.CharField(max_length=50, null=True)
+    city = models.CharField(max_length=50, null=True)
+

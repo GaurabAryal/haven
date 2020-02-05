@@ -1,4 +1,6 @@
 import graphene
+import graphql.error
+
 from graphql import GraphQLError
 from django.contrib.auth import get_user_model
 
@@ -23,10 +25,10 @@ class Register(graphene.Mutation):
             )
             user.set_password(user_input.password)
             user.save()
-        except Exception:
-            raise GraphQLError("")
+        except Exception as e:
+            raise GraphQLError(e)
 
-        return CreateUser(user=user)
+        return Register(user=user)
 
 # Mutation to create User Profile
 class CreateProfile(graphene.Mutation):
@@ -36,19 +38,32 @@ class CreateProfile(graphene.Mutation):
     profile = graphene.Field(ProfileNode)
 
     def mutate(self, info, profile_input=None):
+        # Check if user is logged in
         curr_user = info.context.user
         if curr_user.is_anonymous:
             raise GraphqlError('User must be logged in!')
 
-        # Create profile object
-        profile = Profile(
-            position=profile_input.position,
-            bio=profile_input.bio,
-            interests=profile_input.interests,
-            user=curr_user
-        )
+        # Check if profile exists
+        if Profile.objects.filter(user=curr_user).exists():
+            profile = Profile.objects.get(user=curr_user)
+            profile.position=profile_input.position
+            profile.bio=profile_input.bio
+            profile.interests=profile_input.interests
+            profile.country = profile_input.country
+            profile.city = profile_input.city
+            profile.save()
 
-        profile.save()
+        else:
+            # Create profile object
+            profile = Profile(
+                position=profile_input.position,
+                bio=profile_input.bio,
+                interests=profile_input.interests,
+                country=profile_input.country,
+                city=profile_input.city,
+                user=curr_user
+            )
+            profile.save()
 
         return CreateProfile(
             profile=profile
@@ -56,5 +71,5 @@ class CreateProfile(graphene.Mutation):
 
 # Registers Users into Mutation
 class Mutation(graphene.ObjectType):
-    create_user = CreateUser.Field()
+    register = Register.Field()
     create_profile = CreateProfile.Field()
