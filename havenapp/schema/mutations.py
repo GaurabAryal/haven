@@ -19,6 +19,7 @@ class Register(graphene.Mutation):
         try:
             user = get_user_model()(
                 email=user_input.email,
+                username=user_input.email,
                 first_name=user_input.first_name,
                 last_name=user_input.last_name,
             )
