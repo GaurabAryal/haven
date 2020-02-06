@@ -11,17 +11,18 @@ import {
   Route,
 } from 'react-router-dom';
 
+import { AUTH_TOKEN } from 'src/constants';
 import PrivateRoute from 'src/components/PrivateRoute/PrivateRoute';
 import LoginPage from './Views/Login/LoginPage';
 import OnboardingContainer from './Views/Onboarding/OnboardingContainer';
 
 const httpLink = createHttpLink({
-  uri: 'http://159.203.36.23/graphql',
+  uri: 'http://159.203.36.23/graphql/',
 });
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem(AUTH_TOKEN);
   // return the headers to the context so httpLink can read them
   return {
     headers: {
