@@ -12,19 +12,20 @@ export default function ProfileScreen(props) {
   return (
     <>
       <div>
-        <h2 className="heading--lg font-weight--regular spacing-bottom--sm">Almost done!</h2>
+        <h2 className="heading--lg font-weight--regular spacing-bottom--sm">
+          Almost done!
+        </h2>
         <p className="text--md font-weight--regular">
           Introduce yourself with a short bio and add a profile
-          picture to get started. Don't worry, you can change these later!
+          picture to get started. Don&apos;t worry, you can change
+          these later!
         </p>
         <OnboardingRow label="Describe yourself">
           <TextArea
             value={props.bio}
             initialRowHeight={3}
             placeholder="What makes you unique? What should people know about you?"
-            onChange={e =>
-              props.onInputChange('bio', e.target.value)
-            }
+            onChange={e => props.onInputChange('bio', e.target.value)}
           />
         </OnboardingRow>
         <OnboardingRow label="What are your interests and hobbies?">
@@ -44,7 +45,12 @@ export default function ProfileScreen(props) {
           />
         </OnboardingRow>
         <div className="button-wrapper spacing-top--lg spacing-bottom--md">
-          <Button variant="primary" isFullWidth={true} onClick={props.onSubmit} className="test">
+          <Button
+            variant="primary"
+            isFullWidth={true}
+            onClick={props.onSubmit}
+            className="test"
+          >
             Get started
           </Button>
         </div>

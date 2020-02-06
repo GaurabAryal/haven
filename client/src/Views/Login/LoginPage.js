@@ -55,7 +55,7 @@ export default class LoginPage extends React.Component {
     firstName: '',
     lastName: '',
     showPassword: false,
-    error: false,
+    isError: false,
   };
 
   _saveUserData = token => {
@@ -63,9 +63,9 @@ export default class LoginPage extends React.Component {
   };
 
   _confirm = async data => {
-    const { token } = this.state.login ? data.login : data.signup;
+    const { token } = this.state.isLogin ? data.login : data.register;
     this._saveUserData(token);
-    this.props.history.push(`/`);
+    this.props.history.push(`/onboarding`);
   };
 
   login = mutation => {
@@ -78,16 +78,19 @@ export default class LoginPage extends React.Component {
     } = this.state;
 
     if (!email || !password) {
-      this.setState({ error: true });
+      this.setState({ isError: true });
     } else if (!isLogin && (!firstName || !lastName)) {
-      this.setState({ error: true });
+      this.setState({ isError: true });
     } else {
       mutation();
     }
   };
 
   onInputChange = (inputType, value) => {
-    this.setState({ [inputType]: value, error: false });
+    this.setState({
+      [inputType]: value,
+      isError: false,
+    });
   };
 
   render() {
@@ -97,7 +100,7 @@ export default class LoginPage extends React.Component {
       password,
       firstName,
       lastName,
-      error,
+      isError,
     } = this.state;
 
     return (
@@ -105,61 +108,72 @@ export default class LoginPage extends React.Component {
         mutation={isLogin ? LOGIN_MUTATION : REGISTER_MUTATION}
         variables={{ email, password, firstName, lastName }}
         onCompleted={data => this._confirm(data)}
+        onError={() => this.setState({ isError: true })}
       >
-        {mutation => (
-          <div className="page-container">
-            <div className="haven-logo center--horizontally spacing-top--md">
-              <HavenLogo />
-            </div>
-            <h1 className="page-container__heading heading--lg text-align--center">
-              Connect with caregivers of people with dementia and find
-              your community
-            </h1>
-            <div className="form-container">
-              <h2 className="heading--md text-align--center spacing-bottom--md">
-                {isLogin ? 'Sign in' : 'Sign up to get started'}
-              </h2>
-              {!isLogin && (
-                <div className="form__name spacing-bottom--sm">
+        {(mutation, { error }) => {
+          const errorMessage =
+            isError && error && error.graphQLErrors[0]
+              ? error.graphQLErrors[0].message
+              : isError
+              ? 'Please enter valid fields'
+              : null;
+          return (
+            <div className="page-container">
+              <div className="haven-logo center--horizontally spacing-top--md">
+                <HavenLogo />
+              </div>
+              <h1 className="page-container__heading heading--lg text-align--center">
+                Connect with caregivers of people with dementia and
+                find your community
+              </h1>
+              <div className="form-container">
+                <h2 className="heading--md text-align--center spacing-bottom--md">
+                  {isLogin ? 'Sign in' : 'Sign up to get started'}
+                </h2>
+                {!isLogin && (
+                  <div className="form__name spacing-bottom--sm">
+                    <TextInput
+                      label="First name"
+                      value={firstName}
+                      isHalfWidth={true}
+                      onChange={e =>
+                        this.onInputChange(
+                          'firstName',
+                          e.target.value,
+                        )
+                      }
+                    />
+                    <TextInput
+                      label="Last name"
+                      value={lastName}
+                      isHalfWidth={true}
+                      onChange={e =>
+                        this.onInputChange('lastName', e.target.value)
+                      }
+                    />
+                  </div>
+                )}
+
+                <div className="spacing-bottom--sm">
                   <TextInput
-                    label="First name"
-                    value={firstName}
-                    isHalfWidth={true}
+                    label="Email"
+                    value={email}
                     onChange={e =>
-                      this.onInputChange('firstName', e.target.value)
-                    }
-                  />
-                  <TextInput
-                    label="Last name"
-                    value={lastName}
-                    isHalfWidth={true}
-                    onChange={e =>
-                      this.onInputChange('lastName', e.target.value)
+                      this.onInputChange('email', e.target.value)
                     }
                   />
                 </div>
-              )}
-
-              <div className="spacing-bottom--sm">
-                <TextInput
-                  label="Email"
-                  value={email}
-                  onChange={e =>
-                    this.onInputChange('email', e.target.value)
-                  }
-                />
-              </div>
-              <div className="spacing-bottom--lg">
-                <TextInput
-                  label="Password"
-                  type="password"
-                  value={password}
-                  onChange={e =>
-                    this.onInputChange('password', e.target.value)
-                  }
-                />
-              </div>
-              {/* <button
+                <div className="spacing-bottom--lg">
+                  <TextInput
+                    label="Password"
+                    type="password"
+                    value={password}
+                    onChange={e =>
+                      this.onInputChange('password', e.target.value)
+                    }
+                  />
+                </div>
+                {/* <button
                 onClick={() =>
                   this.setState(prevState => ({
                     showPassword: !prevState.showPassword,
@@ -168,44 +182,51 @@ export default class LoginPage extends React.Component {
               >
                 Show password eye picture icon thing
               </button> */}
-              <div className="button-wrapper">
-                {error ? (
-                  <p className="error-message">
-                    Please enter valid fields
-                  </p>
-                ) : null}
-                <Button
-                  variant="primary"
-                  disabled={error}
-                  isFullWidth={true}
-                  onClick={() => this.login(mutation)}
-                >
-                  {isLogin ? 'Sign in' : 'Sign up'}
-                </Button>
-              </div>
+                <div className="button-wrapper">
+                  <p className="error-message">{errorMessage}</p>
+                  <Button
+                    variant="primary"
+                    disabled={isError}
+                    isFullWidth={true}
+                    onClick={() => this.login(mutation)}
+                  >
+                    {isLogin ? 'Sign in' : 'Sign up'}
+                  </Button>
+                </div>
 
-              {isLogin ? (
-                <div className="text-align--center spacing-top--sm color--grey text--md">
-                  Don&apos;t have an account?{' '}
-                  <span
-                    onClick={() => this.setState({ isLogin: false })}
-                  >
-                    Sign up
-                  </span>
-                </div>
-              ) : (
-                <div className="text-align--center spacing-top--sm spacing-bottom--md color--grey text--md">
-                  Already have an account?{' '}
-                  <span
-                    onClick={() => this.setState({ isLogin: true })}
-                  >
-                    Log in
-                  </span>
-                </div>
-              )}
+                {isLogin ? (
+                  <div className="text-align--center spacing-top--sm color--grey text--md">
+                    Don&apos;t have an account?{' '}
+                    <span
+                      onClick={() =>
+                        this.setState({
+                          isLogin: false,
+                          isError: false,
+                        })
+                      }
+                    >
+                      Sign up
+                    </span>
+                  </div>
+                ) : (
+                  <div className="text-align--center spacing-top--sm spacing-bottom--md color--grey text--md">
+                    Already have an account?{' '}
+                    <span
+                      onClick={() =>
+                        this.setState({
+                          isLogin: true,
+                          isError: false,
+                        })
+                      }
+                    >
+                      Log in
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        }}
       </Mutation>
     );
   }
