@@ -46,7 +46,10 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/login" component={LoginPage} />
-          <Route path="/onboarding" component={OnboardingContainer} />
+          <PrivateRoute
+            path="/onboarding"
+            component={OnboardingContainer}
+          />
           <PrivateRoute path="/" component={Test} />
         </Switch>
       </Router>

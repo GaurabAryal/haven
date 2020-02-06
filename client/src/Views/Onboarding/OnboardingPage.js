@@ -47,18 +47,26 @@ export default class OnboardingPage extends React.Component {
     this.setState({ image, imageUrl: URL.createObjectURL(image) });
   };
 
-  onSubmit = () => {
-    const { position, bio, interests, city, country } = this.state;
+  // onSubmit = () => {
+  //   const { position, bio, interests, city, country } = this.state;
 
-    this.props.createProfile({
-      position,
-      bio,
-      interests,
-      city,
-      country,
+  //   this.createProfile();
+  //   this.goToNextStep();
+  // };
+
+  createProfile = async () => {
+    const { position, bio, interests, city, country } = this.state;
+    await this.props.createProfileMutation({
+      variables: {
+        position,
+        bio,
+        interests,
+        city,
+        country,
+      },
     });
 
-    this.goToNextStep();
+    this.props.history.push(`/`);
   };
 
   onInputChange = (inputType, value) => {
@@ -100,7 +108,7 @@ export default class OnboardingPage extends React.Component {
             )}
             {this.state.step === 2 && (
               <ProfileScreen
-                onSubmit={this.onSubmit}
+                onSubmit={this.createProfile}
                 onInputChange={this.onInputChange}
                 onUploadImage={this.onUploadImage}
                 imageUrl={this.state.imageUrl}
@@ -118,5 +126,6 @@ export default class OnboardingPage extends React.Component {
 
 OnboardingPage.propTypes = {
   firstName: PropTypes.string,
-  createProfile: PropTypes.string,
+  createProfileMutation: PropTypes.func,
+  history: PropTypes.object,
 };

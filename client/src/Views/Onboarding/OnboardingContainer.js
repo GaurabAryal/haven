@@ -31,39 +31,47 @@ const CREATE_PROFILE_MUTATION = gql`
   }
 `;
 
-class OnboardingContainer extends React.Component {
-  createProfile = async profileInput => {
-    const { position, bio, interests, city, country } = profileInput;
-    await this.props.createProfileMutation({
-      variables: {
-        position,
-        bio,
-        interests,
-        city,
-        country,
-      },
-    });
+// class OnboardingContainer extends React.Component {
+//   createProfile = async profileInput => {
+//     const { position, bio, interests, city, country } = profileInput;
+//     await this.props.createProfileMutation({
+//       variables: {
+//         position,
+//         bio,
+//         interests,
+//         city,
+//         country,
+//       },
+//     });
 
-    this.props.history.push(`/`);
-  };
+//     this.props.history.push(`/`);
+//   };
 
-  render() {
-    return (
-      <Mutation>
-        <OnboardingPage
-          firstName="James"
-          createProfile={this.createProfile}
-        />
-      </Mutation>
-    );
-  }
-}
+//   _confirm(data) {
+//     console.log('data', data);
+//   }
 
-OnboardingContainer.propTypes = {
-  createProfileMutation: PropTypes.func,
-  history: PropTypes.object,
-};
+//   render() {
+//     return (
+//       <Mutation
+//         mutation={CREATE_PROFILE_MUTATION}
+//         variables={{ position, password, firstName, lastName }}
+//         onCompleted={data => this._confirm(data)}
+//       >
+//         <OnboardingPage
+//           firstName="James"
+//           createProfile={this.createProfile}
+//         />
+//       </Mutation>
+//     );
+//   }
+// }
+
+// OnboardingContainer.propTypes = {
+//   createProfileMutation: PropTypes.func,
+//   history: PropTypes.object,
+// };
 
 export default compose(
   graphql(CREATE_PROFILE_MUTATION, { name: 'createProfileMutation' }),
-)(OnboardingContainer);
+)(OnboardingPage);
