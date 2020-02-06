@@ -63,8 +63,7 @@ export default class LoginPage extends React.Component {
   };
 
   _confirm = async data => {
-    const { token } = this.state.isLogin ? data.login : data.register;
-    this._saveUserData(token);
+    this._saveUserData(data.login?.token || '');
     this.props.history.push(`/onboarding`);
   };
 

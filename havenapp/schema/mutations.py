@@ -1,6 +1,4 @@
 import graphene
-import graphql.error
-
 from graphql import GraphQLError
 from django.contrib.auth import get_user_model
 
@@ -16,17 +14,14 @@ class Register(graphene.Mutation):
     user = graphene.Field(UserNode)
 
     def mutate(self, info, user_input=None):
-        try:
-            user = get_user_model()(
-                email=user_input.email,
-                username=user_input.email,
-                first_name=user_input.first_name,
-                last_name=user_input.last_name,
-            )
-            user.set_password(user_input.password)
-            user.save()
-        except Exception as e:
-            raise GraphQLError(e)
+        user = get_user_model()(
+            email=user_input.email,
+            username=user_input.email,
+            first_name=user_input.first_name,
+            last_name=user_input.last_name,
+        )
+        user.set_password(user_input.password)
+        user.save()
 
         return Register(user=user)
 
@@ -41,14 +36,16 @@ class CreateProfile(graphene.Mutation):
         # Check if user is logged in
         curr_user = info.context.user
         if curr_user.is_anonymous:
-            raise GraphqlError('User must be logged in!')
+            raise GraphQLError('User must be logged in!')
+
+        profile = Profile.objects.filter(user=curr_user)
 
         # Check if profile exists
-        if Profile.objects.filter(user=curr_user).exists():
+        if profile.exists():
             profile = Profile.objects.get(user=curr_user)
             profile.position=profile_input.position
-            profile.bio=profile_input.bio
-            profile.interests=profile_input.interests
+            profile.bio = profile_input.bio
+            profile.interests = profile_input.interests
             profile.country = profile_input.country
             profile.city = profile_input.city
             profile.save()
@@ -64,6 +61,10 @@ class CreateProfile(graphene.Mutation):
                 user=curr_user
             )
             profile.save()
+
+        # This ensures that everything goes well
+        profile.onboarding_done = True
+        profile.save()
 
         return CreateProfile(
             profile=profile

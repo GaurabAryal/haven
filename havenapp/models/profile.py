@@ -9,4 +9,4 @@ class Profile(models.Model):
     interests = models.TextField(null=True)
     country = models.CharField(max_length=50, null=True)
     city = models.CharField(max_length=50, null=True)
-
+    onboarding_done = models.BooleanField(default=False)
