@@ -27,7 +27,7 @@ DEBUG = True
 
 # Application definition
 
-ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', '159.203.36.23']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '159.203.36.23']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,18 +39,18 @@ INSTALLED_APPS = [
     'graphene_django',
     'havenapp',
     'havenapp.schema',
-    'corsheaders'
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'haven.urls'
@@ -129,19 +129,23 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
-# CORS
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    'https://localhost:3000',
-    'http://127.0.0.1:3000',
-    'https://127.0.0.1:3000',
-]
+# # CORS
+# CORS_ORIGIN_WHITELIST = [
+#     'http://localhost:3000',
+#     'https://localhost:3000',
+#     'http://127.0.0.1:3000',
+#     'https://127.0.0.1:3000',
+# ]
 
-CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
+# Graphql-JWT
+GRAPHQL_JWT = {
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer'
+}

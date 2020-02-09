@@ -12,4 +12,5 @@ class ProfileInput(graphene.InputObjectType):
     bio = graphene.String()
     interests = graphene.String()
     country = graphene.String()
-    city= graphene.String()
+    city = graphene.String()
+    
