@@ -17,7 +17,7 @@ import LoginPage from './Views/Login/LoginPage';
 import OnboardingContainer from './Views/Onboarding/OnboardingContainer';
 
 const httpLink = createHttpLink({
-  uri: 'http://127.0.0.1:8000/graphql/',
+  uri: 'http://159.203.36.23/graphql/',
 });
 
 const authLink = setContext((_, { headers }) => {
