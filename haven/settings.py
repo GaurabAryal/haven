@@ -11,22 +11,28 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv
+from pathlib import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+env_path = Path(BASE_DIR) / '.env'
+load_dotenv(dotenv_path=env_path)
+
+# Application ENV
+APP_ENV = os.getenv('APP_ENV', 'default')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'fz8zw9pq%5iuow0g2eft@#kpm-_on0=eiei+t%1z^2sazt+@ma'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', default=True)
 
 # Application definition
-
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '159.203.36.23']
 
 INSTALLED_APPS = [
@@ -77,10 +83,10 @@ WSGI_APPLICATION = 'haven.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': '127.0.0.1',
-        'USER': 'havenuser',
-        'PASSWORD': 'ponnumon',
-        'NAME': 'haven',
+        'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+        'USER': os.getenv('DB_USER','havenuser'),
+        'PASSWORD': os.getenv('DB_PASS', 'ponnumon'),
+        'NAME': os.getenv('DB_NAME', 'haven'),
     }
 }
 
