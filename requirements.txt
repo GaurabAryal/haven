@@ -13,6 +13,7 @@ promise==2.3
 psycopg2==2.8.4
 psycopg2-binary==2.8.4
 PyJWT==1.7.1
+python-dotenv==0.11.0
 pytz==2019.3
 Rx==1.6.1
 singledispatch==3.4.0.3
