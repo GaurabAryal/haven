@@ -9,6 +9,7 @@ import TextArea from 'src/components/TextArea/TextArea';
 import Button from 'src/components/Button/Button';
 
 export default function ProfileScreen(props) {
+  window.scrollTo(0, 0);
   return (
     <>
       <div>
@@ -38,7 +39,7 @@ export default function ProfileScreen(props) {
             }
           />
         </OnboardingRow>
-        <OnboardingRow label="Profile picture">
+        <OnboardingRow label="Add a profile picture">
           <ImageUpload
             onUpload={props.onUploadImage}
             imageUrl={props.imageUrl}
