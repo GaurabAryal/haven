@@ -15,15 +15,3 @@ textarea:focus {
   border-color: #525EC8;
   background-color: #F6F7FF;
 }
-
-.textarea--height-1 {
-  min-height: 40px;
-}
-
-.textarea--height-2 {
-  min-height: 60px;
-}
-
-.textarea--height-3 {
-  min-height: 90px;
-}

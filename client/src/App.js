@@ -15,6 +15,7 @@ import { AUTH_TOKEN } from 'src/constants';
 import PrivateRoute from 'src/components/PrivateRoute/PrivateRoute';
 import LoginPage from './Views/Login/LoginPage';
 import OnboardingContainer from './Views/Onboarding/OnboardingContainer';
+import TestPage from './Views/Test/TestPage';
 
 const httpLink = createHttpLink({
   uri: 'http://159.203.36.23/graphql/',
@@ -38,7 +39,7 @@ const client = new ApolloClient({
 });
 
 function Test() {
-  return <div>test</div>;
+  return <TestPage/>;
 }
 
 function App() {
