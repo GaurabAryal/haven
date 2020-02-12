@@ -14,7 +14,7 @@ import { ReactComponent as ArrowLeft } from './images/arrow-left.svg';
 
 export default class OnboardingPage extends React.Component {
   state = {
-    step: 1,
+    step: this.props.initialStep || 1,
     image: null,
     imageUrl: '',
     position: '',
@@ -59,7 +59,11 @@ export default class OnboardingPage extends React.Component {
       },
     });
 
-    this.props.history.push(`/`);
+    this.setState(prevState => {
+      return {
+        step: prevState.step + 1,
+      };
+    });
   };
 
   onInputChange = (inputType, value) => {
@@ -123,4 +127,5 @@ OnboardingPage.propTypes = {
   firstName: PropTypes.string,
   createProfileMutation: PropTypes.func,
   history: PropTypes.object,
+  initialStep: PropTypes.number,
 };
