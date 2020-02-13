@@ -24,6 +24,14 @@
   line-height: 1.4;
 }
 
+.text--lg {
+  font-size: 24px;
+}
+
+.text--xl {
+  font-size: 36px;
+}
+
 .font-weight--regular {
   font-weight: 400;
 }
