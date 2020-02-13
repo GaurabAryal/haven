@@ -26,7 +26,8 @@ class GroupQuery(graphene.AbstractType):
         if user.is_anonymous:
             raise GraphQLError('User is not logged in!')
         
-        members = user.group_set.first().users.all()
+        members = user.group_set.first().members.all()
+        print(members)
         return members
     
 # Queries related to Users
