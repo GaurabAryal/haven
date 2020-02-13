@@ -14,7 +14,7 @@ import { ReactComponent as ArrowLeft } from './images/arrow-left.svg';
 
 export default class OnboardingPage extends React.Component {
   state = {
-    step: this.props.initialStep || 1,
+    step: this.props.groupMembersAmount ? 3 : 1,
     image: null,
     imageUrl: '',
     position: '',
@@ -73,7 +73,7 @@ export default class OnboardingPage extends React.Component {
   render() {
     return (
       <div className="onboarding-page-container">
-        {this.state.step !== 3 ? (
+        {this.state.step < 3 ? (
           <>
             <div className="haven-logo text-align--center spacing-top--lg spacing-bottom--md">
               <HavenLogo />
@@ -116,7 +116,15 @@ export default class OnboardingPage extends React.Component {
             )}
           </>
         ) : (
-          <WaitingScreen firstName={this.props.firstName} />
+          <WaitingScreen
+            firstName={this.props.firstName}
+            goToNextStep={this.goToNextStep}
+            isWaiting={this.state.step === 3}
+            startPolling={this.props.startPolling}
+            stopPolling={this.props.stopPolling}
+            groupMembersAmount={this.props.groupMembersAmount}
+            goToApp={this.props.goToApp}
+          />
         )}
       </div>
     );
@@ -126,6 +134,9 @@ export default class OnboardingPage extends React.Component {
 OnboardingPage.propTypes = {
   firstName: PropTypes.string,
   createProfileMutation: PropTypes.func,
-  history: PropTypes.object,
+  goToApp: PropTypes.func,
   initialStep: PropTypes.number,
+  startPolling: PropTypes.func,
+  stopPolling: PropTypes.func,
+  groupMembersAmount: PropTypes.number,
 };

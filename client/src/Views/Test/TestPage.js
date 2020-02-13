@@ -1,12 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import 'src/App.css';
 import ChatMessage from 'src/components/ChatMessage/ChatMessage';
 
 export default class TestPage extends React.Component {
-  state = {
-
-  };
+  state = {};
 
   render() {
     return (
@@ -28,6 +25,4 @@ export default class TestPage extends React.Component {
   }
 }
 
-TestPage.propTypes = {
-
-};
+TestPage.propTypes = {};

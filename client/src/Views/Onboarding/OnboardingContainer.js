@@ -10,8 +10,11 @@ import OnboardingPage from './OnboardingPage';
 const GET_USER_QUERY = gql`
   {
     me {
-      profile {
-        onboardingDone
+      firstName
+    }
+    membership {
+      members {
+        id
       }
     }
   }
@@ -43,18 +46,22 @@ const CREATE_PROFILE_MUTATION = gql`
 
 const OnboardingPageContainer = props => (
   <Query query={GET_USER_QUERY}>
-    {({ loading, error, data }) => {
+    {({ loading, error, data, startPolling, stopPolling }) => {
       if (loading) return 'Loading...';
       if (error) return `Error! ${error.message}`;
 
-      const isOnboardingDone =
-        data.me?.profile?.onboardingDone || false;
+      const groupMembersAmount =
+        data.membership[0]?.members?.length || 0;
+      const firstName = data.me?.firstName || '';
 
       return (
         <OnboardingPage
-          firstName="James"
-          initialStep={isOnboardingDone ? 3 : null}
+          firstName={firstName}
+          groupMembersAmount={groupMembersAmount}
           createProfileMutation={props.createProfileMutation}
+          startPolling={startPolling}
+          stopPolling={stopPolling}
+          goToApp={() => this.props.history.push('/')}
         />
       );
     }}

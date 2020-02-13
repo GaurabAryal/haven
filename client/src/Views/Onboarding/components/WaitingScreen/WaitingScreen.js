@@ -2,19 +2,53 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './WaitingScreen.css';
 
-export default function WaitingScreen(props) {
-  return (
-    <div className="waiting-container">
-      <h2 className="text--xl font-weight--regular spacing-bottom--md">Hang tight {props.firstName}!</h2>
-      <p className="text--md spacing-bottom--lg">
-        We&apos;re currently looking for the perfect group match for
-        you. We&apos;ll email you once you&apos;ve been added to it.
-      </p>
-      <div className="loadingspinner"></div>
-    </div>
-  );
+export default class WaitingScreen extends React.Component {
+  timer = null;
+
+  componentDidMount() {
+    if (this.props.isWaiting) {
+      this.props.startPolling(1000);
+      this.timer = setTimeout(() => {
+        this.props.stopPolling();
+        this.props.goToNextStep();
+      }, 10000);
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.groupMembersAmount >= 3) {
+      this.props.goToApp();
+    }
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
+
+  render() {
+    const { isWaiting } = this.props;
+    const bodyText = isWaiting
+      ? "We're currently looking for the perfect group match for you. Please wait a few seconds."
+      : "We can't find you a group right now. You can close this tab, we'll email you once you've been added to it.";
+
+    return (
+      <div className="waiting-container">
+        <h2 className="text--xl font-weight--regular spacing-bottom--md">
+          Hang tight {this.props.firstName}!
+        </h2>
+        <p className="text--md spacing-bottom--lg">{bodyText}</p>
+        {isWaiting && <div className="loadingspinner" />}
+      </div>
+    );
+  }
 }
 
 WaitingScreen.propTypes = {
   firstName: PropTypes.string,
+  isWaiting: PropTypes.bool,
+  goToNextStep: PropTypes.func,
+  startPolling: PropTypes.func,
+  stopPolling: PropTypes.func,
+  groupMembersAmount: PropTypes.number,
+  goToApp: PropTypes.func,
 };
