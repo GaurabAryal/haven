@@ -39,7 +39,7 @@ const QUESTION_OPTIONS = {
     [options.position.UNKNOWN]: 'Prefer not to say',
   },
   preferences: {
-    [options.preferences.ALL]: 'All',
+    [options.preferences.ALL]: 'Any',
     [options.preferences.FRIENDS]: 'Make new friends',
     [options.preferences.SOCIALIZING]: 'General socializing',
     [options.preferences.MENTEE]: 'Seeking mentorship',
@@ -144,7 +144,35 @@ export default class MatchmakingScreen extends React.Component {
       this.onInputChange(type, { [options.preferences.ALL]: true });
       return;
     }
+
     const selectedValues = Object.assign(this.props[type], {});
+
+    // This series of if statements make sure someone can't seek and provide mentorship/professional advice at the same time
+    if (
+      option === options.preferences.MENTEE &&
+      selectedValues[options.preferences.MENTOR]
+    ) {
+      selectedValues[options.preferences.MENTOR] = false;
+      this.onInputChange(type, selectedValues);
+    } else if (
+      option === options.preferences.MENTOR &&
+      selectedValues[options.preferences.MENTEE]
+    ) {
+      selectedValues[options.preferences.MENTEE] = false;
+      this.onInputChange(type, selectedValues);
+    } else if (
+      option === options.preferences.SEEK_PROF &&
+      selectedValues[options.preferences.GIVE_PROF]
+    ) {
+      selectedValues[options.preferences.GIVE_PROF] = false;
+      this.onInputChange(type, selectedValues);
+    } else if (
+      option === options.preferences.GIVE_PROF &&
+      selectedValues[options.preferences.SEEK_PROF]
+    ) {
+      selectedValues[options.preferences.SEEK_PROF] = false;
+      this.onInputChange(type, selectedValues);
+    }
 
     if (this.props[type].all) {
       selectedValues.all = false;
