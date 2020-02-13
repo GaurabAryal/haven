@@ -1,9 +1,14 @@
 import graphene
+import graphql_jwt
+import asgiref
+import channels
 from graphql import GraphQLError
 from django.contrib.auth import get_user_model
 
 from .inputs import UserInput, ProfileInput
 from .types import UserNode, ProfileNode
+from .subscriptions import OnNewChatMessage
+from .types import chats
 from havenapp.models import Profile, Group, Membership
 
 
@@ -81,7 +86,50 @@ class CreateProfile(graphene.Mutation):
             profile=profile
         )
 
+
+class SendChatMessage(graphene.Mutation, name="SendChatMessagePayload"):
+    """Send chat message."""
+
+    ok = graphene.Boolean()
+
+    class Arguments:
+        """Mutation arguments."""
+
+        chatroom = graphene.String()
+        text = graphene.String()
+        author = graphene.String()
+
+    def mutate(self, info, chatroom, text, author):
+        """Mutation "resolver" - store and broadcast a message."""
+        # Use the username from the connection scope if authorized.
+        username = author
+        # Store a message.
+        chats[chatroom].append({"chatroom": chatroom, "text": text, "author": username})
+        # Notify subscribers.
+        OnNewChatMessage.new_chat_message(chatroom=chatroom, text=text, author=username)
+
+        return SendChatMessage(ok=True)
+
+
+class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
+    user = graphene.Field(UserNode)
+
+    @classmethod
+    def resolve(cls, root, info, **kwargs):
+
+        # Use Channels to login, in other words to put proper data to
+        # the session stored in the scope. The `info.context` is
+        # practically just a wrapper around Channel `self.scope`, but
+        # the `login` method requires dict, so use `_asdict`.
+        # asgiref.sync.async_to_sync(channels.auth.login)(info.context._asdict(), info.context.user)
+        # Save the session, `channels.auth.login` does not do this.
+        # info.context.session.save()
+
+        return cls(user=info.context.user)
+
 # Registers Users into Mutation
 class Mutation(graphene.ObjectType):
     register = Register.Field()
     create_profile = CreateProfile.Field()
+    login = ObtainJSONWebToken.Field()
+    sendChatMessage = SendChatMessage.Field()

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'havenapp',
     'havenapp.schema',
     'corsheaders',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -77,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'haven.wsgi.application'
+ASGI_APPLICATION = 'haven.routing.application'
 
 # Database
 DATABASES = {
@@ -155,3 +156,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 GRAPHQL_JWT = {
     'JWT_AUTH_HEADER_PREFIX': 'Bearer'
 }
+
+
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
+# ASGI_APPLICATION = "haven.wsgi._application"
+
