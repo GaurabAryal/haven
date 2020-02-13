@@ -3,6 +3,8 @@ import graphql_jwt
 
 import havenapp.schema.queries
 import havenapp.schema.mutations
+import havenapp.schema.subscription
+
 
 class Query(havenapp.schema.queries.Query, graphene.ObjectType):
     pass
@@ -15,4 +17,8 @@ class Mutation(havenapp.schema.mutations.Mutation, graphene.ObjectType):
     pass
 
 
-schema = graphene.Schema(query=Query, mutation=Mutation)
+class Subscription(havenapp.schema.subscription, graphene.ObjectType):
+    pass
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation, subscription=Subscription)

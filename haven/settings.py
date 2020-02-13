@@ -77,7 +77,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'haven.wsgi.application'
+# WSGI_APPLICATION = 'haven.wsgi.application'
+
+ASGI_APPLICATION = "haven.wsgi.application"
 
 # Database
 DATABASES = {
