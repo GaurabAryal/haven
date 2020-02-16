@@ -4,7 +4,8 @@ from django.contrib.auth import get_user_model
 
 from .inputs import UserInput, ProfileInput
 from .types import UserNode, ProfileNode
-from havenapp.models import Profile
+from havenapp.models import Profile, Group, Membership
+
 
 # Mutation class to register user
 class Register(graphene.Mutation):
@@ -65,6 +66,16 @@ class CreateProfile(graphene.Mutation):
         # This ensures that everything goes well
         profile.onboarding_done = True
         profile.save()
+
+        # Temp create group
+        temp_group = Group.objects.create()
+        temp_group.save()
+        temp_member = Membership(user=curr_user, group=temp_group)
+        temp_member.save()
+        # REMOVE LATER
+
+        print(temp_group)
+        print(temp_member)
 
         return CreateProfile(
             profile=profile

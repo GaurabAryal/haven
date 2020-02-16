@@ -1,12 +1,37 @@
 import graphene
 from graphql import GraphQLError
 from django.contrib.auth import get_user_model
-from havenapp.models import Profile
+from havenapp.models import Profile, Group, Membership
 
-from .types import UserNode, ProfileNode
+from .types import UserNode, ProfileNode, GroupNode, MembershipNode
 
-# Query
-class Query(graphene.AbstractType):
+# Queries related to Groups
+class GroupQuery(graphene.AbstractType):
+    groups = graphene.List(GroupNode)
+    membership = graphene.List(GroupNode)
+    group_users = graphene.List(UserNode)
+
+    def resolve_groups(self, info, **kwargs):
+        return Group.objects.all()
+
+    def resolve_membership(self, info, **kwargs):
+        user = info.context.user
+        if user.is_anonymous:
+            raise GraphQLError('User is not logged in!')
+        
+        return user.group_set.all()
+    
+    def resolve_group_users(self, info, **kwargs):
+        user = info.context.user
+        if user.is_anonymous:
+            raise GraphQLError('User is not logged in!')
+        
+        members = user.group_set.first().members.all()
+        print(members)
+        return members
+    
+# Queries related to Users
+class UserQuery(graphene.AbstractType):
     users = graphene.List(UserNode)
     me = graphene.Field(UserNode)
 
@@ -24,3 +49,8 @@ class Query(graphene.AbstractType):
             raise GraphQLError('User is not logged in!')
 
         return user
+
+# Query
+class Query(GroupQuery, UserQuery, graphene.ObjectType):
+    pass
+
