@@ -1,0 +1,15 @@
+.sidebar-container {
+    background: #E5E5E5;
+    height: 100vh;
+    width: 400px;
+}
+
+.sidebar-pill {
+    border: solid 1px black;
+    margin: 5px;
+    text-decoration: none;
+}
+
+.sidebar-pill_selected {
+    border: solid 1px red
+}

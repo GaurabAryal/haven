@@ -58,6 +58,12 @@ export default class LoginPage extends React.Component {
     isError: false,
   };
 
+  componentDidMount() {
+    if (localStorage[AUTH_TOKEN]) {
+      localStorage.removeItem(AUTH_TOKEN);
+    }
+  }
+
   _saveUserData = token => {
     localStorage.setItem(AUTH_TOKEN, token);
   };
