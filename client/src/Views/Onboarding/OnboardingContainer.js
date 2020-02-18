@@ -4,8 +4,10 @@ import { graphql } from '@apollo/react-hoc';
 import { compose } from 'recompose';
 import gql from 'graphql-tag';
 import { Query } from '@apollo/react-components';
+import { Redirect } from 'react-router-dom';
 
 import OnboardingPage from './OnboardingPage';
+import { MIN_GROUP_SIZE } from 'src/constants';
 
 const GET_USER_QUERY = gql`
   {
@@ -13,6 +15,7 @@ const GET_USER_QUERY = gql`
       firstName
     }
     membership {
+      id
       members {
         id
       }
@@ -47,12 +50,23 @@ const CREATE_PROFILE_MUTATION = gql`
 const OnboardingPageContainer = props => (
   <Query query={GET_USER_QUERY}>
     {({ loading, error, data, startPolling, stopPolling }) => {
-      if (loading) return 'Loading...';
+      if (loading) return <div />;
       if (error) return `Error! ${error.message}`;
 
       const groupMembersAmount =
         data.membership[0]?.members?.length || 0;
       const firstName = data.me?.firstName || '';
+
+      if (groupMembersAmount >= MIN_GROUP_SIZE) {
+        return (
+          <Redirect
+            to={{
+              pathname: `/${data.membership[0].id}`,
+              state: { from: props.location },
+            }}
+          />
+        );
+      }
 
       return (
         <OnboardingPage
@@ -61,7 +75,7 @@ const OnboardingPageContainer = props => (
           createProfileMutation={props.createProfileMutation}
           startPolling={startPolling}
           stopPolling={stopPolling}
-          goToApp={() => this.props.history.push('/')}
+          goToApp={() => props.history.push('/')}
         />
       );
     }}
@@ -70,6 +84,8 @@ const OnboardingPageContainer = props => (
 
 OnboardingPageContainer.propTypes = {
   createProfileMutation: PropTypes.func,
+  history: PropTypes.object,
+  location: PropTypes.object,
 };
 
 export default compose(

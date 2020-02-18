@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './WaitingScreen.css';
+import { MIN_GROUP_SIZE } from 'src/constants';
 
 export default class WaitingScreen extends React.Component {
   timer = null;
@@ -16,7 +17,7 @@ export default class WaitingScreen extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.groupMembersAmount >= 3) {
+    if (this.props.groupMembersAmount >= MIN_GROUP_SIZE) {
       this.props.goToApp();
     }
   }

@@ -3,3 +3,4 @@ export const UPLOAD_URL =
   'https://api.cloudinary.com/v1_1/dix3wp2wae/upload';
 export const UPLOAD_PRESET = 'ywgbrqps';
 export const UPLOAD_API_KEY = '643182473321327';
+export const MIN_GROUP_SIZE = 3;
