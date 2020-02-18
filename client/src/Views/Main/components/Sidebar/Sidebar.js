@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Button from 'src/components/Button/Button';
 import { withRouter } from 'react-router-dom';
+
 import { AUTH_TOKEN } from 'src/constants';
+import { getMemberNames } from 'src/utils';
 
 import './Sidebar.css';
 
@@ -11,18 +13,6 @@ class Sidebar extends React.Component {
   state = {
     selectedGroup: null,
   };
-
-  getMemberNames(group) {
-    let membersString = '';
-    group.members.forEach((member, index) => {
-      if (index === group.members.length - 1) {
-        membersString += member.firstName;
-      } else {
-        membersString += `${member.firstName}, `;
-      }
-    });
-    return membersString;
-  }
 
   renderGroups() {
     const id = this.props.match.params?.id || null;
@@ -36,7 +26,7 @@ class Sidebar extends React.Component {
           className={`sidebar-pill ${id === group.id &&
             'sidebar-pill_selected'}`}
         >
-          <div>{this.getMemberNames(group)}</div>
+          <div>{getMemberNames(group.members)}</div>
           <div>the latest chat that ill figure out later</div>
         </div>
       </Link>
