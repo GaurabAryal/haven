@@ -2,18 +2,28 @@ import graphene
 import graphene_django
 from graphql import GraphQLError
 from django.contrib.auth import get_user_model
-from havenapp.models import Profile, Group, Membership
+from havenapp.models import Profile, Group, Membership, MatchHistory
 
-from .types import UserNode, ProfileNode, GroupNode, MembershipNode, chats, Message
+from .types import UserNode, ProfileNode, GroupNode, MembershipNode, chats, Message, MatchHistoryNode
+
+# Queries related to MatchHistory
+class MatchHistoryQuery(graphene.AbstractType):
+    match_history = graphene.List(MatchHistoryNode, user_id=graphene.String(required=True), completed=graphene.Boolean())
+
+    def resolve_match_history(self, info, user_id, completed=None, **kwargs):
+        if completed is None:
+            return MatchHistory.objects.filter(user__id=user_id)
+        
+        return MatchHistory.objects.filter(user__id=user_id, completed=completed)
+
 
 # Queries related to Groups
 class GroupQuery(graphene.AbstractType):
-    groups = graphene.List(GroupNode)
+    all_groups = graphene.List(GroupNode)
     membership = graphene.List(GroupNode)
-    group_users = graphene.List(UserNode)
-    group = graphene.Field(GroupNode, group_id=graphene.String())
+    group = graphene.Field(GroupNode, group_id=graphene.String(required=True))
 
-    def resolve_groups(self, info, **kwargs):
+    def resolve_all_groups(self, info, **kwargs):
         return Group.objects.all()
 
     def resolve_group(self, info, group_id):
@@ -26,17 +36,9 @@ class GroupQuery(graphene.AbstractType):
 
         return user.group_set.all()
 
-    def resolve_group_users(self, info, **kwargs):
-        user = info.context.user
-        if user.is_anonymous:
-            raise GraphQLError('User is not logged in!')
-
-        members = user.group_set.first().members.all()
-        return members
-
 # Queries related to Users
 class UserQuery(graphene.AbstractType):
-    user = graphene.Field(UserNode, user_id=graphene.String())
+    user = graphene.Field(UserNode, user_id=graphene.String(required=True))
     me = graphene.Field(UserNode)
 
     profiles = graphene.List(ProfileNode)
@@ -55,7 +57,7 @@ class UserQuery(graphene.AbstractType):
         return user
 
 # Query
-class Query(GroupQuery, UserQuery, graphene.ObjectType):
+class Query(GroupQuery, UserQuery, MatchHistoryQuery, graphene.ObjectType):
     history = graphene.List(Message, chatroom=graphene.String())
 
     def resolve_history(self, info, chatroom):

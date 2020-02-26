@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 from django.contrib.auth import get_user_model
-from havenapp.models import Profile, Group, Membership
+from havenapp.models import Profile, Group, Membership, MatchHistory
 
 from typing import DefaultDict, List
 
@@ -33,3 +33,7 @@ class MembershipNode(DjangoObjectType):
     class Meta:
         model = Membership
         fields = ('group', 'user')
+
+class MatchHistoryNode(DjangoObjectType):
+    class Meta:
+        model = MatchHistory
