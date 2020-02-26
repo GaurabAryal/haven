@@ -36,7 +36,7 @@ class GroupQuery(graphene.AbstractType):
 
 # Queries related to Users
 class UserQuery(graphene.AbstractType):
-    users = graphene.List(UserNode)
+    user = graphene.Field(UserNode, user_id=graphene.String())
     me = graphene.Field(UserNode)
 
     profiles = graphene.List(ProfileNode)
@@ -44,8 +44,8 @@ class UserQuery(graphene.AbstractType):
     def resolve_profiles(self, info, **kwargs):
         return Profile.objects.all()
 
-    def resolve_users(self, info, **kwargs):
-        return get_user_model().objects.all()
+    def resolve_user(self, info, user_id):
+        return get_user_model().objects.get(pk=user_id)
 
     def resolve_me(self, info):
         user = info.context.user
