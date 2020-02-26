@@ -4,13 +4,16 @@ import asgiref
 import channels
 from graphql import GraphQLError
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from django.db.models import Count, Q
 
 from .inputs import UserInput, ProfileInput
-from .types import UserNode, ProfileNode
+from .types import UserNode, ProfileNode, GroupNode
 from .subscriptions import OnNewChatMessage
 from .types import chats
-from havenapp.models import Profile, Group, Membership
-
+from havenapp.models import Profile, Group, Membership, MatchHistory
+from havenapp.matchmaking.matching import UserPreferences, find_best_match, join_group, join_new_group
+from havenapp.constants.constant import UserStatus
 
 # Mutation class to register user
 class Register(graphene.Mutation):
@@ -69,23 +72,63 @@ class CreateProfile(graphene.Mutation):
             profile.save()
 
         # This ensures that everything goes well
-        profile.onboarding_done = True
         profile.save()
-
-        # Temp create group
-        temp_group = Group.objects.create()
-        temp_group.save()
-        temp_member = Membership(user=curr_user, group=temp_group)
-        temp_member.save()
-        # REMOVE LATER
-
-        print(temp_group)
-        print(temp_member)
 
         return CreateProfile(
             profile=profile
         )
 
+class MatchGroup(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.String(required=True)
+        preference_list = graphene.List(graphene.Int)
+    
+    group = graphene.Field(GroupNode)
+    status = graphene.String()
+
+    def mutate(self, info, user_id, preference_list=[]):
+        # Randomly match user to a group, if no preference (also, should not be the last person to join group)
+        # Do the matchmaking
+        match_entry = None
+        user = User.objects.get(id=user_id)
+        try:
+            user_pref = UserPreferences(user_id, preference_list)
+        except:
+            raise GraphQLError('Please enter valid preferences')
+       
+        match_entry = MatchHistory.objects.create(user=user, preferences=user_pref.preference_flags)
+        match_entry.save()
+        
+        try:             
+            # Create an match history entry for successful parsing
+            profile = Profile.objects.filter(user=user)
+            profile.update(status=UserStatus.SEARCHING.value)
+
+        except:
+            raise GraphQLError('Error updating user profile')
+
+        # Match to Group
+        group_id: str = find_best_match(user_pref)
+        print(f'Group id: {group_id}')
+        if not group_id:
+            group_id = join_new_group(user_pref)
+            status = "Joined new group"
+        else:
+            try:
+                group_id = join_group(user_pref, group_id)
+                status = "Joined existing group"
+            except:
+                raise GraphQLError('Error matching user with a group, please try again later')
+        
+        # Update Entry
+        match_entry.completed = True
+        match_entry.save()
+
+        g = Group.objects.get(id=group_id)
+        return MatchGroup(
+            group=g,
+            status=status,
+        )
 
 class SendChatMessage(graphene.Mutation, name="SendChatMessagePayload"):
     """Send chat message."""
@@ -133,3 +176,4 @@ class Mutation(graphene.ObjectType):
     create_profile = CreateProfile.Field()
     login = ObtainJSONWebToken.Field()
     sendChatMessage = SendChatMessage.Field()
+    match_group = MatchGroup.Field()
