@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Button from 'src/components/Button/Button';
 import { withRouter } from 'react-router-dom';
+import { MIN_GROUP_SIZE } from 'src/constants';
 
 import { AUTH_TOKEN } from 'src/constants';
 import { getMemberNames } from 'src/utils';
@@ -16,21 +17,23 @@ class Sidebar extends React.Component {
 
   renderGroups() {
     const id = this.props.match.params?.id || null;
-    return this.props.groups.map(group => (
-      <Link
-        to={`/${group.id}`}
-        key={group.id}
-        style={{ textDecoration: 'none', color: 'black' }}
-      >
-        <div
-          className={`sidebar-pill ${id === group.id &&
-            'sidebar-pill_selected'}`}
+    return this.props.groups.map(group =>
+      group.members?.length >= MIN_GROUP_SIZE ? (
+        <Link
+          to={`/${group.id}`}
+          key={group.id}
+          style={{ textDecoration: 'none', color: 'black' }}
         >
-          <div>{getMemberNames(group.members)}</div>
-          <div>the latest chat that ill figure out later</div>
-        </div>
-      </Link>
-    ));
+          <div
+            className={`sidebar-pill ${id === group.id &&
+              'sidebar-pill_selected'}`}
+          >
+            <div>{getMemberNames(group.members)}</div>
+            <div>the latest chat that ill figure out later</div>
+          </div>
+        </Link>
+      ) : null,
+    );
   }
 
   logout = () => {
@@ -44,7 +47,7 @@ class Sidebar extends React.Component {
   render() {
     return (
       <div className="sidebar-container">
-        <div onClick={() => this.props.history.push('/')}>Haven</div>
+        <div>Haven</div>
         {this.renderGroups()}
         <Button
           variant="secondary"
