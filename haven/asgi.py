@@ -8,10 +8,12 @@ https://docs.djangoproject.com/en/2.2/howto/deployment/wsgi/
 """
 
 import os
+import django.apps.config
 from channels.routing import get_default_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'haven.settings')
 
+django.setup()
 application = get_default_application()
 
 # _application = channels.routing.ProtocolTypeRouter(
