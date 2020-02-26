@@ -1,9 +1,10 @@
 import graphene
+import graphene_django
 from graphql import GraphQLError
 from django.contrib.auth import get_user_model
 from havenapp.models import Profile, Group, Membership
 
-from .types import UserNode, ProfileNode, GroupNode, MembershipNode
+from .types import UserNode, ProfileNode, GroupNode, MembershipNode, chats, Message
 
 # Queries related to Groups
 class GroupQuery(graphene.AbstractType):
@@ -18,18 +19,18 @@ class GroupQuery(graphene.AbstractType):
         user = info.context.user
         if user.is_anonymous:
             raise GraphQLError('User is not logged in!')
-        
+
         return user.group_set.all()
-    
+
     def resolve_group_users(self, info, **kwargs):
         user = info.context.user
         if user.is_anonymous:
             raise GraphQLError('User is not logged in!')
-        
+
         members = user.group_set.first().members.all()
         print(members)
         return members
-    
+
 # Queries related to Users
 class UserQuery(graphene.AbstractType):
     users = graphene.List(UserNode)
@@ -52,5 +53,10 @@ class UserQuery(graphene.AbstractType):
 
 # Query
 class Query(GroupQuery, UserQuery, graphene.ObjectType):
-    pass
+    history = graphene.List(Message, chatroom=graphene.String())
+
+    def resolve_history(self, info, chatroom):
+        """Return chat history."""
+        del info
+        return chats[chatroom] if chatroom in chats else []
 

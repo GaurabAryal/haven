@@ -17,9 +17,27 @@ from django.urls import path
 from django.contrib import admin
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
+from django.conf.urls import url
+from havenapp.websocket import consumer
+import pathlib
+import django
+
+
+
+# def graphiql(request):
+#     """Trivial view to serve the `graphiql.html` file."""
+#     del request
+#     graphiql_filepath = pathlib.Path(__file__).absolute().parent / "graphiql.html"
+#     with open(graphiql_filepath) as f:
+#         return django.http.response.HttpResponse(f.read())
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+]
+
+
+websocket_urlpatterns = [
+    url(r'^ws/chat/$', consumer.MyGraphqlWsConsumer),
 ]
