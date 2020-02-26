@@ -59,7 +59,7 @@ export default class MainPageContainer extends React.Component {
                   <div>hi2</div>
                 </Route>
                 <Route exact path="/">
-                  <div>hi3</div>
+                  <Redirect to={`/${data.membership[0].id}`} />
                 </Route>
               </Switch>
             </div>
