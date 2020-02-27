@@ -1,0 +1,30 @@
+.profile-pic-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.sidebar-pill__profile-pics-wrapper {
+  position: absolute;
+}
+
+.profile-pic-placeholder--sm {
+  width: 35px;
+  height: 35px;
+  font-size: 18px;
+}
+
+.profile-pic-placeholder--md {
+  width: 45px;
+  height: 45px;
+  font-size: 24px;
+}
+
+.profile-pic-placeholder--lg {
+  width: 60px;
+  height: 60px;
+  font-size: 30px;
+}
