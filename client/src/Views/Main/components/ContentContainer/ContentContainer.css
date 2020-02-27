@@ -1,0 +1,13 @@
+.contentContainer-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.contentContainer-header {
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    height: 110px;
+    border-bottom: 1px solid #DDD;
+}
