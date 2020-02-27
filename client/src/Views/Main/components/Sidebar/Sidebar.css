@@ -1,15 +1,35 @@
 .sidebar-container {
-    background: #E5E5E5;
-    height: 100vh;
-    width: 400px;
+  background: #fafafa;
+  border-right: 1px solid #ddd;
+  height: 100vh;
+  width: 400px;
+  padding: 30px 20px;
 }
 
 .sidebar-pill {
-    border: solid 1px black;
-    margin: 5px;
-    text-decoration: none;
+  display: flex;
+  border-radius: 10px;
+  padding: 10px;
+  text-decoration: none;
 }
 
-.sidebar-pill_selected {
-    border: solid 1px red
+.sidebar-pill__profile-pics {
+  position: relative;
+  display: flex;
+  width: 70px;
+}
+
+.sidebar-pill--selected {
+  background-color: #e7e7e7;
+}
+
+.logout {
+  position: absolute;
+  cursor: pointer;
+  bottom: 30px;
+  transition: color 0.15s;
+}
+
+.logout:hover {
+  color: #525EC8;
 }

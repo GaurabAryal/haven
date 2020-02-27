@@ -19,6 +19,7 @@ const GET_USER_QUERY = gql`
       members {
         id
         firstName
+        lastName
       }
     }
   }
