@@ -8,6 +8,7 @@ import { Switch, Route } from 'react-router-dom';
 import './MainPage.css';
 
 import Sidebar from './components/Sidebar/Sidebar';
+import ChatContainer from './components/Chat/ChatContainer';
 
 const GET_USER_QUERY = gql`
   {
@@ -56,9 +57,7 @@ export default class MainPageContainer extends React.Component {
                 <Route path="/community">
                   <div>hi</div>
                 </Route>
-                <Route path="/:id">
-                  <div>hi2</div>
-                </Route>
+                <Route path="/:id" component={ChatContainer} />
                 <Route exact path="/">
                   <Redirect to={`/${data.membership[0].id}`} />
                 </Route>
