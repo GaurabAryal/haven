@@ -1,13 +1,18 @@
 .contentContainer-container {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: calc(100% - 400px);
 }
 
 .contentContainer-header {
     display: flex;
     align-items: center;
-    padding: 30px;
+    padding: 30px 20px;
     height: 110px;
     border-bottom: 1px solid #DDD;
+}
+
+.messages-container {
+  height: calc(100vh - 110px);
+  overflow-y: scroll;
 }

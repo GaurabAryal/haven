@@ -5,6 +5,7 @@ import ChatHeader from './ChatHeader';
 import ContentContainer from '../ContentContainer/ContentContainer';
 import ChatMessage from 'src/components/ChatMessage/ChatMessage';
 import Button from 'src/components/Button/Button';
+import './Chat.css';
 
 export default class ChatScreen extends React.Component {
   state = { message: '' };
@@ -54,7 +55,7 @@ export default class ChatScreen extends React.Component {
               />
             ))}
           </div>
-          <form onSubmit={this.onSubmit}>
+          <form onSubmit={this.onSubmit} className="message-input">
             <input
               type="text"
               placeholder="Type a message"

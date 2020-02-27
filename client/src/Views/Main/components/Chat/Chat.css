@@ -1,0 +1,12 @@
+.messageContainer {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.message-input {
+  position: fixed;
+  display: flex;
+  background-color: #fff;
+  width: calc(100% - 400px);
+  bottom: 0;
+}
