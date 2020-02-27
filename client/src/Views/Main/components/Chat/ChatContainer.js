@@ -11,6 +11,7 @@ const CHAT_QUERY = gql`
   query Chat($groupId: String!) {
     group(groupId: $groupId) {
       members {
+        id
         firstName
         lastName
       }
@@ -68,7 +69,7 @@ const ChatContainer = props => {
               if (!subscriptionData.data) return prev;
               const node = subscriptionData.data.onNewChatMessage;
               return Object.assign({}, prev, {
-                history: [...prev.history, node].slice(0, 20),
+                history: [...prev.history, node].slice(-9),
               });
             },
           });
@@ -76,7 +77,7 @@ const ChatContainer = props => {
         return (
           <ChatScreen
             members={data.group.members}
-            history={data.history}
+            history={data.history.slice(-9)}
             meId={data.me.id}
             groupId={groupId}
             createMessageMutation={props.createMessageMutation}

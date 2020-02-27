@@ -3,35 +3,19 @@ import PropTypes from 'prop-types';
 
 import ChatHeader from './ChatHeader';
 import ContentContainer from '../ContentContainer/ContentContainer';
-
-const MessageItem = ({ message }) => (
-  <div>
-    <p>
-      {message.author}: {message.text}
-    </p>
-  </div>
-);
-
-class MessageListView extends React.PureComponent {
-  componentDidMount() {
-    this.props.subscribeToMore();
-  }
-  render() {
-    const { history } = this.props;
-    return (
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
-        {history.map(message => (
-          <MessageItem message={message} />
-        ))}
-      </ul>
-    );
-  }
-}
+import ChatMessage from 'src/components/ChatMessage/ChatMessage';
+import Button from 'src/components/Button/Button';
 
 export default class ChatScreen extends React.Component {
   state = { message: '' };
 
-  onSubmit = async () => {
+  componentDidMount() {
+    this.props.subscribeToMore();
+  }
+
+  onSubmit = async event => {
+    event.preventDefault();
+
     if (!this.state.message) {
       return;
     }
@@ -47,23 +31,42 @@ export default class ChatScreen extends React.Component {
     this.setState({ message: '' });
   };
 
+  getName(id) {
+    const member = this.props.members.find(
+      member => id === member.id,
+    );
+
+    return `${member.firstName} ${member.lastName}`;
+  }
+
   render() {
+    const { history, meId, members } = this.props;
     return (
-      <ContentContainer
-        header={<ChatHeader members={this.props.members} />}
-      >
-        <MessageListView
-          history={this.props.history}
-          subscribeToMore={this.props.subscribeToMore}
-        />
-        <div className="textField">
-          <input
-            type="text"
-            placeholder="Type a message"
-            value={this.state.message}
-            onChange={e => this.setState({ message: e.target.value })}
-          />
-          <button onClick={this.onSubmit}>Submit</button>
+      <ContentContainer header={<ChatHeader members={members} />}>
+        <div className="chatContainer">
+          <div className="messageContainer">
+            {history.map((message, index) => (
+              <ChatMessage
+                key={`message ${index}`}
+                sender={this.getName(message.author)}
+                message={message.text}
+                isSelf={message.author === meId}
+              />
+            ))}
+          </div>
+          <form onSubmit={this.onSubmit}>
+            <input
+              type="text"
+              placeholder="Type a message"
+              value={this.state.message}
+              onChange={e =>
+                this.setState({ message: e.target.value })
+              }
+            />
+            <Button variant="primary" onClick={this.onSubmit}>
+              Submit
+            </Button>
+          </form>
         </div>
       </ContentContainer>
     );
@@ -76,5 +79,5 @@ ChatScreen.propTypes = {
   meId: PropTypes.string,
   groupId: PropTypes.string,
   createMessageMutation: PropTypes.func,
-  history: PropTypes.object,
+  history: PropTypes.array,
 };
