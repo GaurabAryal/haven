@@ -61,7 +61,7 @@ const OnboardingPageContainer = props => (
         return (
           <Redirect
             to={{
-              pathname: `/${data.membership[0].id}`,
+              pathname: `/t/${data.membership[0].id}`,
               state: { from: props.location },
             }}
           />

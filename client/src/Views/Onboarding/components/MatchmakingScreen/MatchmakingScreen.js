@@ -1,77 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import OnboardingRow from '../OnboardingRow/OnboardingRow';
+import FormRow from 'src/components/FormRow/FormRow';
 import Button from 'src/components/Button/Button';
 import TextInput from 'src/components/TextInput/TextInput';
 import SelectableContainer from 'src/components/SelectableContainer/SelectableContainer';
+
+import { OPTIONS, QUESTION_OPTIONS } from 'src/constants';
+import { getFilteredPreferencesOptions } from 'src/utils';
+
 import 'src/utils.css';
 import './MatchmakingScreen.css';
-
-const options = {
-  position: {
-    RELATIVE: 'relative',
-    PROFESSIONAL: 'professional',
-    FRIEND: 'friend',
-    OTHER: 'other',
-    UNKNOWN: 'unknown',
-  },
-  preferences: {
-    ALL: 'all',
-    FRIENDS: 'friends',
-    SOCIALIZING: 'socializing',
-    MENTEE: 'mentee',
-    MENTOR: 'mentor',
-    SEEK_PROF: 'seekProfessional',
-    GIVE_PROF: 'giveProfessional',
-  },
-  isLocationPreferred: {
-    YES: 'yes',
-    NO: 'no',
-  },
-};
-
-const QUESTION_OPTIONS = {
-  position: {
-    [options.position.RELATIVE]: 'Relative of person with dementia',
-    [options.position.PROFESSIONAL]: 'Professional caregiver',
-    [options.position.FRIEND]: 'Friend of person with dementia',
-    [options.position.OTHER]: 'Other',
-    [options.position.UNKNOWN]: 'Prefer not to say',
-  },
-  preferences: {
-    [options.preferences.ALL]: 'Any',
-    [options.preferences.FRIENDS]: 'Make new friends',
-    [options.preferences.SOCIALIZING]: 'General socializing',
-    [options.preferences.MENTEE]: 'Seeking mentorship',
-    [options.preferences.MENTOR]: 'Provide mentorship',
-    [options.preferences.SEEK_PROF]: 'Seeking professional advice',
-    [options.preferences.GIVE_PROF]: 'Giving professional advice',
-  },
-  isLocationPreferred: {
-    [options.isLocationPreferred.YES]: 'Yes',
-    [options.isLocationPreferred.NO]: 'No preference',
-  },
-};
 
 export default class MatchmakingScreen extends React.Component {
   state = {
     error: false,
   };
-
-  getFilteredPreferencesOptions() {
-    const isProfessional =
-      this.props.position === options.position.PROFESSIONAL;
-    if (isProfessional) {
-      return QUESTION_OPTIONS.preferences;
-    } else {
-      const filteredOptions = Object.assign(
-        {},
-        QUESTION_OPTIONS.preferences,
-      );
-      delete filteredOptions.giveProfessional;
-      return filteredOptions;
-    }
-  }
 
   isValidInputs() {
     const {
@@ -82,35 +25,41 @@ export default class MatchmakingScreen extends React.Component {
       country,
     } = this.props;
 
+    const preferenceValues = Object.values(preferences);
+
+    const noPreferenceSelected =
+      preferenceValues.every(preference => preference === false) ||
+      !preferenceValues.length;
+
     const isFieldsFilled = Boolean(
       position &&
         this.props.isLocationPreferred &&
-        Object.keys(preferences).length,
+        !noPreferenceSelected,
     );
     const isLocationFilled = Boolean(city && country);
 
     return (
       isFieldsFilled &&
-      ((isLocationPreferred === options.isLocationPreferred.YES &&
+      ((isLocationPreferred === OPTIONS.isLocationPreferred.YES &&
         isLocationFilled) ||
-        isLocationPreferred === options.isLocationPreferred.NO)
+        isLocationPreferred === OPTIONS.isLocationPreferred.NO)
     );
   }
 
   onContinue = () => {
     if (this.isValidInputs()) {
       if (
-        this.props.position !== options.position.PROFESSIONAL &&
-        this.props.preferences[options.preferences.GIVE_PROF]
+        this.props.position !== OPTIONS.position.PROFESSIONAL &&
+        this.props.preferences[OPTIONS.preferences.GIVE_PROF]
       ) {
         const preferences = Object.assign(this.props.preferences, {});
-        preferences[options.preferences.GIVE_PROF] = false;
+        preferences[OPTIONS.preferences.GIVE_PROF] = false;
         this.props.onInputChange('preferences', preferences);
       }
 
       if (
         this.props.isLocationPreferred ===
-          options.isLocationPreferred.NO &&
+          OPTIONS.isLocationPreferred.NO &&
         (this.props.city || this.props.country)
       ) {
         this.props.onInputChange('city', '');
@@ -138,10 +87,10 @@ export default class MatchmakingScreen extends React.Component {
 
   onSelectMultiple = (type, option) => {
     if (
-      option === options.preferences.ALL &&
-      !this.props[type][options.preferences.ALL]
+      option === OPTIONS.preferences.ALL &&
+      !this.props[type][OPTIONS.preferences.ALL]
     ) {
-      this.onInputChange(type, { [options.preferences.ALL]: true });
+      this.onInputChange(type, { [OPTIONS.preferences.ALL]: true });
       return;
     }
 
@@ -149,28 +98,28 @@ export default class MatchmakingScreen extends React.Component {
 
     // This series of if statements make sure someone can't seek and provide mentorship/professional advice at the same time
     if (
-      option === options.preferences.MENTEE &&
-      selectedValues[options.preferences.MENTOR]
+      option === OPTIONS.preferences.MENTEE &&
+      selectedValues[OPTIONS.preferences.MENTOR]
     ) {
-      selectedValues[options.preferences.MENTOR] = false;
+      selectedValues[OPTIONS.preferences.MENTOR] = false;
       this.onInputChange(type, selectedValues);
     } else if (
-      option === options.preferences.MENTOR &&
-      selectedValues[options.preferences.MENTEE]
+      option === OPTIONS.preferences.MENTOR &&
+      selectedValues[OPTIONS.preferences.MENTEE]
     ) {
-      selectedValues[options.preferences.MENTEE] = false;
+      selectedValues[OPTIONS.preferences.MENTEE] = false;
       this.onInputChange(type, selectedValues);
     } else if (
-      option === options.preferences.SEEK_PROF &&
-      selectedValues[options.preferences.GIVE_PROF]
+      option === OPTIONS.preferences.SEEK_PROF &&
+      selectedValues[OPTIONS.preferences.GIVE_PROF]
     ) {
-      selectedValues[options.preferences.GIVE_PROF] = false;
+      selectedValues[OPTIONS.preferences.GIVE_PROF] = false;
       this.onInputChange(type, selectedValues);
     } else if (
-      option === options.preferences.GIVE_PROF &&
-      selectedValues[options.preferences.SEEK_PROF]
+      option === OPTIONS.preferences.GIVE_PROF &&
+      selectedValues[OPTIONS.preferences.SEEK_PROF]
     ) {
-      selectedValues[options.preferences.SEEK_PROF] = false;
+      selectedValues[OPTIONS.preferences.SEEK_PROF] = false;
       this.onInputChange(type, selectedValues);
     }
 
@@ -180,7 +129,7 @@ export default class MatchmakingScreen extends React.Component {
 
     if (selectedValues[option]) {
       selectedValues[option] = false;
-    } else if (option !== options.preferences.ALL) {
+    } else if (option !== OPTIONS.preferences.ALL) {
       selectedValues[option] = true;
     }
     this.onInputChange(type, selectedValues);
@@ -202,7 +151,7 @@ export default class MatchmakingScreen extends React.Component {
           Let&apos;s get to know you so we can match you with the
           right people!
         </h2>
-        <OnboardingRow label="What do you consider yourself?">
+        <FormRow label="What do you consider yourself?">
           <SelectableContainer
             value={position}
             options={QUESTION_OPTIONS.position}
@@ -210,18 +159,18 @@ export default class MatchmakingScreen extends React.Component {
               this.onSelectSingle('position', option)
             }
           />
-        </OnboardingRow>
-        <OnboardingRow label="What do you want to get from this new community? (select all that apply)">
+        </FormRow>
+        <FormRow label="What do you want to get from this new community? (select all that apply)">
           <SelectableContainer
             multiselect
             value={preferences}
-            options={this.getFilteredPreferencesOptions()}
+            options={getFilteredPreferencesOptions(position)}
             onSelect={option =>
               this.onSelectMultiple('preferences', option)
             }
           />
-        </OnboardingRow>
-        <OnboardingRow label="Would you prefer to meet people in your area?">
+        </FormRow>
+        <FormRow label="Would you prefer to meet people in your area?">
           <SelectableContainer
             value={isLocationPreferred}
             options={QUESTION_OPTIONS.isLocationPreferred}
@@ -229,10 +178,10 @@ export default class MatchmakingScreen extends React.Component {
               this.onSelectSingle('isLocationPreferred', option)
             }
           />
-        </OnboardingRow>
-        <OnboardingRow>
+        </FormRow>
+        <FormRow>
           {isLocationPreferred ===
-            options.isLocationPreferred.YES && (
+            OPTIONS.isLocationPreferred.YES && (
             <>
               <h3 className="text--md font-weight--semi-bold spacing-bottom--xs">
                 What city and country are you in?
@@ -261,7 +210,7 @@ export default class MatchmakingScreen extends React.Component {
               </div>
             </>
           )}
-        </OnboardingRow>
+        </FormRow>
         <div className="button-wrapper spacing-bottom--md">
           {error ? (
             <p className="error-message">

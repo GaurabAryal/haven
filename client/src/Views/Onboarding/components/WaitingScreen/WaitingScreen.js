@@ -30,7 +30,7 @@ export default class WaitingScreen extends React.Component {
     const { isWaiting } = this.props;
     const bodyText = isWaiting
       ? "We're currently looking for the perfect group match for you. Please wait a few seconds."
-      : "We can't find you a group right now. You can close this tab, we'll email you once you've been added to it.";
+      : "We can't find you a group right now. You can change this tab, we'll email you once you've been added to it.";
 
     return (
       <div className="waiting-container">
