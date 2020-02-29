@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { MIN_GROUP_SIZE } from 'src/constants';
 import { Switch, Route } from 'react-router-dom';
 import './MainPage.css';
+import { AUTH_TOKEN } from 'src/constants';
 
 import Sidebar from './components/Sidebar/Sidebar';
 import ChatContainer from './components/Chat/ChatContainer';
@@ -29,10 +30,18 @@ const GET_USER_QUERY = gql`
 export default class MainPageContainer extends React.Component {
   state = {};
 
+  logout = async client => {
+    if (localStorage[AUTH_TOKEN]) {
+      localStorage.removeItem(AUTH_TOKEN);
+    }
+    await client.clearStore();
+    this.props.history.push('/login');
+  };
+
   render() {
     return (
       <Query query={GET_USER_QUERY}>
-        {({ loading, error, data }) => {
+        {({ client, loading, error, data }) => {
           if (loading) return <div />;
           if (error) return `Error! ${error.message}`;
 
@@ -52,7 +61,10 @@ export default class MainPageContainer extends React.Component {
 
           return (
             <div className="mainpage-container">
-              <Sidebar groups={data.membership} />
+              <Sidebar
+                groups={data.membership}
+                logout={() => this.logout(client)}
+              />
               <Switch>
                 <Route path="/community">
                   <div>hi</div>

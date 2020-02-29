@@ -10,12 +10,20 @@ import './Chat.css';
 export default class ChatScreen extends React.Component {
   state = { message: '' };
 
+  scrollToBottom = (smooth = false) => {
+    this.messagesEnd.scrollIntoView({
+      behavior: smooth ? 'smooth' : 'auto',
+    });
+  };
+
   componentDidMount() {
+    this.scrollToBottom();
     this.props.subscribeToMore();
   }
 
   onSubmit = async event => {
     event.preventDefault();
+    this.scrollToBottom(true);
 
     if (!this.state.message) {
       return;
@@ -54,6 +62,11 @@ export default class ChatScreen extends React.Component {
                 isSelf={message.author === meId}
               />
             ))}
+            <div
+              ref={el => {
+                this.messagesEnd = el;
+              }}
+            ></div>
           </div>
           <form onSubmit={this.onSubmit} className="message-input">
             <input

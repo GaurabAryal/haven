@@ -6,7 +6,6 @@ import ProfilePicPlaceholder from 'src/components/ProfilePicPlaceholder/ProfileP
 import { withRouter } from 'react-router-dom';
 import { MIN_GROUP_SIZE } from 'src/constants';
 
-import { AUTH_TOKEN } from 'src/constants';
 import { getMemberNames } from 'src/utils';
 
 import './Sidebar.css';
@@ -19,28 +18,35 @@ class Sidebar extends React.Component {
   renderProfilePics(members) {
     const profilePics = [];
     let offsetStyle = {
-      left: `${25}px`
-    }
+      left: `${25}px`,
+    };
     profilePics.push(
-      <div className="sidebar-pill__profile-pics-wrapper" style={offsetStyle}>
+      <div
+        key={members[0].id}
+        className="sidebar-pill__profile-pics-wrapper"
+        style={offsetStyle}
+      >
         <ProfilePicPlaceholder
-          key={members[0].id}
           firstName={members[0].firstName}
           lastName={members[0].lastName}
           backgroundColor="teal"
-          size="sm"/>
-      </div>
-    )
+          size="sm"
+        />
+      </div>,
+    );
     profilePics.push(
-      <div className="sidebar-pill__profile-pics-wrapper">
+      <div
+        className="sidebar-pill__profile-pics-wrapper"
+        key={members[1].id}
+      >
         <ProfilePicPlaceholder
-          key={members[0].id}
-          firstName={members[0].firstName}
-          lastName={members[0].lastName}
+          firstName={members[1].firstName}
+          lastName={members[1].lastName}
           backgroundColor="magenta"
-          size="sm"/>
-      </div>
-    )
+          size="sm"
+        />
+      </div>,
+    );
     return profilePics;
   }
 
@@ -61,8 +67,12 @@ class Sidebar extends React.Component {
               {this.renderProfilePics(group.members)}
             </div>
             <div className="sidebar-pill__text">
-              <div className="text--md">{getMemberNames(group.members)}</div>
-              <div className="text--sm color--grey">the latest chat that ill figure out later</div>
+              <div className="text--md">
+                {getMemberNames(group.members)}
+              </div>
+              <div className="text--sm color--grey">
+                the latest chat that ill figure out later
+              </div>
             </div>
           </div>
         </Link>
@@ -70,19 +80,13 @@ class Sidebar extends React.Component {
     );
   }
 
-  logout = () => {
-    if (localStorage[AUTH_TOKEN]) {
-      localStorage.removeItem(AUTH_TOKEN);
-    }
-
-    this.props.history.push('/login');
-  };
-
   render() {
     return (
       <div className="sidebar-container">
-        <div className="text--lg font-weight--bold spacing-bottom--sm">Haven</div>
-          {this.renderGroups()}
+        <div className="text--lg font-weight--bold spacing-bottom--sm">
+          Haven
+        </div>
+        {this.renderGroups()}
         <div className="spacing-top--md">
           <Button
             variant="secondary"
@@ -92,7 +96,9 @@ class Sidebar extends React.Component {
             Join more communities
           </Button>
         </div>
-        <div className="logout text--md" onClick={this.logout}>Logout</div>
+        <div className="logout text--md" onClick={this.props.logout}>
+          Logout
+        </div>
       </div>
     );
   }
@@ -102,6 +108,7 @@ Sidebar.propTypes = {
   groups: PropTypes.array,
   history: PropTypes.object,
   match: PropTypes.object,
+  logout: PropTypes.func,
 };
 
 export default withRouter(Sidebar);
