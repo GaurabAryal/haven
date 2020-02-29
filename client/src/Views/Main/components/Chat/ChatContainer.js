@@ -69,7 +69,7 @@ const ChatContainer = props => {
               if (!subscriptionData.data) return prev;
               const node = subscriptionData.data.onNewChatMessage;
               return Object.assign({}, prev, {
-                history: [...prev.history, node].slice(-9),
+                history: [...prev.history, node].slice(-20),
               });
             },
           });
@@ -77,7 +77,7 @@ const ChatContainer = props => {
         return (
           <ChatScreen
             members={data.group.members}
-            history={data.history.slice(-9)}
+            history={data.history.slice(-20)}
             meId={data.me.id}
             groupId={groupId}
             createMessageMutation={props.createMessageMutation}

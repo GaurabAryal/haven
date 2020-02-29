@@ -115,7 +115,8 @@ export default class LoginPage extends React.Component {
         onCompleted={data => this._confirm(data)}
         onError={() => this.setState({ isError: true })}
       >
-        {(mutation, { error }) => {
+        {(mutation, { client, error }) => {
+          client.clearStore();
           const errorMessage =
             isError && error && error.graphQLErrors[0]
               ? error.graphQLErrors[0].message
@@ -203,6 +204,7 @@ export default class LoginPage extends React.Component {
                   <div className="text-align--center spacing-top--sm color--grey text--md">
                     Don&apos;t have an account?{' '}
                     <span
+                      className="login-switch"
                       onClick={() =>
                         this.setState({
                           isLogin: false,
@@ -217,6 +219,7 @@ export default class LoginPage extends React.Component {
                   <div className="text-align--center spacing-top--sm spacing-bottom--md color--grey text--md">
                     Already have an account?{' '}
                     <span
+                      className="login-switch"
                       onClick={() =>
                         this.setState({
                           isLogin: true,
