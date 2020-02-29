@@ -10,6 +10,7 @@ import { AUTH_TOKEN } from 'src/constants';
 
 import Sidebar from './components/Sidebar/Sidebar';
 import ChatContainer from './components/Chat/ChatContainer';
+import CommunityContainer from './components/Community/CommunityContainer';
 
 const GET_USER_QUERY = gql`
   {
@@ -66,12 +67,13 @@ export default class MainPageContainer extends React.Component {
                 logout={() => this.logout(client)}
               />
               <Switch>
-                <Route path="/community">
-                  <div>hi</div>
-                </Route>
-                <Route path="/:id" component={ChatContainer} />
+                <Route
+                  path="/community"
+                  component={CommunityContainer}
+                />
+                <Route path="/t/:id" component={ChatContainer} />
                 <Route exact path="/">
-                  <Redirect to={`/${data.membership[0].id}`} />
+                  <Redirect to={`/t/${data.membership[0].id}`} />
                 </Route>
               </Switch>
             </div>

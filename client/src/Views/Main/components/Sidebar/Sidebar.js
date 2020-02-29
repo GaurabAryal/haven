@@ -55,7 +55,7 @@ class Sidebar extends React.Component {
     return this.props.groups.map(group =>
       group.members?.length >= MIN_GROUP_SIZE ? (
         <Link
-          to={`/${group.id}`}
+          to={`/t/${group.id}`}
           key={group.id}
           style={{ textDecoration: 'none', color: 'black' }}
         >

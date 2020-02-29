@@ -70,7 +70,7 @@ function App() {
             component={OnboardingContainer}
           />
           <PrivateRoute
-            path={['/:id', '/']}
+            path={['/t/:id', '/']}
             component={MainPageContainer}
           />
         </Switch>

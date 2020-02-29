@@ -3,7 +3,7 @@ import 'src/utils.css';
 import './ProfileScreen.css';
 import PropTypes from 'prop-types';
 
-import OnboardingRow from '../OnboardingRow/OnboardingRow';
+import FormRow from 'src/components/FormRow/FormRow';
 import ImageUpload from 'src/components/ImageUpload/ImageUpload';
 import TextArea from 'src/components/TextArea/TextArea';
 import Button from 'src/components/Button/Button';
@@ -21,15 +21,15 @@ export default function ProfileScreen(props) {
           picture to get started. Don&apos;t worry, you can change
           these later!
         </p>
-        <OnboardingRow label="Describe yourself">
+        <FormRow label="Describe yourself">
           <TextArea
             value={props.bio}
             initialRowHeight={3}
             placeholder="What makes you unique? What should people know about you?"
             onChange={e => props.onInputChange('bio', e.target.value)}
           />
-        </OnboardingRow>
-        <OnboardingRow label="What are your interests and hobbies?">
+        </FormRow>
+        <FormRow label="What are your interests and hobbies?">
           <TextArea
             value={props.interests}
             initialRowHeight={1}
@@ -38,13 +38,13 @@ export default function ProfileScreen(props) {
               props.onInputChange('interests', e.target.value)
             }
           />
-        </OnboardingRow>
-        <OnboardingRow label="Add a profile picture">
+        </FormRow>
+        <FormRow label="Add a profile picture">
           <ImageUpload
             onUpload={props.onUploadImage}
             imageUrl={props.imageUrl}
           />
-        </OnboardingRow>
+        </FormRow>
         <div className="button-wrapper spacing-top--lg spacing-bottom--md">
           <Button
             variant="primary"
