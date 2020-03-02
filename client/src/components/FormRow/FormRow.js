@@ -5,7 +5,7 @@ import './FormRow.css';
 
 export default function FormRow(props) {
   return (
-    <div className="spacing-top--lg">
+    <div className={props.halfTopSpacing ? "spacing-top--md" : "spacing-top--lg"}>
       <h3 className="question-heading text--md font-weight--semi-bold">
         {props.label}
       </h3>
@@ -20,4 +20,5 @@ FormRow.propTypes = {
     PropTypes.node,
   ]),
   label: PropTypes.string,
+  halfTopSpacing: PropTypes.bool,
 };
