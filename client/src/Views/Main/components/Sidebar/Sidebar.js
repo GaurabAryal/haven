@@ -97,7 +97,7 @@ class Sidebar extends React.Component {
           </Button>
         </div>
         <div className="logout text--md" onClick={this.props.logout}>
-          Logout
+          Sign out
         </div>
       </div>
     );
