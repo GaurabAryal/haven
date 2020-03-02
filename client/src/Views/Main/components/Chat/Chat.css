@@ -3,10 +3,28 @@
   padding-right: 20px;
 }
 
-.message-input {
+.message-composer {
   position: fixed;
   display: flex;
   background-color: #fff;
   width: calc(100% - 400px);
   bottom: 0;
+}
+
+.message-composer__input {
+  padding: 30px 120px 30px 20px;
+  border-radius: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-color: #ddd;
+}
+
+.message-composer__input:focus {
+
+}
+
+.message-input__button {
+  position: absolute;
+  top: 11px;
+  right: 10px;
 }
