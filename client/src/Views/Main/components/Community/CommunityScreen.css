@@ -1,0 +1,11 @@
+.community-container {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.community__questions {
+  flex: 1;
+}

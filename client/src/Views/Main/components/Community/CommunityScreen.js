@@ -7,6 +7,7 @@ import Button from 'src/components/Button/Button';
 import FormRow from 'src/components/FormRow/FormRow';
 import SelectableContainer from 'src/components/SelectableContainer/SelectableContainer';
 import TextInput from 'src/components/TextInput/TextInput';
+import './CommunityScreen.css';
 
 import { OPTIONS, QUESTION_OPTIONS } from 'src/constants';
 import { getFilteredPreferencesOptions } from 'src/utils';
@@ -169,8 +170,12 @@ export default class CommunityScreen extends React.Component {
         }
       >
         {this.state.step === 1 ? (
-          <div>
-            <FormRow label="What do you want to get from this new community? (select all that apply)">
+          <div className="community-container">
+            <div className="community__questions">
+            <FormRow
+              label="What do you want to get from this new community? (select all that apply)"
+              halfTopSpacing={true}
+            >
               <SelectableContainer
                 multiselect
                 value={preferences}
@@ -223,7 +228,9 @@ export default class CommunityScreen extends React.Component {
                 </>
               )}
             </FormRow>
-            <div className="button-wrapper spacing-bottom--md">
+            </div>
+
+            <div className="button-wrapper">
               {error ? (
                 <p className="error-message">
                   Please complete each question
