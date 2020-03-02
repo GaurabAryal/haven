@@ -68,8 +68,9 @@ export default class ChatScreen extends React.Component {
               }}
             ></div>
           </div>
-          <form onSubmit={this.onSubmit} className="message-input">
+          <form onSubmit={this.onSubmit} className="message-composer">
             <input
+              className="message-composer__input"
               type="text"
               placeholder="Type a message"
               value={this.state.message}
@@ -77,9 +78,14 @@ export default class ChatScreen extends React.Component {
                 this.setState({ message: e.target.value })
               }
             />
-            <Button variant="primary" onClick={this.onSubmit}>
-              Submit
-            </Button>
+            <div className="message-input__button">
+              <Button
+                variant="primary"
+                onClick={this.onSubmit}
+              >
+                Send
+              </Button>
+            </div>
           </form>
         </div>
       </ContentContainer>
