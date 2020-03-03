@@ -5,6 +5,7 @@ from .group import Group
 
 class MatchHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    matched_group = models.UUIDField(null=True)
     preferences = JSONField()
     completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

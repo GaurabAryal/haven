@@ -1,36 +1,28 @@
-import operator
-from functools import reduce
+import uuid
 from typing import List, Tuple, Union, Dict
 
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
 from havenapp.models import Group, Membership
-from havenapp.constants.constant import PreferenceFlags
+from havenapp.constants.constant import PreferenceFlags, UserStatus
 
 class UserPreferences():
-    def __init__(self, user_id: str, preference_flags: Dict[str, bool]):
+    def __init__(self, user_id: str, preference_flags: Dict[str, bool], city: str, country: str):
         self.user_id: str = user_id
-        self.preference_flags: Dict[str, bool] = UserPreferences.parse_preferences(preference_flags)
+        self.city = city
+        self.country = country
+        self.preference_flags: Dict[str, bool] = self.parse_preferences(preference_flags)
 
-    @staticmethod
-    def parse_preferences(user_pref: Dict[str, bool]):
+    def parse_preferences(self, user_pref: Dict[str, bool]):
         return {PreferenceFlags(p).name: True for p in user_pref}
 
-
-def get_count_available_groups():
-    available_groups = Group.objects.annotate(num_members=Count('members')).filter(Q(num_members__lt=5))
-    return available_groups.count()
-
-def build_query(preference_flags: Dict[str, bool]):
-    q = Q()
-    for p, flag in preference_flags.items():
-        q |= Q(**{p: flag})
-    return q
+    def build_query(self):
+        q = Q()
+        for p, flag in self.preference_flags.items():
+            q |= Q(**{p: flag})
+        return q
 
 def find_best_match(user_preference: UserPreferences) -> str:
-
-    print(user_preference.preference_flags)
-
     # If no preferences
     if not user_preference.preference_flags or PreferenceFlags.any in user_preference.preference_flags:
         group = Group.objects.annotate(num_members=Count('members')) \
@@ -41,7 +33,7 @@ def find_best_match(user_preference: UserPreferences) -> str:
         return group.id
 
     # Build query and create groups
-    query = build_query(user_preference.preference_flags)
+    query = user_preference.build_query()
     matching_groups = Group.objects.annotate(num_members=Count('members')) \
                         .exclude(members__id=user_preference.user_id) \
                         .filter(Q(num_members__lt=5)) \
@@ -67,7 +59,7 @@ def get_jaccard_sim(user_preference_list: List[str], group_flags_list: List[str]
     sim = user_set.intersection(group_set)
     return float(len(sim)) / (len(user_set) + len(group_set) - len(sim))
 
-def join_group(user_preference: UserPreferences, group_id: str) -> str:
+def join_group(user_preference: UserPreferences, group_id: uuid.UUID) -> str:
     # Get groups
     user = User.objects.get(id=user_preference.user_id)
     group = Group.objects.get(id=group_id)
@@ -113,3 +105,10 @@ def join_new_group(user_preference: UserPreferences) -> str:
     m.save()
     return new_group.id
 
+def update_member_status(group_id: uuid.UUID):
+    group = Group.objects.get(id=group_id)
+
+    if group.members.count() >= 3:
+        for u in group.members.all():
+            u.profile.status=UserStatus.NEWLY_MATCHED.value
+            u.profile.save()

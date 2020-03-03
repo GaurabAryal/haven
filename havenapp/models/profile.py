@@ -17,9 +17,10 @@ class Profile(models.Model):
     position = models.CharField(max_length=50)
     bio = models.TextField(null=True)
     interests = models.TextField(null=True)
-    country = models.CharField(max_length=50, null=True)
-    city = models.CharField(max_length=50, null=True)
     status = models.IntegerField(
         choices=STATUS,
         default=SEARCHING, 
     )
+
+    # country = models.CharField(max_length=50, null=True)
+    # city = models.CharField(max_length=50, null=True)
