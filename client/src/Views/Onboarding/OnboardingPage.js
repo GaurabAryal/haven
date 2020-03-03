@@ -8,6 +8,7 @@ import './OnboardingPage.css';
 import MatchmakingScreen from './components/MatchmakingScreen/MatchmakingScreen';
 import ProfileScreen from './components/ProfileScreen/ProfileScreen';
 import WaitingScreen from './components/WaitingScreen/WaitingScreen';
+import { PREFERENCE_MAPPING } from 'src/constants';
 
 import { ReactComponent as HavenLogo } from './images/haven-logo-small.svg';
 import { ReactComponent as ArrowLeft } from './images/arrow-left.svg';
@@ -47,15 +48,30 @@ export default class OnboardingPage extends React.Component {
     this.setState({ image, imageUrl: URL.createObjectURL(image) });
   };
 
-  createProfile = async () => {
-    const { position, bio, interests, city, country } = this.state;
-    await this.props.createProfileMutation({
+  onSubmit = async () => {
+    const {
+      position,
+      preferences,
+      bio,
+      interests,
+      city,
+      country,
+    } = this.state;
+    const { userId } = this.props;
+
+    const preferenceList = Object.keys(preferences).map(
+      preference => PREFERENCE_MAPPING[preference],
+    );
+
+    await this.props.onboardingMutation({
       variables: {
         position,
         bio,
         interests,
         city,
         country,
+        preferenceList,
+        userId,
       },
     });
 
@@ -105,7 +121,7 @@ export default class OnboardingPage extends React.Component {
             )}
             {this.state.step === 2 && (
               <ProfileScreen
-                onSubmit={this.createProfile}
+                onSubmit={this.onSubmit}
                 onInputChange={this.onInputChange}
                 onUploadImage={this.onUploadImage}
                 bio={this.state.bio}
@@ -133,10 +149,11 @@ export default class OnboardingPage extends React.Component {
 
 OnboardingPage.propTypes = {
   firstName: PropTypes.string,
-  createProfileMutation: PropTypes.func,
+  onboardingMutation: PropTypes.func,
   goToApp: PropTypes.func,
   initialStep: PropTypes.number,
   startPolling: PropTypes.func,
   stopPolling: PropTypes.func,
   groupMembersAmount: PropTypes.number,
+  userId: PropTypes.string,
 };

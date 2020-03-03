@@ -15,6 +15,7 @@ import CommunityContainer from './components/Community/CommunityContainer';
 const GET_USER_QUERY = gql`
   {
     me {
+      id
       firstName
     }
     membership {

@@ -26,7 +26,6 @@ export const OPTIONS = {
     NO: 'no',
   },
 };
-
 export const QUESTION_OPTIONS = {
   position: {
     [OPTIONS.position.RELATIVE]: 'Relative of person with dementia',
@@ -48,4 +47,13 @@ export const QUESTION_OPTIONS = {
     [OPTIONS.isLocationPreferred.YES]: 'Yes',
     [OPTIONS.isLocationPreferred.NO]: 'No preference',
   },
+};
+export const PREFERENCE_MAPPING = {
+  [OPTIONS.preferences.ALL]: 0,
+  [OPTIONS.preferences.FRIENDS]: 1,
+  [OPTIONS.preferences.SOCIALIZING]: 2,
+  [OPTIONS.preferences.MENTEE]: 3,
+  [OPTIONS.preferences.MENTOR]: 4,
+  [OPTIONS.preferences.SEEK_PROF]: 5,
+  [OPTIONS.preferences.GIVE_PROF]: 6,
 };
