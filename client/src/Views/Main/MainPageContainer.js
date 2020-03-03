@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
-import { Query } from '@apollo/react-components';
+import { Query, Mutation } from '@apollo/react-components';
 import { Redirect } from 'react-router-dom';
-import { MIN_GROUP_SIZE } from 'src/constants';
+import { MIN_GROUP_SIZE, USER_STATUSES } from 'src/constants';
 import { Switch, Route } from 'react-router-dom';
 import './MainPage.css';
 import { AUTH_TOKEN } from 'src/constants';
@@ -11,12 +11,16 @@ import { AUTH_TOKEN } from 'src/constants';
 import Sidebar from './components/Sidebar/Sidebar';
 import ChatContainer from './components/Chat/ChatContainer';
 import CommunityContainer from './components/Community/CommunityContainer';
+import Modal from 'src/components/Modal/Modal';
 
 const GET_USER_QUERY = gql`
   {
     me {
       id
       firstName
+      profile {
+        status
+      }
     }
     membership {
       id
@@ -29,9 +33,18 @@ const GET_USER_QUERY = gql`
   }
 `;
 
-export default class MainPageContainer extends React.Component {
-  state = {};
+const UPDATE_USER_STATUS_MUTATION = gql`
+  mutation JoinCommunityMutation($status: Int) {
+    updateProfile(profileInput: { status: $status }) {
+      profile {
+        id
+        status
+      }
+    }
+  }
+`;
 
+export default class MainPageContainer extends React.Component {
   logout = async client => {
     if (localStorage[AUTH_TOKEN]) {
       localStorage.removeItem(AUTH_TOKEN);
@@ -39,6 +52,30 @@ export default class MainPageContainer extends React.Component {
     await client.clearStore();
     this.props.history.push('/login');
   };
+
+  getMembersList(members) {
+    return members.map((member, index) => (
+      <div key={member.firstName + index}>
+        {member.firstName} {member.lastName}
+      </div>
+    ));
+  }
+
+  onAfterOpenModal(id) {
+    this.props.history.push(`/t/${id}`);
+  }
+
+  async onCloseModal(mutation) {
+    await mutation({
+      variables: { status: USER_STATUSES.NORMAL[1] },
+    });
+  }
+
+  async test(mutation) {
+    await mutation({
+      variables: { status: USER_STATUSES.NEWLY_MATCHED[1] },
+    });
+  }
 
   render() {
     return (
@@ -77,6 +114,42 @@ export default class MainPageContainer extends React.Component {
                   <Redirect to={`/t/${data.membership[0].id}`} />
                 </Route>
               </Switch>
+              <Mutation mutation={UPDATE_USER_STATUS_MUTATION}>
+                {(mutation, { data: mutationData }) => {
+                  const updatedStatus =
+                    mutationData?.updateProfile?.profile?.status ||
+                    null;
+                  const matchedGroup =
+                    data.membership[data.membership.length - 1];
+                  return (
+                    <>
+                      <Modal
+                        isOpen={
+                          (updatedStatus ||
+                            data.me.profile.status) ===
+                          USER_STATUSES.NEWLY_MATCHED[0]
+                        }
+                        onAfterOpen={() =>
+                          this.onAfterOpenModal(matchedGroup.id)
+                        }
+                        onClose={() => this.onCloseModal(mutation)}
+                        buttonText="Let's get the conversation starting!"
+                        header={`${data.me.firstName}, you've been matched with:`}
+                        onButtonClick={() =>
+                          this.onCloseModal(mutation)
+                        }
+                      >
+                        <>
+                          {this.getMembersList(matchedGroup.members)}
+                        </>
+                      </Modal>
+                      <button onClick={() => this.test(mutation)}>
+                        REMOVE THIS AFTER
+                      </button>
+                    </>
+                  );
+                }}
+              </Mutation>
             </div>
           );
         }}
