@@ -126,7 +126,7 @@ export default class MainPageContainer extends React.Component {
                       <Modal
                         isOpen={
                           (updatedStatus ||
-                            data.me.profile.status) ===
+                            data?.me?.profile?.status) ===
                           USER_STATUSES.NEWLY_MATCHED[0]
                         }
                         onAfterOpen={() =>

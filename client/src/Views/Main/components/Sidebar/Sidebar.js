@@ -68,10 +68,10 @@ class Sidebar extends React.Component {
               {this.renderProfilePics(group.members)}
             </div>
             <div className="sidebar-pill__text">
-              <div className="add-ellipses text--md">
+              <div className="add-ellipses text--md sidebar-pill-text__names">
                 {getMemberNames(group.members)}
               </div>
-              <div className="add-ellipses text--sm color--grey">
+              <div className="add-ellipses text--sm sidebar-pill-text__message">
                 the latest chat that ill figure out later
               </div>
             </div>
@@ -84,11 +84,11 @@ class Sidebar extends React.Component {
   render() {
     return (
       <div className="sidebar-container">
-        <div className="haven-logo spacing-bottom--md">
+        <div className="haven-logo spacing-bottom--md margin-15">
           <HavenLogo />
         </div>
         {this.renderGroups()}
-        <div className="spacing-top--md">
+        <div className="spacing-top--md margin-15">
           <Button
             variant="secondary"
             onClick={() => this.props.history.push('/community')}
