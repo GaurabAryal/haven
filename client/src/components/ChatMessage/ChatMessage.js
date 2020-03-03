@@ -13,7 +13,12 @@ export default function ChatMessage(props) {
       }
     >
       <div className="message-container__profile-pic"></div>
-      <div className="message-text-container">
+      <div className={
+        props.isSelf === true
+          ? 'message-text-wrapper message-text-wrapper--from-self'
+          : 'message-text-wrapper'
+      }>
+        <div className="message-text-container">
         <div
           className={
             props.isSelf === true
@@ -37,6 +42,7 @@ export default function ChatMessage(props) {
         >
           {props.message}
         </div>
+      </div>
       </div>
     </div>
   );

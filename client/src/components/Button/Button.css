@@ -34,6 +34,10 @@
   color: #525EC8;
 }
 
+.button--secondary:hover {
+  background-color: rgba(82, 94, 200, 0.08);
+}
+
 .button:disabled {
   border-color: #bbb;
   background-color: #bbb;

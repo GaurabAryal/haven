@@ -1,3 +1,27 @@
+.group-header-container {
+  display: flex;
+  width: 100%;
+}
+
+.group-header__text {
+  flex: 1;
+}
+
+.group-header__actions {
+  display: flex;
+  align-self: flex-end;
+}
+
+.group-header__action {
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.group-header__action-text {
+  margin-left: 8px;
+}
+
 .messageContainer {
   padding-left: 20px;
   padding-right: 20px;
@@ -12,7 +36,8 @@
 }
 
 .message-composer__input {
-  padding: 30px 120px 30px 20px;
+  padding: 20px 100px 20px 20px;
+  max-height: 200px;
   border-radius: 0;
   border-left-width: 0;
   border-right-width: 0;
@@ -25,6 +50,6 @@
 
 .message-input__button {
   position: absolute;
-  top: 11px;
+  top: 12px;
   right: 10px;
 }
