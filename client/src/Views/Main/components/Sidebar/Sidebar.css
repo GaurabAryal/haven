@@ -15,8 +15,18 @@
 
 .sidebar-pill__profile-pics {
   position: relative;
-  display: flex;
   width: 70px;
+}
+
+.sidebar-pill__text {
+  max-width: calc(100% - 80px);
+  flex: 1;
+}
+
+.add-ellipses {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar-pill--selected {
@@ -26,7 +36,7 @@
 .logout {
   position: absolute;
   cursor: pointer;
-  bottom: 30px;
+  bottom: 20px;
   transition: color 0.15s;
 }
 

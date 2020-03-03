@@ -48,6 +48,27 @@ export default class ChatScreen extends React.Component {
     return `${member.firstName} ${member.lastName}`;
   }
 
+  handleEnter(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      let inputField = e.target;
+      inputField.style.height = 'auto';
+      this.onSubmit(e);
+      e.target.value = '';
+    }
+  }
+
+  resizeInput(e) {
+    let inputField = e.target;
+
+    this.setState({
+      message: e.target.value
+    })
+
+    inputField.style.height = 'auto';
+    inputField.style.height = inputField.scrollHeight + 'px';
+  }
+
   render() {
     const { history, meId, members } = this.props;
     return (
@@ -60,22 +81,27 @@ export default class ChatScreen extends React.Component {
                 sender={this.getName(message.author)}
                 message={message.text}
                 isSelf={message.author === meId}
+                time="just now"
               />
             ))}
             <div
               ref={el => {
                 this.messagesEnd = el;
               }}
-            ></div>
+            />
           </div>
           <form onSubmit={this.onSubmit} className="message-composer">
-            <input
+            <textarea
               className="message-composer__input"
+              rows="1"
               type="text"
               placeholder="Type a message"
               value={this.state.message}
-              onChange={e =>
-                this.setState({ message: e.target.value })
+              onChange={(e) =>
+                this.resizeInput(e)
+              }
+              onKeyDown={(e) =>
+                this.handleEnter(e)
               }
             />
             <div className="message-input__button">

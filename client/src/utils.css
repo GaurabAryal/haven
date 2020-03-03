@@ -62,6 +62,16 @@
   color: #555;
 }
 
+.color--purple {
+  color: #525EC8;
+}
+
+.add-ellipses {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
 .spacing-bottom--xs {
   margin-bottom: 10px;
 }

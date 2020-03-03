@@ -5,6 +5,7 @@ import Button from 'src/components/Button/Button';
 import ProfilePicPlaceholder from 'src/components/ProfilePicPlaceholder/ProfilePicPlaceholder';
 import { withRouter } from 'react-router-dom';
 import { MIN_GROUP_SIZE } from 'src/constants';
+import { ReactComponent as HavenLogo } from 'src/Views/Onboarding/images/haven-logo-small.svg';
 
 import { getMemberNames } from 'src/utils';
 
@@ -67,10 +68,10 @@ class Sidebar extends React.Component {
               {this.renderProfilePics(group.members)}
             </div>
             <div className="sidebar-pill__text">
-              <div className="text--md">
+              <div className="add-ellipses text--md">
                 {getMemberNames(group.members)}
               </div>
-              <div className="text--sm color--grey">
+              <div className="add-ellipses text--sm color--grey">
                 the latest chat that ill figure out later
               </div>
             </div>
@@ -83,8 +84,8 @@ class Sidebar extends React.Component {
   render() {
     return (
       <div className="sidebar-container">
-        <div className="text--lg font-weight--bold spacing-bottom--sm">
-          Haven
+        <div className="haven-logo spacing-bottom--md">
+          <HavenLogo />
         </div>
         {this.renderGroups()}
         <div className="spacing-top--md">
@@ -96,7 +97,7 @@ class Sidebar extends React.Component {
             Join more communities
           </Button>
         </div>
-        <div className="logout text--md" onClick={this.props.logout}>
+        <div className="logout text--md color--grey" onClick={this.props.logout}>
           Sign out
         </div>
       </div>

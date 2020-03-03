@@ -1,8 +1,8 @@
 .message-container {
   display: flex;
   flex-direction: row;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 .message-container--from-self {
@@ -10,13 +10,25 @@
 }
 
 .message-container__profile-pic {
-  width: 60px;
-  height: 60px;
+  margin-top: 2px;
+  width: 45px;
+  height: 45px;
   background-color: #ccc;
   border-radius: 50%;
 }
 
+.message-text-wrapper {
+  display: flex;
+  flex: 1;
+}
+
+.message-text-wrapper--from-self {
+  justify-content: flex-end;
+}
+
 .message-text-container {
+  max-width: 70%;
+  display: inline-block;
   margin-left: 12px;
   margin-right: 12px;
 }
@@ -46,6 +58,7 @@
   background-color: #f1f1f1;
   padding: 8px 12px;
   border-radius: 10px;
+  word-wrap: break-word;
 }
 
 .message-text__content--from-self {
