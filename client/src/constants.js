@@ -57,3 +57,9 @@ export const PREFERENCE_MAPPING = {
   [OPTIONS.preferences.SEEK_PROF]: 5,
   [OPTIONS.preferences.GIVE_PROF]: 6,
 };
+
+export const USER_STATUSES = {
+  NORMAL: ['A_1', 1],
+  SEARCHING: ['A_2', 2],
+  NEWLY_MATCHED: ['A_3', 3],
+};

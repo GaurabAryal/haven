@@ -36,6 +36,7 @@ const JOIN_COMMUNITY_MUTATION = gql`
     updateProfile(profileInput: { city: $city, country: $country }) {
       profile {
         id
+        status
       }
     }
     matchGroup(preferenceList: $preferenceList, userId: $userId) {
