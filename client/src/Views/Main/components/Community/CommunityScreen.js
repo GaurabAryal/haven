@@ -8,7 +8,11 @@ import FormRow from 'src/components/FormRow/FormRow';
 import SelectableContainer from 'src/components/SelectableContainer/SelectableContainer';
 import TextInput from 'src/components/TextInput/TextInput';
 
-import { OPTIONS, QUESTION_OPTIONS } from 'src/constants';
+import {
+  OPTIONS,
+  QUESTION_OPTIONS,
+  PREFERENCE_MAPPING,
+} from 'src/constants';
 import { getFilteredPreferencesOptions } from 'src/utils';
 
 export default class CommunityScreen extends React.Component {
@@ -115,7 +119,8 @@ export default class CommunityScreen extends React.Component {
   };
 
   onSubmit = async () => {
-    const { city, country } = this.state;
+    const { preferences, city, country } = this.state;
+    const { userId } = this.props;
 
     if (this.isValidInputs()) {
       if (
@@ -135,10 +140,17 @@ export default class CommunityScreen extends React.Component {
         this.onInputChange('city', '');
         this.onInputChange('country', '');
       }
+
+      const preferenceList = Object.keys(preferences).map(
+        preference => PREFERENCE_MAPPING[preference],
+      );
+
       await this.props.joinCommunityMutation({
         variables: {
           city,
           country,
+          preferenceList,
+          userId,
         },
       });
       this.goToNextStep();
@@ -262,4 +274,5 @@ CommunityScreen.propTypes = {
   stopPolling: PropTypes.func,
   firstName: PropTypes.string,
   position: PropTypes.string,
+  userId: PropTypes.string,
 };

@@ -10,9 +10,11 @@ import CommunityScreen from './CommunityScreen.js';
 const GET_USER_QUERY = gql`
   {
     me {
+      id
       firstName
       profile {
         position
+        status
       }
     }
     membership {
@@ -26,22 +28,18 @@ const GET_USER_QUERY = gql`
 
 const JOIN_COMMUNITY_MUTATION = gql`
   mutation JoinCommunityMutation(
-    $position: String!
-    $bio: String!
-    $interests: String!
+    $preferenceList: [Int]
     $city: String!
     $country: String!
+    $userId: String!
   ) {
-    createProfile(
-      profileInput: {
-        position: $position
-        bio: $bio
-        interests: $interests
-        city: $city
-        country: $country
-      }
-    ) {
+    updateProfile(profileInput: { city: $city, country: $country }) {
       profile {
+        id
+      }
+    }
+    matchGroup(preferenceList: $preferenceList, userId: $userId) {
+      group {
         id
       }
     }
@@ -60,6 +58,7 @@ const CommunityContainer = props => {
 
         return (
           <CommunityScreen
+            userId={data.me.id}
             firstName={data.me?.firstName || ''}
             position={data.me?.position || ''}
             groupMembersAmount={groupMembersAmount}

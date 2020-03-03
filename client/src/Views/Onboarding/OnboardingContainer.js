@@ -13,6 +13,7 @@ const GET_USER_QUERY = gql`
   {
     me {
       firstName
+      id
     }
     membership {
       id
@@ -23,13 +24,15 @@ const GET_USER_QUERY = gql`
   }
 `;
 
-const CREATE_PROFILE_MUTATION = gql`
-  mutation CreateProfileMutation(
+const ONBOARDING_MUTATION = gql`
+  mutation OnboardingMutation(
     $position: String!
     $bio: String!
     $interests: String!
     $city: String!
     $country: String!
+    $preferenceList: [Int]
+    $userId: String!
   ) {
     createProfile(
       profileInput: {
@@ -41,6 +44,11 @@ const CREATE_PROFILE_MUTATION = gql`
       }
     ) {
       profile {
+        id
+      }
+    }
+    matchGroup(preferenceList: $preferenceList, userId: $userId) {
+      group {
         id
       }
     }
@@ -72,10 +80,11 @@ const OnboardingPageContainer = props => (
         <OnboardingPage
           firstName={firstName}
           groupMembersAmount={groupMembersAmount}
-          createProfileMutation={props.createProfileMutation}
+          onboardingMutation={props.onboardingMutation}
           startPolling={startPolling}
           stopPolling={stopPolling}
           goToApp={() => props.history.push('/')}
+          userId={data.me.id}
         />
       );
     }}
@@ -83,11 +92,11 @@ const OnboardingPageContainer = props => (
 );
 
 OnboardingPageContainer.propTypes = {
-  createProfileMutation: PropTypes.func,
+  onboardingMutation: PropTypes.func,
   history: PropTypes.object,
   location: PropTypes.object,
 };
 
 export default compose(
-  graphql(CREATE_PROFILE_MUTATION, { name: 'createProfileMutation' }),
+  graphql(ONBOARDING_MUTATION, { name: 'onboardingMutation' }),
 )(OnboardingPageContainer);
