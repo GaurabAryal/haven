@@ -11,9 +11,11 @@
     padding-right: 20px;
     height: 80px;
     border-bottom: 1px solid #DDD;
+    background-color: #f8f8f8;
 }
 
 .messages-container {
+  /* background-color: #E5EBF7; */
   height: calc(100vh - 140px);
   overflow-y: scroll;
 }
