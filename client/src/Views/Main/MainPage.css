@@ -1,4 +1,18 @@
 .mainpage-container {
-    display: flex;
+  display: flex;
+}
 
+.new-match {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.new-match__name {
+  margin-left: 15px;
+}
+
+.members-list {
+  flex: 1;
 }
