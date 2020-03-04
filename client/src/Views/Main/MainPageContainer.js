@@ -133,7 +133,6 @@ export default class MainPageContainer extends React.Component {
                   const matchedGroup =
                     data.membership[data.membership.length - 1];
                   return (
-                    <>
                       <Modal
                         isOpen={
                           (updatedStatus ||
@@ -156,10 +155,7 @@ export default class MainPageContainer extends React.Component {
                           {this.getMembersList(matchedGroup.members, data.me.id)}
                         </div>
                       </Modal>
-                      <button onClick={() => this.test(mutation)}>
-                        REMOVE THIS AFTER
-                      </button>
-                    </>
+
                   );
                 }}
               </Mutation>
