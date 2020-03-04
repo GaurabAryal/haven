@@ -98,7 +98,7 @@ class MatchGroup(graphene.Mutation):
     group = graphene.Field(GroupNode)
     status = graphene.String()
 
-    def mutate(self, info, user_id, preference_list=[], city='', country=''):
+    def mutate(self, info, user_id, city='', country='', preference_list=[]):
         # Randomly match user to a group, if no preference (also, should not be the last person to join group)
         # Do the matchmaking
         match_entry = None
@@ -113,7 +113,16 @@ class MatchGroup(graphene.Mutation):
         except:
             raise GraphQLError('Please enter valid preferences')
        
-        match_entry = MatchHistory.objects.create(user=user, preferences=user_pref.preference_flags, city=city, country=country)
+        match_entry = MatchHistory.objects.create(
+                    user=user, 
+                    preferences={
+                        "preference_flags": user_pref.preference_flags, 
+                        "location": {
+                            "city": city,
+                            "country": country,
+                        },
+                    },
+        )
         match_entry.save()
         
         try:             
