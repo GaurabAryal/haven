@@ -35,7 +35,7 @@ export const QUESTION_OPTIONS = {
     [OPTIONS.position.UNKNOWN]: 'Prefer not to say',
   },
   preferences: {
-    [OPTIONS.preferences.ALL]: 'Any',
+    [OPTIONS.preferences.ALL]: 'No preference',
     [OPTIONS.preferences.FRIENDS]: 'Make new friends',
     [OPTIONS.preferences.SOCIALIZING]: 'General socializing',
     [OPTIONS.preferences.MENTEE]: 'Seeking mentorship',

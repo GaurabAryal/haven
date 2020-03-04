@@ -5,11 +5,12 @@ import ChatHeader from './ChatHeader';
 import ChatDetails from './ChatDetails';
 import ContentContainer from '../ContentContainer/ContentContainer';
 import ChatMessage from 'src/components/ChatMessage/ChatMessage';
+import Modal from 'src/components/Modal/Modal';
 import Button from 'src/components/Button/Button';
 import './Chat.css';
 
 export default class ChatScreen extends React.Component {
-  state = { message: '', showDetails: false };
+  state = { message: '', showDetails: false, showGuidelines: false };
 
   scrollToBottom = (smooth = false) => {
     this.messagesEnd.scrollIntoView({
@@ -41,12 +42,31 @@ export default class ChatScreen extends React.Component {
     this.setState({ message: '' });
   };
 
+  onCloseGuidelines = () => this.setState({ showGuidelines: false });
+
   getName(id) {
     const member = this.props.members.find(
       member => id === member.id,
     );
 
     return `${member.firstName} ${member.lastName}`;
+  }
+
+  getGuidelines() {
+    return [
+      'This is a closed community, so your activity will only be seen by your community members',
+      'Be kind, polite, and corteous',
+      'No hate speech or bullying',
+      'No inappropriate and vulgar language',
+      "Respect everyone's privacy",
+      'No debating religion or political beliefs',
+      'Report any violation',
+      'Members not complying with the community guidlines may be banned',
+    ].map((guideline, index) => (
+      <p key={'guideline' + index} className="spacing-bottom--sm">
+        {index + 1}. {guideline}
+      </p>
+    ));
   }
 
   handleEnter(e) {
@@ -81,6 +101,9 @@ export default class ChatScreen extends React.Component {
               this.setState(prevState => ({
                 showDetails: !prevState.showDetails,
               }))
+            }
+            showGuidelines={() =>
+              this.setState({ showGuidelines: true })
             }
           />
         }
@@ -122,6 +145,17 @@ export default class ChatScreen extends React.Component {
               </Button>
             </div>
           </form>
+          <Modal
+            isOpen={this.state.showGuidelines}
+            onClose={this.onCloseGuidelines}
+            buttonText="Got it!"
+            header="Community guidelines"
+            onButtonClick={this.onCloseGuidelines}
+            width="600px"
+            height="480px"
+          >
+            <>{this.getGuidelines()}</>
+          </Modal>
         </div>
       </ContentContainer>
     );

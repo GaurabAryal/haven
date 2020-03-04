@@ -55,21 +55,23 @@ export default class MainPageContainer extends React.Component {
   };
 
   getMembersList(members, meId) {
-    return members.map((member, index) => (
-      member.id !== meId ? <div key={member.firstName + index} className="new-match">
-        <div className="new-match__pic">
-          <ProfilePicPlaceholder
-            firstName={member.firstName[0]}
-            lastName={member.lastName[0]}
-            size="md"
-            backgroundColor="grey"
-          />
+    return members.map((member, index) =>
+      member.id !== meId ? (
+        <div key={member.firstName + index} className="new-match">
+          <div className="new-match__pic">
+            <ProfilePicPlaceholder
+              firstName={member.firstName[0]}
+              lastName={member.lastName[0]}
+              size="md"
+              backgroundColor="grey"
+            />
+          </div>
+          <div className="new-match__name text--md font-weight--bold">
+            {member.firstName} {member.lastName}
+          </div>
         </div>
-        <div className="new-match__name text--md font-weight--bold">
-          {member.firstName} {member.lastName}
-        </div>
-      </div> : null
-    ));
+      ) : null,
+    );
   }
 
   onAfterOpenModal(id) {
@@ -133,33 +135,31 @@ export default class MainPageContainer extends React.Component {
                   const matchedGroup =
                     data.membership[data.membership.length - 1];
                   return (
-                    <>
-                      <Modal
-                        isOpen={
-                          (updatedStatus ||
-                            data?.me?.profile?.status) ===
-                          USER_STATUSES.NEWLY_MATCHED[0]
-                        }
-                        onAfterOpen={() =>
-                          this.onAfterOpenModal(matchedGroup.id)
-                        }
-                        onClose={() => this.onCloseModal(mutation)}
-                        buttonText="Get started"
-                        header={`${data.me.firstName}, meet your new group!`}
-                        onButtonClick={() =>
-                          this.onCloseModal(mutation)
-                        }
-                        width="600px"
-                        height="420px"
-                      >
-                        <div className="members-list spacing-top--xs">
-                          {this.getMembersList(matchedGroup.members, data.me.id)}
-                        </div>
-                      </Modal>
-                      <button onClick={() => this.test(mutation)}>
-                        REMOVE THIS AFTER
-                      </button>
-                    </>
+                    <Modal
+                      isOpen={
+                        (updatedStatus ||
+                          data?.me?.profile?.status) ===
+                        USER_STATUSES.NEWLY_MATCHED[0]
+                      }
+                      onAfterOpen={() =>
+                        this.onAfterOpenModal(matchedGroup.id)
+                      }
+                      onClose={() => this.onCloseModal(mutation)}
+                      buttonText="Get started"
+                      header={`${data.me.firstName}, meet your new group!`}
+                      onButtonClick={() =>
+                        this.onCloseModal(mutation)
+                      }
+                      width="600px"
+                      height="420px"
+                    >
+                      <div className="members-list">
+                        {this.getMembersList(
+                          matchedGroup.members,
+                          data.me.id,
+                        )}
+                      </div>
+                    </Modal>
                   );
                 }}
               </Mutation>
