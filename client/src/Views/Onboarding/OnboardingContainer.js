@@ -39,15 +39,18 @@ const ONBOARDING_MUTATION = gql`
         position: $position
         bio: $bio
         interests: $interests
-        city: $city
-        country: $country
       }
     ) {
       profile {
         id
       }
     }
-    matchGroup(preferenceList: $preferenceList, userId: $userId) {
+    matchGroup(
+      preferenceList: $preferenceList
+      userId: $userId
+      city: $city
+      country: $country
+    ) {
       group {
         id
       }

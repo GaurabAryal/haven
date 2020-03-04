@@ -18,4 +18,10 @@
   /* background-color: #E5EBF7; */
   height: calc(100vh - 140px);
   overflow-y: scroll;
+  flex-grow: 1;
+}
+
+.contentContainer-mainContent {
+  display: flex;
+  flex-direction: row;
 }

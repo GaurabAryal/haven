@@ -12,7 +12,12 @@ export default class ContentContainer extends React.Component {
         <div className="contentContainer-header">
           {this.props.header}
         </div>
-        <div className="messages-container">{this.props.children}</div>
+        <div className="contentContainer-mainContent">
+          <div className="messages-container">
+            {this.props.children}
+          </div>
+          {this.props.showDetails ? this.props.details : null}
+        </div>
       </div>
     );
   }
@@ -21,4 +26,6 @@ export default class ContentContainer extends React.Component {
 ContentContainer.propTypes = {
   header: PropTypes.element,
   children: PropTypes.element,
+  details: PropTypes.element,
+  showDetails: PropTypes.bool,
 };
