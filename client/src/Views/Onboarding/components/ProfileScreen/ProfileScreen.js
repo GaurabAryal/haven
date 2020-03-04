@@ -40,10 +40,12 @@ export default function ProfileScreen(props) {
           />
         </FormRow>
         <FormRow label="Add a profile picture">
-          <ImageUpload
-            onUpload={props.onUploadImage}
-            imageUrl={props.imageUrl}
-          />
+          <div className="profileScreen-imageUpload">
+            <ImageUpload
+              onUpload={props.onUploadImage}
+              imageUrl={props.imageUrl}
+            />
+          </div>
         </FormRow>
         <div className="button-wrapper spacing-top--lg spacing-bottom--md">
           <Button

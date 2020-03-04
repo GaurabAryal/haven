@@ -8,14 +8,18 @@ import ContentContainer from '../ContentContainer/ContentContainer';
 import ChatMessage from 'src/components/ChatMessage/ChatMessage';
 import Modal from 'src/components/Modal/Modal';
 import Button from 'src/components/Button/Button';
+import VerifyModal from './components/VerifyModal/VerifyModal';
+
 import { getMemberColor } from 'src/utils';
 import './Chat.css';
 
 export default class ChatScreen extends React.Component {
   state = {
     message: '',
-    showDetails: localStorage.getItem('haven_sidebar') === 'true' ? true : false,
-    showGuidelines: false
+    showDetails:
+      localStorage.getItem('haven_sidebar') === 'true' ? true : false,
+    showGuidelines: false,
+    showVerifyModal: false,
   };
 
   scrollToBottom = (smooth = false) => {
@@ -61,7 +65,7 @@ export default class ChatScreen extends React.Component {
   getGuidelines() {
     return [
       'This is a closed community, so your activity will only be seen by your community members',
-      'Be kind, polite, and corteous',
+      'Be kind, polite, and courteous',
       'No hate speech or bullying',
       'No inappropriate and vulgar language',
       "Respect everyone's privacy",
@@ -104,19 +108,27 @@ export default class ChatScreen extends React.Component {
           <ChatHeader
             members={members}
             toggleDetails={() => {
-                this.setState(prevState => ({
-                  showDetails: !prevState.showDetails,
-                }));
-                localStorage.setItem('haven_sidebar', !this.state.showDetails)
-              }
-            }
+              this.setState(prevState => ({
+                showDetails: !prevState.showDetails,
+              }));
+              localStorage.setItem(
+                'haven_sidebar',
+                !this.state.showDetails,
+              );
+            }}
             showGuidelines={() =>
               this.setState({ showGuidelines: true })
             }
           />
         }
         details={
-          <ChatDetails members={members} meId={this.props.meId} />
+          <ChatDetails
+            members={members}
+            meId={this.props.meId}
+            openVerifyModal={() =>
+              this.setState({ showVerifyModal: true })
+            }
+          />
         }
         showDetails={this.state.showDetails}
       >
@@ -129,7 +141,10 @@ export default class ChatScreen extends React.Component {
                 message={message.text}
                 isSelf={message.author === meId}
                 time="just now"
-                backgroundColor={getMemberColor(message.author, members)}
+                backgroundColor={getMemberColor(
+                  message.author,
+                  members,
+                )}
               />
             ))}
             <div
@@ -138,7 +153,14 @@ export default class ChatScreen extends React.Component {
               }}
             />
           </div>
-          <form onSubmit={this.onSubmit} className={this.state.showDetails ? "message-composer message-composer--small-width" : "message-composer message-composer--full-width"}>
+          <form
+            onSubmit={this.onSubmit}
+            className={
+              this.state.showDetails
+                ? 'message-composer message-composer--small-width'
+                : 'message-composer message-composer--full-width'
+            }
+          >
             <textarea
               className="message-composer__input"
               rows="1"
@@ -165,6 +187,11 @@ export default class ChatScreen extends React.Component {
           >
             <>{this.getGuidelines()}</>
           </Modal>
+          <VerifyModal
+            isOpen={this.state.showVerifyModal}
+            onClose={() => this.setState({ showVerifyModal: false })}
+            onVerify={() => console.log('verified!')}
+          />
         </div>
       </ContentContainer>
     );

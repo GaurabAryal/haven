@@ -12,26 +12,26 @@ export default class ImageUpload extends React.Component {
 
     return (
       <Dropzone
-        className="onboarding-dropzone"
         onDrop={this.props.onUpload}
         accept="image/*"
         multiple={false}
       >
         {({ getRootProps, getInputProps }) => (
-          <section>
-            <div className={
-              imageUrl ?
-              "onboarding-dropzone" :
-              "onboarding-dropzone onboarding-dropzone--no-image"
-            } {...getRootProps()}>
-              <input {...getInputProps()} />
-              {imageUrl ? (
-                <Img className="plsFit" src={imageUrl} />
-              ) : (
-                <PlusIcon/>
-              )}
-            </div>
-          </section>
+          <div
+            className={
+              imageUrl
+                ? 'imageUpload-dropzone'
+                : 'imageUpload-dropzone imageUpload-dropzone--no-image'
+            }
+            {...getRootProps()}
+          >
+            <input {...getInputProps()} />
+            {imageUrl ? (
+              <Img className="imageUpload-image" src={imageUrl} />
+            ) : (
+              <PlusIcon />
+            )}
+          </div>
         )}
       </Dropzone>
     );
@@ -41,4 +41,5 @@ export default class ImageUpload extends React.Component {
 ImageUpload.propTypes = {
   onUpload: PropTypes.func,
   imageUrl: PropTypes.string,
+  fullWidth: PropTypes.bool,
 };
