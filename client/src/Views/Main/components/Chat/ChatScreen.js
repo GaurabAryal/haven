@@ -12,7 +12,11 @@ import { getMemberColor } from 'src/utils';
 import './Chat.css';
 
 export default class ChatScreen extends React.Component {
-  state = { message: '', showDetails: false, showGuidelines: false };
+  state = {
+    message: '',
+    showDetails: localStorage.getItem('haven_sidebar') === 'true' ? true : false,
+    showGuidelines: false
+  };
 
   scrollToBottom = (smooth = false) => {
     this.messagesEnd.scrollIntoView({
@@ -99,10 +103,12 @@ export default class ChatScreen extends React.Component {
         header={
           <ChatHeader
             members={members}
-            toggleDetails={() =>
-              this.setState(prevState => ({
-                showDetails: !prevState.showDetails,
-              }))
+            toggleDetails={() => {
+                this.setState(prevState => ({
+                  showDetails: !prevState.showDetails,
+                }));
+                localStorage.setItem('haven_sidebar', !this.state.showDetails)
+              }
             }
             showGuidelines={() =>
               this.setState({ showGuidelines: true })
