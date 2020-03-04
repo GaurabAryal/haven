@@ -13,10 +13,12 @@ export default function ChatMessage(props) {
           : 'message-container'
       }
     >
-      <ProfilePicPlaceholder
-        size="md"
-        backgroundColor={props.backgroundColor || "grey"}
-      />
+      <div className="message-container__profile-pic">
+        <ProfilePicPlaceholder
+          size="md"
+          backgroundColor={props.backgroundColor || "grey"}
+        />
+      </div>
       <div className={
         props.isSelf === true
           ? 'message-text-wrapper message-text-wrapper--from-self'
