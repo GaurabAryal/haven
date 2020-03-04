@@ -7,6 +7,7 @@ import { MIN_GROUP_SIZE, USER_STATUSES } from 'src/constants';
 import { Switch, Route } from 'react-router-dom';
 import './MainPage.css';
 import { AUTH_TOKEN } from 'src/constants';
+import { getMemberColor } from 'src/utils';
 
 import Sidebar from './components/Sidebar/Sidebar';
 import ChatContainer from './components/Chat/ChatContainer';
@@ -61,10 +62,8 @@ export default class MainPageContainer extends React.Component {
         <div key={member.firstName + index} className="new-match">
           <div className="new-match__pic">
             <ProfilePicPlaceholder
-              firstName={member.firstName[0]}
-              lastName={member.lastName[0]}
               size="md"
-              backgroundColor="grey"
+              backgroundColor={getMemberColor(member.id, members)}
             />
           </div>
           <div className="new-match__name text--md font-weight--bold">

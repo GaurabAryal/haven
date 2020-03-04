@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import 'src/utils.css';
 import './ChatMessage.css';
+import ProfilePicPlaceholder from 'src/components/ProfilePicPlaceholder/ProfilePicPlaceholder';
 
 export default function ChatMessage(props) {
   return (
@@ -12,7 +13,10 @@ export default function ChatMessage(props) {
           : 'message-container'
       }
     >
-      <div className="message-container__profile-pic"></div>
+      <ProfilePicPlaceholder
+        size="md"
+        backgroundColor={props.backgroundColor || "grey"}
+      />
       <div className={
         props.isSelf === true
           ? 'message-text-wrapper message-text-wrapper--from-self'
@@ -54,4 +58,5 @@ ChatMessage.propTypes = {
   time: PropTypes.string,
   image: PropTypes.string,
   isSelf: PropTypes.bool,
+  backgroundColor: PropTypes.string,
 };

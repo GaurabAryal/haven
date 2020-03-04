@@ -8,6 +8,7 @@ import ContentContainer from '../ContentContainer/ContentContainer';
 import ChatMessage from 'src/components/ChatMessage/ChatMessage';
 import Modal from 'src/components/Modal/Modal';
 import Button from 'src/components/Button/Button';
+import { getMemberColor } from 'src/utils';
 import './Chat.css';
 
 export default class ChatScreen extends React.Component {
@@ -122,6 +123,7 @@ export default class ChatScreen extends React.Component {
                 message={message.text}
                 isSelf={message.author === meId}
                 time="just now"
+                backgroundColor={getMemberColor(message.author, members)}
               />
             ))}
             <div

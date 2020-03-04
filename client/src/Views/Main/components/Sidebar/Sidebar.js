@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { MIN_GROUP_SIZE } from 'src/constants';
 import { ReactComponent as HavenLogo } from 'src/Views/Onboarding/images/haven-logo-small.svg';
 
-import { getMemberNames } from 'src/utils';
+import { getMemberNames, getMemberColor } from 'src/utils';
 
 import './Sidebar.css';
 
@@ -28,9 +28,7 @@ class Sidebar extends React.Component {
         style={offsetStyle}
       >
         <ProfilePicPlaceholder
-          firstName={members[0].firstName}
-          lastName={members[0].lastName}
-          backgroundColor="teal"
+          backgroundColor={getMemberColor(members[0].id, members)}
           size="sm"
         />
       </div>,
@@ -43,7 +41,7 @@ class Sidebar extends React.Component {
         <ProfilePicPlaceholder
           firstName={members[1].firstName}
           lastName={members[1].lastName}
-          backgroundColor="magenta"
+          backgroundColor={getMemberColor(members[1].id, members)}
           size="sm"
         />
       </div>,
