@@ -11,7 +11,7 @@ export default class WaitingScreen extends React.Component {
     if (this.props.isWaiting) {
       this.startTimer = setTimeout(() => {
         this.props.startPolling(1000);
-      }, 5000);
+      }, 3000);
       this.endTimer = setTimeout(() => {
         this.props.stopPolling();
         this.props.goToNextStep();
