@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import './fonts/Inter-Bold.woff2';
+import './fonts/Inter-Regular.woff2';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
