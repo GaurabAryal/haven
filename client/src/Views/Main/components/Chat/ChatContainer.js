@@ -49,11 +49,13 @@ const CREATE_MESSAGE_MUTATION = gql`
     $chatroom: String!
     $text: String
     $author: String!
+    $date: String!
   ) {
     sendChatMessage(
       chatroom: $chatroom
       text: $text
       author: $author
+      date: $date
     ) {
       ok
     }
