@@ -1,19 +1,19 @@
 import graphene
 import graphql_jwt
-import asgiref
-import channels
 from graphql import GraphQLError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.db.models import Count, Q
 
 from .inputs import UserInput, ProfileInput
 from .types import UserNode, ProfileNode, GroupNode
 from .subscriptions import OnNewChatMessage
 from .types import chats
-from havenapp.models import Profile, Group, Membership, MatchHistory
 from havenapp.matchmaking.matching import UserPreferences, find_best_match, join_group, join_new_group, update_member_status
 from havenapp.constants.constant import UserStatus
+from havenapp.models import Profile, Group, Chat, MatchHistory
+from havenapp.models import SavedMessages
+
+
 
 # Mutation class to register user
 class Register(graphene.Mutation):
@@ -94,7 +94,7 @@ class MatchGroup(graphene.Mutation):
         preference_list = graphene.List(graphene.Int)
         country = graphene.String()
         city = graphene.String()
-    
+
     group = graphene.Field(GroupNode)
     status = graphene.String()
 
@@ -170,15 +170,31 @@ class SendChatMessage(graphene.Mutation, name="SendChatMessagePayload"):
         chatroom = graphene.String()
         text = graphene.String()
         author = graphene.String()
+        date = graphene.String()
 
-    def mutate(self, info, chatroom, text, author):
+    def mutate(self, info, chatroom, text, author, date ):
         """Mutation "resolver" - store and broadcast a message."""
         # Use the username from the connection scope if authorized.
+        #username is actually ID
         username = author
+        print("ID below")
+        print(author)
+        print(chatroom)
+        user = User.objects.get(id=int(author))
+        print(user)
+        group = Group.objects.get(id=chatroom)
         # Store a message.
-        chats[chatroom].append({"chatroom": chatroom, "text": text, "author": username})
+        chats[chatroom].append({"chatroom": chatroom,
+                                "text": text,
+                                "author": username,
+                                "date": date})
+        print("date")
+        print(date)
+        save_chat = Chat(message=text, user=user, group=group)
+
+        save_chat.save()
         # Notify subscribers.
-        OnNewChatMessage.new_chat_message(chatroom=chatroom, text=text, author=username)
+        OnNewChatMessage.new_chat_message(chatroom=chatroom, text=text, author=username, date=date)
 
         return SendChatMessage(ok=True)
 
@@ -198,6 +214,24 @@ class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
         # info.context.session.save()
 
         return cls(user=info.context.user)
+
+
+# Mutation class to save message
+class SaveMessage(graphene.Mutation):
+    class Arguments:
+
+        group_id = graphene.String()
+
+    ok = graphene.Boolean()
+
+    def mutate(self, info, group_id):
+        group = Group.objects.get(group_id=group_id)
+        user = info.context.user
+        chat = Chat.objects.get(group=group, user=user)
+        save_msg = SavedMessages(user=user, chat=chat, group_id=group.id)
+        save_msg.save()
+        return SaveMessage(ok=True)
+
 
 # Registers Users into Mutation
 class Mutation(graphene.ObjectType):

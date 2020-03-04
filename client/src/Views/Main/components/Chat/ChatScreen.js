@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import ChatHeader from './ChatHeader';
 import ChatDetails from './ChatDetails';
@@ -29,12 +30,12 @@ export default class ChatScreen extends React.Component {
     if (!this.state.message) {
       return;
     }
-
     await this.props.createMessageMutation({
       variables: {
         chatroom: this.props.groupId,
         text: this.state.message,
         author: this.props.meId,
+        date: moment().format('YYYY-MM-DD HH:mm:ss'),
       },
     });
 
