@@ -7,13 +7,16 @@ from havenapp.models import Group, Membership
 from havenapp.constants.constant import PreferenceFlags, UserStatus
 
 class UserPreferences():
-    def __init__(self, user_id: str, preference_flags: Dict[str, bool], city: str, country: str):
+    def __init__(self, user_id: str, preference_flags: List[int], city: str, country: str):
         self.user_id: str = user_id
-        self.city = city
-        self.country = country
+        self.city: str = city
+        self.country: str = country
         self.preference_flags: Dict[str, bool] = self.parse_preferences(preference_flags)
 
-    def parse_preferences(self, user_pref: Dict[str, bool]):
+    def parse_preferences(self, user_pref: List[int]) -> Dict[str, bool]:
+        # If no pref, toggle all flags that is not providing
+        if PreferenceFlags.no_preference.value in user_pref:
+            return {'find_friends': True, 'socialize': True, 'seek_mentor': True, 'seek_advice': True}
         return {PreferenceFlags(p).name: True for p in user_pref}
 
     def build_query(self):
@@ -23,15 +26,6 @@ class UserPreferences():
         return q
 
 def find_best_match(user_preference: UserPreferences) -> str:
-    # If no preferences
-    if not user_preference.preference_flags or PreferenceFlags.any in user_preference.preference_flags:
-        group = Group.objects.annotate(num_members=Count('members')) \
-                .exclude(members__id=user_preference.user_id) \
-                .filter(Q(num_members__lt=5)) \
-                .filter(provide_mentor=False, provide_advice=False) \
-                .first()
-        return group.id
-
     # Build query and create groups
     query = user_preference.build_query()
     matching_groups = Group.objects.annotate(num_members=Count('members')) \
