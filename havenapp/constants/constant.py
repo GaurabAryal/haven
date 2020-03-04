@@ -1,7 +1,7 @@
 import enum
 
 class PreferenceFlags(enum.Enum):
-    any = 0
+    no_preference = 0
     find_friends = 1
     socialize = 2
     seek_mentor = 3
