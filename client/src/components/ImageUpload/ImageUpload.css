@@ -1,6 +1,6 @@
-.onboarding-dropzone {
-    width: 150px;
-    height: 150px;
+.imageUpload-dropzone {
+    width: 100%;
+    height: 100%;
     border-radius: 5px;
     display: flex;
     justify-content: center;
@@ -8,19 +8,23 @@
     outline: none;
 }
 
-.onboarding-dropzone:hover {
+.imageUpload-fullwidth {
+  width: 100%;
+}
+
+.imageUpload-dropzone:hover {
   cursor: pointer;
 }
 
-.onboarding-dropzone--no-image {
+.imageUpload-dropzone--no-image {
   border: 1px solid #888;
 }
 
-.onboarding-dropzone--no-image .select-image {
+.imageUpload-dropzone--no-image .select-image {
   /* add styles for hover choose new image (make it like messenger group chat picture) */
 }
 
-.plsFit {
+.imageUpload-image {
     width: 100%;
     height: 100%;
 }

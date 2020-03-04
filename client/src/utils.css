@@ -113,3 +113,16 @@
   color: #EA5635;
   top: -30px;
 }
+
+.loadingspinner {
+  margin-left: auto;
+  margin-right: auto;
+	pointer-events: none;
+	width: 3em;
+	height: 3em;
+	border: 0.4em solid transparent;
+	border-color: #eee;
+	border-top-color: #3E67EC;
+	border-radius: 50%;
+	animation: loadingspin 1s linear infinite;
+}

@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+
+import Button from 'src/components/Button/Button';
 import ProfilePicPlaceholder from 'src/components/ProfilePicPlaceholder/ProfilePicPlaceholder';
+
 import { ReactComponent as ChevronDown } from './images/chevron-down.svg';
 import { getMemberColor } from 'src/utils';
 
-export default class ChatHeader extends React.Component {
+export default class ChatDetails extends React.Component {
   state = {
     openDetails: {},
+    showVerifyModal: false,
   };
 
   toggleDetails(id) {
@@ -27,25 +31,36 @@ export default class ChatHeader extends React.Component {
       } = member;
 
       return (
-        <div key={firstName + index} className="person-container noselect">
-          <div onClick={() => this.toggleDetails(id)} className="person">
+        <div
+          key={firstName + index}
+          className="person-container noselect"
+        >
+          <div
+            onClick={() => this.toggleDetails(id)}
+            className="person"
+          >
             <div className="person__pic">
               <ProfilePicPlaceholder
                 size="sm"
-                backgroundColor={getMemberColor(member.id, this.props.members)}
+                backgroundColor={getMemberColor(
+                  member.id,
+                  this.props.members,
+                )}
               />
             </div>
-            <div className="person__name text--sm font-weight--bold">
+            <div className="person__name text--md font-weight--bold">
               {`${firstName} ${lastName}`}{' '}
               {id === this.props.meId && '(You)'}
             </div>
 
             <span>
-              <ChevronDown className={
-                this.state.openDetails[id] ?
-                'chevron chevron--up' :
-                'chevron chevron--down'
-              }/>
+              <ChevronDown
+                className={
+                  this.state.openDetails[id]
+                    ? 'chevron chevron--up'
+                    : 'chevron chevron--down'
+                }
+              />
             </span>
           </div>
           {this.state.openDetails[id] && (
@@ -71,16 +86,38 @@ export default class ChatHeader extends React.Component {
   render() {
     return (
       <div className="chat-details-container">
-        <div className="text--md">
-          Group Members
-        </div>
+        <div className="text--lg">Group Members</div>
         {this.getMemberDetails()}
+        <div className="text--lg spacing-top--lg spacing-bottom--sm">
+          One on One
+        </div>
+        <div className="chat-details-verify spacing-bottom--sm">
+          <ProfilePicPlaceholder
+            size="sm"
+            backgroundColor={getMemberColor(
+              this.props.meId,
+              this.props.members,
+            )}
+          />
+          <div className="chat-details-verify-desc">
+            For your security, you must be a verified member to have
+            one-on-one (direct) messages. Get started below!
+          </div>
+        </div>
+        <Button
+          isFullWidth
+          onClick={this.props.openVerifyModal}
+          variant="secondary"
+        >
+          Become a verified member
+        </Button>
       </div>
     );
   }
 }
 
-ChatHeader.propTypes = {
+ChatDetails.propTypes = {
   members: PropTypes.array,
   meId: PropTypes.string,
+  openVerifyModal: PropTypes.func,
 };

@@ -36,6 +36,7 @@ export default function Modal(props) {
           className="modal-button spacing-bottom--sm"
           variant="primary"
           onClick={props.onButtonClick}
+          disabled={props.disableButton}
           isFullWidth={true}
         >
           {props.buttonText}
@@ -53,4 +54,7 @@ Modal.propTypes = {
   header: PropTypes.string,
   buttonText: PropTypes.string,
   onButtonClick: PropTypes.func,
+  disableButton: PropTypes.bool,
+  width: PropTypes.string,
+  height: PropTypes.string,
 };
