@@ -1,5 +1,6 @@
 .profile-pic-placeholder {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   color: #fff;
@@ -26,4 +27,23 @@
   width: 60px;
   height: 60px;
   font-size: 30px;
+}
+
+.profile-pic-placeholder__haven-logo {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profile-pic-placeholder--sm .profile-pic-placeholder__haven-logo {
+  margin-top: 3px;
+  padding-right: 2px;
+}
+
+.profile-pic-placeholder--md .profile-pic-placeholder__haven-logo {
+  margin-bottom: 1px;
+  padding-right: 1px;
+}
+
+.profile-pic-placeholder__initials {
+  font-size: 14px;
 }

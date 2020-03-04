@@ -25,3 +25,11 @@ export function getFilteredPreferencesOptions(position) {
     return filteredOptions;
   }
 }
+
+export function getMemberColor(memberId, members) {
+  const userColors = ["#1877F2", "#39CB05", "#EA5635", "#FDA700", "#9C42BB"];
+  for (let i = 0; i < members.length; i++) {
+    if (members[i].id === memberId) return userColors[i]
+  }
+  return "grey";
+}

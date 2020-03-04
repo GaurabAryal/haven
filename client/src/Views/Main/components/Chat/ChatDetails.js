@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import ProfilePicPlaceholder from 'src/components/ProfilePicPlaceholder/ProfilePicPlaceholder';
 import { ReactComponent as ChevronDown } from './images/chevron-down.svg';
+import { getMemberColor } from 'src/utils';
 
 export default class ChatHeader extends React.Component {
   state = {
@@ -30,10 +31,8 @@ export default class ChatHeader extends React.Component {
           <div onClick={() => this.toggleDetails(id)} className="person">
             <div className="person__pic">
               <ProfilePicPlaceholder
-                firstName={firstName[0]}
-                lastName={lastName[0]}
                 size="sm"
-                backgroundColor="grey"
+                backgroundColor={getMemberColor(member.id, this.props.members)}
               />
             </div>
             <div className="person__name text--sm font-weight--bold">
