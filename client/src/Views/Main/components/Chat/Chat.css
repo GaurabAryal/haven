@@ -71,9 +71,10 @@
 }
 
 .chat-details-container {
+  height: calc(100vh - 80px);
   width: 350px;
   padding: 20px;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .person-container {
