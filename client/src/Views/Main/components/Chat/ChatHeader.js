@@ -12,12 +12,19 @@ export default function ChatHeader(props) {
       </div>
       <div className="group-header__actions">
         <div className="group-header__action">
-          <BookIcon/>
-          <p className="color--purple group-header__action-text">Guidelines</p>
+          <BookIcon />
+          <p className="color--purple group-header__action-text">
+            Guidelines
+          </p>
         </div>
-        <div className="group-header__action">
-          <SidebarIcon/>
-          <p className="color--purple group-header__action-text">Details</p>
+        <div
+          className="group-header__action"
+          onClick={props.toggleDetails}
+        >
+          <SidebarIcon />
+          <p className="color--purple group-header__action-text">
+            Details
+          </p>
         </div>
       </div>
     </div>

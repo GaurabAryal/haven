@@ -14,6 +14,13 @@ const CHAT_QUERY = gql`
         id
         firstName
         lastName
+        dateJoined
+        profile {
+          id
+          position
+          bio
+          interests
+        }
       }
     }
 
@@ -49,6 +56,21 @@ const CREATE_MESSAGE_MUTATION = gql`
       author: $author
     ) {
       ok
+    }
+  }
+`;
+
+const EDIT_PROFILE_MUTATION = gql`
+  mutation editProfile(
+    $chatroom: String!
+    $text: String
+    $author: String!
+  ) {
+    updateProfile(profileInput: { status: $status }) {
+      profile {
+        id
+        status
+      }
     }
   }
 `;
@@ -97,4 +119,5 @@ ChatContainer.propTypes = {
 
 export default compose(
   graphql(CREATE_MESSAGE_MUTATION, { name: 'createMessageMutation' }),
+  graphql(EDIT_PROFILE_MUTATION),
 )(ChatContainer);

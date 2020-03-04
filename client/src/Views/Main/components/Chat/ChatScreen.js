@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ChatHeader from './ChatHeader';
+import ChatDetails from './ChatDetails';
 import ContentContainer from '../ContentContainer/ContentContainer';
 import ChatMessage from 'src/components/ChatMessage/ChatMessage';
 import Button from 'src/components/Button/Button';
 import './Chat.css';
 
 export default class ChatScreen extends React.Component {
-  state = { message: '' };
+  state = { message: '', showDetails: false };
 
   scrollToBottom = (smooth = false) => {
     this.messagesEnd.scrollIntoView({
@@ -62,8 +63,8 @@ export default class ChatScreen extends React.Component {
     let inputField = e.target;
 
     this.setState({
-      message: e.target.value
-    })
+      message: e.target.value,
+    });
 
     inputField.style.height = 'auto';
     inputField.style.height = inputField.scrollHeight + 'px';
@@ -72,7 +73,22 @@ export default class ChatScreen extends React.Component {
   render() {
     const { history, meId, members } = this.props;
     return (
-      <ContentContainer header={<ChatHeader members={members} />}>
+      <ContentContainer
+        header={
+          <ChatHeader
+            members={members}
+            toggleDetails={() =>
+              this.setState(prevState => ({
+                showDetails: !prevState.showDetails,
+              }))
+            }
+          />
+        }
+        details={
+          <ChatDetails members={members} meId={this.props.meId} />
+        }
+        showDetails={this.state.showDetails}
+      >
         <div className="chatContainer">
           <div className="messageContainer">
             {history.map((message, index) => (
@@ -97,18 +113,11 @@ export default class ChatScreen extends React.Component {
               type="text"
               placeholder="Type a message"
               value={this.state.message}
-              onChange={(e) =>
-                this.resizeInput(e)
-              }
-              onKeyDown={(e) =>
-                this.handleEnter(e)
-              }
+              onChange={e => this.resizeInput(e)}
+              onKeyDown={e => this.handleEnter(e)}
             />
             <div className="message-input__button">
-              <Button
-                variant="primary"
-                onClick={this.onSubmit}
-              >
+              <Button variant="primary" onClick={this.onSubmit}>
                 Send
               </Button>
             </div>
