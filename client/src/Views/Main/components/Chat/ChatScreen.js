@@ -130,7 +130,7 @@ export default class ChatScreen extends React.Component {
               }}
             />
           </div>
-          <form onSubmit={this.onSubmit} className="message-composer">
+          <form onSubmit={this.onSubmit} className={this.state.showDetails ? "message-composer message-composer--small-width" : "message-composer message-composer--full-width"}>
             <textarea
               className="message-composer__input"
               rows="1"

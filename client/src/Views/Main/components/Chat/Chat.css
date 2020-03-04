@@ -36,11 +36,19 @@
 }
 
 .message-composer {
+  border-right: 1px solid #ddd;
   position: fixed;
   display: flex;
   background-color: #fff;
-  width: calc(100% - 400px);
   bottom: 0;
+}
+
+.message-composer--full-width {
+  width: calc(100% - 400px);
+}
+
+.message-composer--small-width {
+  width: calc(100% - 751px);
 }
 
 .message-composer__input {
@@ -62,6 +70,52 @@
   right: 10px;
 }
 
-.chatDetails {
-  width: 380px;
+.chat-details-container {
+  width: 350px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.person-container {
+  border-bottom: 1px solid #ddd;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.person:hover .person__name {
+  color: #525EC8;
+}
+
+.person__name {
+  transition: color 0.15s;
+  margin-left: 12px;
+  flex: 1;
+}
+
+.chevron {
+  transition: transform 0.2s;
+}
+
+.chevron--up {
+  transform: rotate(-180deg);
+}
+
+.chevron--down {
+
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
 }
