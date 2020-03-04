@@ -12,6 +12,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 import ChatContainer from './components/Chat/ChatContainer';
 import CommunityContainer from './components/Community/CommunityContainer';
 import Modal from 'src/components/Modal/Modal';
+import ProfilePicPlaceholder from 'src/components/ProfilePicPlaceholder/ProfilePicPlaceholder';
 
 const GET_USER_QUERY = gql`
   {
@@ -53,11 +54,21 @@ export default class MainPageContainer extends React.Component {
     this.props.history.push('/login');
   };
 
-  getMembersList(members) {
+  getMembersList(members, meId) {
     return members.map((member, index) => (
-      <div key={member.firstName + index}>
-        {member.firstName} {member.lastName}
-      </div>
+      member.id !== meId ? <div key={member.firstName + index} className="new-match">
+        <div className="new-match__pic">
+          <ProfilePicPlaceholder
+            firstName={member.firstName[0]}
+            lastName={member.lastName[0]}
+            size="md"
+            backgroundColor="grey"
+          />
+        </div>
+        <div className="new-match__name text--md font-weight--bold">
+          {member.firstName} {member.lastName}
+        </div>
+      </div> : null
     ));
   }
 
@@ -133,15 +144,17 @@ export default class MainPageContainer extends React.Component {
                           this.onAfterOpenModal(matchedGroup.id)
                         }
                         onClose={() => this.onCloseModal(mutation)}
-                        buttonText="Let's get the conversation starting!"
-                        header={`${data.me.firstName}, you've been matched with:`}
+                        buttonText="Get started"
+                        header={`${data.me.firstName}, meet your new group!`}
                         onButtonClick={() =>
                           this.onCloseModal(mutation)
                         }
+                        width="600px"
+                        height="420px"
                       >
-                        <>
-                          {this.getMembersList(matchedGroup.members)}
-                        </>
+                        <div className="members-list spacing-top--xs">
+                          {this.getMembersList(matchedGroup.members, data.me.id)}
+                        </div>
                       </Modal>
                       <button onClick={() => this.test(mutation)}>
                         REMOVE THIS AFTER
