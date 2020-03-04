@@ -4,12 +4,15 @@ import './WaitingScreen.css';
 import { MIN_GROUP_SIZE } from 'src/constants';
 
 export default class WaitingScreen extends React.Component {
-  timer = null;
+  startTimer = null;
+  endTimer = null;
 
   componentDidMount() {
     if (this.props.isWaiting) {
-      this.props.startPolling(1000);
-      this.timer = setTimeout(() => {
+      this.startTimer = setTimeout(() => {
+        this.props.startPolling(1000);
+      }, 5000);
+      this.endTimer = setTimeout(() => {
         this.props.stopPolling();
         this.props.goToNextStep();
       }, 10000);
@@ -23,7 +26,8 @@ export default class WaitingScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    clearTimeout(this.timer);
+    clearTimeout(this.startTimer);
+    clearTimeout(this.endTimer);
   }
 
   render() {
