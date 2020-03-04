@@ -11,7 +11,10 @@ export default function ChatHeader(props) {
         {getMemberNames(props.members)}
       </div>
       <div className="group-header__actions">
-        <div className="group-header__action">
+        <div
+          className="group-header__action"
+          onClick={props.showGuidelines}
+        >
           <BookIcon />
           <p className="color--purple group-header__action-text">
             Guidelines
@@ -33,4 +36,6 @@ export default function ChatHeader(props) {
 
 ChatHeader.propTypes = {
   members: PropTypes.array,
+  showGuidelines: PropTypes.func,
+  toggleDetails: PropTypes.func,
 };

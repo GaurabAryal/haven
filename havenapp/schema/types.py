@@ -1,7 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 from django.contrib.auth import get_user_model
-from havenapp.models import Profile, Group, Membership, MatchHistory
+from havenapp.models import Profile, Group, Membership, MatchHistory, SavedMessages, Chat
 
 from typing import DefaultDict, List
 
@@ -22,6 +22,11 @@ class Message(graphene.ObjectType, default_resolver=graphene.types.resolver.dict
     text = graphene.String()
     author = graphene.String()
 
+class SavedMsgType(graphene.ObjectType):
+    class Meta:
+        model = SavedMessages
+    """Message GraphQL type."""
+    group_id = graphene.String()
 
 chats: DefaultDict[str, List[str]] = defaultdict(list)
 
