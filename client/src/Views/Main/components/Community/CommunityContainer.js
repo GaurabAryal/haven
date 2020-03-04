@@ -13,6 +13,7 @@ const GET_USER_QUERY = gql`
       id
       firstName
       profile {
+        id
         position
         status
       }

@@ -62,7 +62,7 @@ const OnboardingPageContainer = props => (
   <Query query={GET_USER_QUERY}>
     {({ loading, error, data, startPolling, stopPolling }) => {
       if (loading) return <div />;
-      if (error) return `Error! ${error.message}`;
+      if (error) return <div />;
 
       const groupMembersAmount =
         data.membership[0]?.members?.length || 0;

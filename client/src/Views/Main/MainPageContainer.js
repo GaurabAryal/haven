@@ -20,6 +20,7 @@ const GET_USER_QUERY = gql`
       id
       firstName
       profile {
+        id
         status
       }
     }
@@ -95,7 +96,7 @@ export default class MainPageContainer extends React.Component {
       <Query query={GET_USER_QUERY}>
         {({ client, loading, error, data }) => {
           if (loading) return <div />;
-          if (error) return `Error! ${error.message}`;
+          if (error) return <div />;
 
           const groupMembersAmount =
             data.membership[0]?.members?.length || 0;
