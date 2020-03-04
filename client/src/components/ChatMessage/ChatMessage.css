@@ -29,6 +29,107 @@
   margin-right: 12px;
 }
 
+.message-text {
+  display: flex;
+  align-items: center;
+}
+
+.message-text__content:hover {
+  cursor: pointer;
+}
+
+.message-text--from-self {
+  flex-direction: row-reverse;
+}
+
+.message-text__content:hover + .message-text-content__actions,
+.message-text-content__actions:hover {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.message-text-content__actions {
+  transition-property: opacity transform;
+  transition-duration: 0.15s;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(-10px);
+  display: flex;
+  padding-left: 10px;
+  padding-right: 6px;
+}
+
+.message-text-content__actions--from-self {
+  transform: translateX(10px);
+}
+
+.message-text-content__action {
+  position: relative;
+  transition: background-color 0.15s;
+  display: flex;
+  margin-right: 4px;
+}
+
+.message-action-tooltip {
+  transition-property: opacity;
+  transition-duration: 0.15s;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.message-action__icon {
+  transition: background-color 0.3s;
+  border-radius: 5px;
+  padding: 8px 7px 4px 7px;
+}
+
+.message-action__icon:hover {
+  cursor: pointer;
+  background-color: #E5E7F7;
+}
+
+.message-action__icon:hover + .message-action-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.message-action__icon:hover + .message-action-tooltip .message-text-content__action-text,
+.message-action__icon:hover + .message-action-tooltip .message-triangle {
+  transform: translateY(0);
+}
+
+.message-text-content__action-text {
+  transform: translateY(2px);
+  transition-property: transform;
+  transition-duration: 0.2s;
+  text-align: center;
+  border-radius: 5px;
+  position: absolute;
+  background-color: #525EC8;
+  color: #fff;
+  padding: 5px;
+  bottom: 45px;
+  left: -15px;
+  right: -15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.message-triangle {
+  transform: translateY(2px);
+  transition-property: transform;
+  transition-duration: 0.2s;
+  left: 7px;
+  position: absolute;
+  bottom: 40px;
+  width: 10px;
+  height: 5px;
+  border-top: solid 10px #525EC8;
+  border-left: solid 10px transparent;
+  border-right: solid 10px transparent;
+}
+
 .message-text__metadata {
   display: flex;
   margin-left: 12px;
