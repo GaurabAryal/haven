@@ -47,7 +47,7 @@ export default class ChatMessage extends React.Component {
       this.setState({ showDetails: false, eventCalled: true });
       this.timer = setTimeout(() => {
         this.setState({ eventCalled: false });
-      }, 50);
+      }, 100);
     }
   }
 
