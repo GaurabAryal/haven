@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'havenapp.schema',
     'corsheaders',
     'channels',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -136,12 +137,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-
 # # CORS
 # CORS_ORIGIN_WHITELIST = [
 #     'http://localhost:3000',
@@ -157,7 +152,43 @@ GRAPHQL_JWT = {
     'JWT_AUTH_HEADER_PREFIX': 'Bearer'
 }
 
-
 CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 # ASGI_APPLICATION = "haven.wsgi._application"
 
+# Digital Ocean storage settings
+USE_DO_SPACES = os.getenv('USE_DO_SPACES') == 'True'
+if USE_DO_SPACES:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+    # Access to DOSpaces
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+
+    # DOSpaces config
+    AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME')
+    AWS_S3_ENDPOINT_URL = os.getenv('AWS_S3_ENDPOINT_URL')
+    AWS_S3_CUSTOM_DOMAIN = os.getenv('AWS_S3_CUSTOM_DOMAIN')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+
+    # Location for files on DO
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+
+    # Static file Settings
+    # Spaces static settings
+    STATIC_LOCATION = 'static'
+    STATIC_URL = f'{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+    STATICFILES_STORAGE = 'haven.storage_backends.StaticStorage'
+
+    # Spaces public media settings
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f'{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'haven.storage_backends.PublicMediaStorage'
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
