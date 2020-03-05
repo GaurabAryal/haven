@@ -45,6 +45,8 @@ export default class OnboardingPage extends React.Component {
 
   onUploadImage = files => {
     const image = files[0];
+    console.log(image)
+
     this.setState({ image, imageUrl: URL.createObjectURL(image) });
   };
 
@@ -56,6 +58,7 @@ export default class OnboardingPage extends React.Component {
       interests,
       city,
       country,
+      image,
     } = this.state;
     const { userId } = this.props;
 
@@ -72,8 +75,11 @@ export default class OnboardingPage extends React.Component {
         country,
         preferenceList,
         userId,
+        image,
       },
     });
+
+    console.log('IMAGE', image)
 
     this.setState(prevState => {
       return {

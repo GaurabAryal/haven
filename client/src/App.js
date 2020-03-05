@@ -19,8 +19,9 @@ import PrivateRoute from 'src/components/PrivateRoute/PrivateRoute';
 import LoginPage from './Views/Login/LoginPage';
 import OnboardingContainer from './Views/Onboarding/OnboardingContainer';
 import MainPageContainer from './Views/Main/MainPageContainer';
+import { createUploadLink } from "apollo-upload-client";
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: 'http://159.203.36.23/graphql/',
 });
 
