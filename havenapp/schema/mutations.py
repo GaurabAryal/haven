@@ -1,8 +1,15 @@
 import graphene
 import graphql_jwt
+import asgiref
+import channels
+import os
+
 from graphql import GraphQLError
+from django.core.files.base import ContentFile
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
+from django.db.models import Count, Q
 
 from .inputs import UserInput, ProfileInput
 from .types import UserNode, ProfileNode, GroupNode
@@ -38,7 +45,7 @@ class Register(graphene.Mutation):
 class CreateProfile(graphene.Mutation):
     class Arguments:
         profile_input = ProfileInput(required=True)
-    
+
     profile = graphene.Field(ProfileNode)
 
     def mutate(self, info, profile_input=None):
@@ -58,12 +65,26 @@ class CreateProfile(graphene.Mutation):
                 interests=profile_input.interests,
                 user=curr_user
             )
+
+            # Check if there is am image payload
+            if info.context.FILES:
+                image_file = info.context.FILES['profilePicture']
+                _, image_ext = os.path.splitext(image_file.name)
+
+                # if 'image' in image_file.content_type:
+                profile.profile_picture.save(slugify(f'{curr_user.username}_profile') + image_ext, ContentFile(image_file.read()), save=False)
+
             profile.save()
 
-        # This ensures that everything goes well
-        return CreateProfile(
-            profile=profile
-        )
+            # This ensures that everything goes well
+            return CreateProfile(
+                profile=profile
+            )
+        else:
+            return CreateProfile(
+                profile=profile.get()
+            )
+            
 
 class UpdateProfile(graphene.Mutation):
     class Arguments:
@@ -77,15 +98,24 @@ class UpdateProfile(graphene.Mutation):
         if curr_user.is_anonymous:
             raise GraphQLError('User must be logged in!')
 
-        profile = Profile.objects.filter(user=curr_user)
-        if not profile.exists():
+        profile_query = Profile.objects.filter(user=curr_user)
+        if not profile_query.exists():
             raise GraphQLError("Error, user does not have a profile...")
 
         field_updates = {k:v for k, v in profile_input.items()}
-        profile.update(**field_updates)
+        profile_query.update(**field_updates)
+
+        profile = profile_query.get()
+         # Check if there is am image payload
+        if info.context.FILES:
+            image_file = info.context.FILES['profilePicture']
+            _, image_ext = os.path.splitext(image_file.name)
+
+            # if 'image' in image_file.content_type:
+            profile.profile_picture.save(slugify(f'{curr_user.username}_profile') + image_ext, ContentFile(image_file.read()), save=True)
 
         return UpdateProfile(
-            profile=profile.get()
+            profile=profile
         )
 
 class MatchGroup(graphene.Mutation):

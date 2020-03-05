@@ -54,12 +54,8 @@ export default class ChatScreen extends React.Component {
 
   onCloseGuidelines = () => this.setState({ showGuidelines: false });
 
-  getName(id) {
-    const member = this.props.members.find(
-      member => id === member.id,
-    );
-
-    return `${member.firstName} ${member.lastName}`;
+  getSender(id) {
+    return this.props.members.find(member => id === member.id);
   }
 
   getGuidelines() {
@@ -137,7 +133,7 @@ export default class ChatScreen extends React.Component {
             {history.map((message, index) => (
               <ChatMessage
                 key={`message ${index}`}
-                sender={this.getName(message.author)}
+                sender={this.getSender(message.author)}
                 message={message.text}
                 isSelf={message.author === meId}
                 time="just now"
