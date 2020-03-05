@@ -1,4 +1,5 @@
 .message-container {
+  position: relative;
   display: flex;
   flex-direction: row;
   margin-top: 30px;
@@ -11,6 +12,7 @@
 
 .message-container__profile-pic {
   margin-top: 4px;
+  cursor: pointer;
 }
 
 .message-text-wrapper {
@@ -138,7 +140,7 @@
 }
 
 .metadata__sender {
-
+  cursor: pointer;
 }
 
 .metadata__time {
@@ -148,11 +150,20 @@
 }
 
 .message-text__content {
+  transition: background-color 0.15s;
   background-color: #f1f1f1;
   padding: 8px 12px;
   border-radius: 10px;
   word-wrap: break-word;
   white-space: pre-line;
+}
+
+.message-text__content:hover {
+  background-color: #e8e8e8;
+}
+
+.message-text__content--from-self:hover {
+  background-color: #D8E2F6;
 }
 
 .message-text__content--from-self {

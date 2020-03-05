@@ -68,7 +68,7 @@ export default class ChatMessage extends React.Component {
       >
         {this.state.showDetails && (
           <div ref={this.setWrapperRef}>
-            <UserDetails user={this.props.sender} />
+            <UserDetails user={this.props.sender} isSelf={this.props.isSelf}/>
           </div>
         )}
         <div
@@ -96,13 +96,13 @@ export default class ChatMessage extends React.Component {
               }
             >
               <p
-                className="metadata__sender text--sm font-weight--bold"
+                className="metadata__sender text--sm font-weight--bold noselect"
                 onClick={this.displayDetails}
               >
                 {this.props.sender.firstName}{' '}
                 {this.props.sender.lastName}
               </p>
-              <p className="metadata__time text--xs font-weight--regular">
+              <p className="metadata__time text--xs font-weight--regular noselect">
                 {this.props.time}
               </p>
             </div>

@@ -70,6 +70,10 @@
   color: #525EC8;
 }
 
+.color--red {
+  color: #EA5635;
+}
+
 .add-ellipses {
   white-space: nowrap;
   overflow-x: hidden;
