@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import 'src/utils.css'
 import './ProfilePicPlaceholder.css';
 import { ReactComponent as HavenLogo } from './images/haven-logo-white.svg';
+import { ReactComponent as VerifiedBadge } from './images/check-badge.svg';
 
 export default function ProfilePicPlaceholder(props) {
   let backgroundStyle = {
@@ -15,6 +16,11 @@ export default function ProfilePicPlaceholder(props) {
     }>
       <div className="profile-pic-placeholder__haven-logo">
         <HavenLogo/>
+        {
+          props.isVerified && <div className="verified-badge">
+            <VerifiedBadge/>
+          </div>
+        }
       </div>
     </div>
   );
@@ -23,4 +29,5 @@ export default function ProfilePicPlaceholder(props) {
 ProfilePicPlaceholder.propTypes = {
   size: PropTypes.oneOf(['sm', 'md', 'lg']).isRequired,
   backgroundColor: PropTypes.string.isRequired,
+  isVerified: PropTypes.bool,
 };

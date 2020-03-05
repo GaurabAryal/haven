@@ -24,6 +24,10 @@
   line-height: 1.4;
 }
 
+.text--md-lg {
+  font-size: 20px;
+}
+
 .text--lg {
   font-size: 24px;
 }
@@ -112,6 +116,10 @@
   position: absolute;
   color: #EA5635;
   top: -30px;
+}
+
+.error-message--relative {
+  color: #EA5635;
 }
 
 .loadingspinner {

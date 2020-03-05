@@ -34,10 +34,6 @@
   align-items: center;
 }
 
-.message-text__content:hover {
-  cursor: pointer;
-}
-
 .message-text--from-self {
   flex-direction: row-reverse;
 }

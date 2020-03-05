@@ -48,7 +48,7 @@ export default class ChatDetails extends React.Component {
                 )}
               />
             </div>
-            <div className="person__name text--md font-weight--bold">
+            <div className="person__name text--sm font-weight--bold">
               {`${firstName} ${lastName}`}{' '}
               {id === this.props.meId && '(You)'}
             </div>
@@ -86,18 +86,19 @@ export default class ChatDetails extends React.Component {
   render() {
     return (
       <div className="chat-details-container">
-        <div className="text--lg">Group Members</div>
+        <div className="text--md-lg spacing-bottom--md">Group Members</div>
         {this.getMemberDetails()}
-        <div className="text--lg spacing-top--lg spacing-bottom--sm">
+        <div className="text--md-lg spacing-top--lg spacing-bottom--md">
           One on One
         </div>
-        <div className="chat-details-verify spacing-bottom--sm">
+        <div className="chat-details-verify spacing-bottom--md">
           <ProfilePicPlaceholder
-            size="sm"
+            size="md"
             backgroundColor={getMemberColor(
               this.props.meId,
               this.props.members,
             )}
+            isVerified={true}
           />
           <div className="chat-details-verify-desc">
             For your security, you must be a verified member to have

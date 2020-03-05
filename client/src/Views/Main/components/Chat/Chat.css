@@ -74,7 +74,7 @@
 .chat-details-container {
   height: calc(100vh - 80px);
   width: 350px;
-  padding: 20px;
+  padding: 25px 20px;
   overflow-y: scroll;
 }
 
@@ -127,6 +127,6 @@
 }
 
 .chat-details-verify-desc {
-  margin-left: 16px;
+  margin-left: 20px;
   flex-shrink: 100;
 }

@@ -30,6 +30,7 @@
 }
 
 .profile-pic-placeholder__haven-logo {
+  position: relative;
   margin-left: auto;
   margin-right: auto;
 }
@@ -46,4 +47,10 @@
 
 .profile-pic-placeholder__initials {
   font-size: 14px;
+}
+
+.verified-badge {
+  position: absolute;
+  right: -17px;
+  bottom: -18px;
 }

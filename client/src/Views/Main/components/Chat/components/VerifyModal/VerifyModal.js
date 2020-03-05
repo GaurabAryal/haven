@@ -39,12 +39,12 @@ export default class VerifyModal extends React.Component {
           width="600px"
           height="600px"
         >
-          <div>
-            <div className="spacing-bottom--sm">
+          <div style={{position: "relative"}}>
+            <div className="spacing-bottom--md">
               To start one-on-one (direct) messages you need to be
-              verified. Verify you account by uploading a valid photo
+              verified. Verify your account by uploading a valid photo
               ID (Driver’s license, passport, health card, etc.).
-              Capture and upload a photo ID below.
+              Please upload a photo ID below.
             </div>
             <div className="verifyModal-imageUpload">
               <ImageUpload
@@ -53,9 +53,7 @@ export default class VerifyModal extends React.Component {
                 fullWidth
               />
             </div>
-            <div className="verifyModal-error">
-              <p className="error-message">{this.state.error}</p>
-            </div>
+            <p className="error-message--relative spacing-top--md">{this.state.error}</p>
           </div>
         </Modal>
         <Modal
