@@ -33,18 +33,21 @@ const ONBOARDING_MUTATION = gql`
     $country: String!
     $preferenceList: [Int]
     $userId: String!
+    $image: Upload
   ) {
     createProfile(
       profileInput: {
         position: $position
         bio: $bio
         interests: $interests
+        profilePicture: $image
       }
     ) {
       profile {
         id
       }
     }
+
     matchGroup(
       preferenceList: $preferenceList
       userId: $userId

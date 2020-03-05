@@ -56,6 +56,7 @@ export default class OnboardingPage extends React.Component {
       interests,
       city,
       country,
+      image,
     } = this.state;
     const { userId } = this.props;
 
@@ -72,6 +73,7 @@ export default class OnboardingPage extends React.Component {
         country,
         preferenceList,
         userId,
+        image,
       },
     });
 
