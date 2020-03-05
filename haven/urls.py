@@ -21,7 +21,7 @@ from django.conf.urls import url
 from havenapp.websocket import consumer
 import pathlib
 import django
-
+from graphene_file_upload.django import FileUploadGraphQLView
 
 
 # def graphiql(request):
@@ -34,7 +34,7 @@ import django
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True))),
+    path('graphql/', csrf_exempt(FileUploadGraphQLView.as_view(graphiql=True))),
 ]
 
 

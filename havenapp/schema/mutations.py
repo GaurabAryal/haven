@@ -20,9 +20,7 @@ from havenapp.constants.constant import UserStatus
 from havenapp.models import Profile, Group, Chat, MatchHistory
 from havenapp.models import SavedMessages
 
-class Upload(graphene.Scalar):
-    def serialize(self):
-        pass
+from graphene_file_upload.scalars import Upload
 
 # Mutation class to register user
 class Register(graphene.Mutation):
@@ -49,18 +47,15 @@ class CreateProfile(graphene.Mutation):
         profile_input = ProfileInput(required=True)
         profile_picture = Upload()
 
-
     profile = graphene.Field(ProfileNode)
 
-    def mutate(self, info, profile_input=None):
+    def mutate(self, info, profile_input=None, profile_picture=None):
         # Check if user is logged in
         curr_user = info.context.user
         if curr_user.is_anonymous:
             raise GraphQLError('User must be logged in!')
 
         profile = Profile.objects.filter(user=curr_user)
-        print(info.context)
-
         # Check if profile exists
         if not profile.exists():
             # Create profile object
@@ -72,9 +67,8 @@ class CreateProfile(graphene.Mutation):
             )
 
             # Check if there is am image payload
-            print(info)
-            if info.context.FILES:
-                image_file = info.context.FILES['profilePicture']
+            if profile_picture:
+                image_file = profile_picture
                 _, image_ext = os.path.splitext(image_file.name)
 
                 # if 'image' in image_file.content_type:
@@ -99,7 +93,7 @@ class UpdateProfile(graphene.Mutation):
     
     profile = graphene.Field(ProfileNode)
 
-    def mutate(self, info, profile_input=None):
+    def mutate(self, info, profile_input=None, profile_picture=None):
         # Check if user is logged in
         curr_user = info.context.user
         if curr_user.is_anonymous:
@@ -113,10 +107,9 @@ class UpdateProfile(graphene.Mutation):
         profile_query.update(**field_updates)
 
         profile = profile_query.get()
-        print(info.context.FILES)
-         # Check if there is am image payload
-        if info.context.FILES:
-            image_file = info.context.FILES['profilePicture']
+        # Check if there is am image payload
+        if profile_picture:
+            image_file = profile_picture
             _, image_ext = os.path.splitext(image_file.name)
 
             # if 'image' in image_file.content_type:
