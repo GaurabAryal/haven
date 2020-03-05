@@ -8,6 +8,12 @@ export default function UserDetails(props) {
       ? "user-details-container user-details-container--from-self"
       : "user-details-container"
     }>
+    <div class={props.isSelf
+      ? "triangle-right"
+      : "triangle-left"
+    }>
+      <div class="inner-triangle"></div>
+    </div>
       <div className="user-details-actions">
         <p className="user-details-action color--purple user-details-action--primary">
           View profile

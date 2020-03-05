@@ -5,6 +5,24 @@
     border-right: 1px solid #ddd;
 }
 
+@media (max-width: 1400px) {
+  .contentContainer-container {
+    width: calc(100% - 350px);
+  }
+}
+
+@media (max-width: 1200px) {
+  .contentContainer-container {
+    width: calc(100% - 300px);
+  }
+}
+
+@media (max-width: 1100px) {
+  .contentContainer-container {
+    width: calc(100% - 260px);
+  }
+}
+
 .contentContainer-header {
     display: flex;
     align-items: center;

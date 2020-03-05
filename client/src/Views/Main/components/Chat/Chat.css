@@ -52,6 +52,36 @@
   width: calc(100% - 751px);
 }
 
+@media (max-width: 1400px) {
+  .message-composer--full-width {
+    width: calc(100% - 350px);
+  }
+
+  .message-composer--small-width {
+    width: calc(100% - 701px);
+  }
+}
+
+@media (max-width: 1200px) {
+  .message-composer--full-width {
+    width: calc(100% - 300px);
+  }
+
+  .message-composer--small-width {
+    width: calc(100% - 651px);
+  }
+}
+
+@media (max-width: 1100px) {
+  .message-composer--full-width {
+    width: calc(100% - 260px);
+  }
+
+  .message-composer--small-width {
+    width: calc(100% - 611px);
+  }
+}
+
 .message-composer__input {
   padding: 20px 100px 20px 20px;
   max-height: 200px;
@@ -85,8 +115,10 @@
 .person {
   display: flex;
   align-items: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   cursor: pointer;
 }
 
