@@ -137,7 +137,7 @@ export default class ChatMessage extends React.Component {
                     <p className="message-text-content__action-text text--xs">
                       Like
                     </p>
-                    <div className="message-triangle" />
+                    <div className="message-triangle"/>
                   </div>
                 </div>
                 <div className="message-text-content__action">
@@ -148,7 +148,7 @@ export default class ChatMessage extends React.Component {
                     <p className="message-text-content__action-text text--xs">
                       Save
                     </p>
-                    <div className="message-triangle" />
+                    <div className="message-triangle"/>
                   </div>
                 </div>
                 {!this.props.isSelf && (
@@ -160,7 +160,7 @@ export default class ChatMessage extends React.Component {
                       <p className="message-text-content__action-text text--xs">
                         Report
                       </p>
-                      <div className="message-triangle" />
+                      <div className="message-triangle"/>
                     </div>
                   </div>
                 )}

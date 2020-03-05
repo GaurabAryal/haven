@@ -2,17 +2,18 @@
   position: absolute;
   padding: 8px;
   border-radius: 5px;
-  left: 53px;
+  left: 57px;
   top: -25px;
   min-width: 130px;
   background-color: #fff;
   border: 1px solid #ddd;
   box-shadow: 0 3px 10px #ddd;
+  z-index: 10;
 }
 
 .user-details-container--from-self {
   left: auto;
-  right: 53px;
+  right: 57px;
 }
 
 .user-details-action {
@@ -37,4 +38,50 @@
 
 .user-details-action--report {
   margin-top: 8px;
+}
+
+.triangle-right {
+  position: absolute;
+  transform: rotate(180deg);
+  right: -8px;
+  top: 42px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid #ddd;
+}
+
+.triangle-right .inner-triangle {
+  position: relative;
+  top: -8px;
+  left: 2px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid #fff;
+}
+
+.triangle-left {
+  position: absolute;
+  transform: rotate(180deg);
+  left: -8px;
+  top: 42px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid #ddd;
+}
+
+.triangle-left .inner-triangle {
+  position: relative;
+  top: -8px;
+  left: -10px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid #fff;
 }

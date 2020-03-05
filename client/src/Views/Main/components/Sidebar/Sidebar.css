@@ -11,6 +11,24 @@
   padding: 30px 0;
 }
 
+@media (max-width: 1400px) {
+  .sidebar-container {
+    width: 350px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .sidebar-container {
+    width: 300px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .sidebar-container {
+    width: 260px;
+  }
+}
+
 .sidebar-pill {
   display: flex;
   padding: 15px;

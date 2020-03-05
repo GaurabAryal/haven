@@ -27,7 +27,7 @@ export default class ChatDetails extends React.Component {
         dateJoined,
         firstName,
         lastName,
-        profile: { bio, interests },
+        profile: { bio, interests, position },
       } = member;
 
       return (
@@ -66,7 +66,13 @@ export default class ChatDetails extends React.Component {
           {this.state.openDetails[id] && (
             <div>
               <div className="spacing-bottom--sm">{bio}</div>
-              {bio && (
+              {(position && position !== "other") && (
+                <div className="spacing-bottom--sm">
+                  <b>{`${firstName} is`}</b>
+                  <div>{`A ${position} of a person with dementia`}</div>
+                </div>
+              )}
+              {interests && (
                 <div>
                   <b>Ask me about</b>
                   <div>{interests}</div>
@@ -86,7 +92,7 @@ export default class ChatDetails extends React.Component {
   render() {
     return (
       <div className="chat-details-container">
-        <div className="text--md-lg spacing-bottom--md">Group Members</div>
+        <div className="text--md-lg spacing-bottom--sm">Group Members</div>
         {this.getMemberDetails()}
         <div className="text--md-lg spacing-top--lg spacing-bottom--md">
           One on One
