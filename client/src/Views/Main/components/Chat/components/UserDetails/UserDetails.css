@@ -1,0 +1,40 @@
+.user-details-container {
+  position: absolute;
+  padding: 8px;
+  border-radius: 5px;
+  left: 53px;
+  top: -25px;
+  min-width: 130px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 3px 10px #ddd;
+}
+
+.user-details-container--from-self {
+  left: auto;
+  right: 53px;
+}
+
+.user-details-action {
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.user-details-action--primary:hover {
+  background-color: #E5E7F7;
+}
+
+.user-details-action--report:hover {
+  background-color: #FFEDEB;
+}
+
+.user-details-actions {
+  padding-bottom: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.user-details-action--report {
+  margin-top: 8px;
+}
