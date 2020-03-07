@@ -9,6 +9,7 @@ class OnNewChatMessage(channels_graphql_ws.Subscription):
     chatroom = graphene.String()
     text = graphene.String()
     date = graphene.String()
+    chat_id = graphene.String()
 
     class Arguments:
         """Subscription arguments."""
@@ -29,6 +30,7 @@ class OnNewChatMessage(channels_graphql_ws.Subscription):
         new_msg_text = self["text"]
         new_msg_sender = self["author"]
         new_msg_date = self["date"]
+        new_msg_id = self["chat_id"]
 
         # Method is called only for events on which client explicitly
         # subscribed, by returning proper subscription groups from the
@@ -44,11 +46,11 @@ class OnNewChatMessage(channels_graphql_ws.Subscription):
         #     return OnNewChatMessage.SKIP
 
         return OnNewChatMessage(
-            chatroom=chatroom, text=new_msg_text, author=new_msg_sender, date=new_msg_date
+            chatroom=chatroom, text=new_msg_text, author=new_msg_sender, date=new_msg_date, chat_id=new_msg_id
         )
 
     @classmethod
-    def new_chat_message(cls, chatroom, text, author, date):
+    def new_chat_message(cls, chatroom, text, author, date, chat_id):
         """Auxiliary function to send subscription notifications.
 
         It is generally a good idea to encapsulate broadcast invocation
@@ -58,7 +60,7 @@ class OnNewChatMessage(channels_graphql_ws.Subscription):
         """
         cls.broadcast(
             group=chatroom,
-            payload={"chatroom": chatroom, "text": text, "author": author, "date": date},
+            payload={"chatroom": chatroom, "text": text, "author": author, "date": date, "chat_id": chat_id},
         )
 
 
