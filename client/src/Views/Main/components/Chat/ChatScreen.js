@@ -9,6 +9,7 @@ import ChatMessage from 'src/components/ChatMessage/ChatMessage';
 import Modal from 'src/components/Modal/Modal';
 import Button from 'src/components/Button/Button';
 import VerifyModal from './components/VerifyModal/VerifyModal';
+import ReportModal from './components/ReportModal/ReportModal';
 
 import { getMemberColor } from 'src/utils';
 import './Chat.css';
@@ -20,6 +21,8 @@ export default class ChatScreen extends React.Component {
       localStorage.getItem('haven_sidebar') === 'true' ? true : false,
     showGuidelines: false,
     showVerifyModal: false,
+    showReportModal: false,
+    reportedUserId: '',
   };
 
   scrollToBottom = (smooth = false) => {
@@ -96,6 +99,12 @@ export default class ChatScreen extends React.Component {
     inputField.style.height = inputField.scrollHeight + 'px';
   }
 
+  verifyUser = () => {
+    this.props.verifyUserMutation({
+      variables: { userId: this.props.meId },
+    });
+  };
+
   render() {
     const { history, meId, members } = this.props;
     return (
@@ -120,8 +129,9 @@ export default class ChatScreen extends React.Component {
         details={
           <ChatDetails
             members={members}
-            meId={this.props.meId}
+            meId={meId}
             meImageUrl={this.props.meImageUrl}
+            meIsVerified={this.props.meIsVerified}
             openVerifyModal={() =>
               this.setState({ showVerifyModal: true })
             }
@@ -142,6 +152,12 @@ export default class ChatScreen extends React.Component {
                   message.author,
                   members,
                 )}
+                onReportUser={reportedUserId => {
+                  this.setState({
+                    showReportModal: true,
+                    reportedUserId,
+                  });
+                }}
               />
             ))}
             <div
@@ -187,7 +203,13 @@ export default class ChatScreen extends React.Component {
           <VerifyModal
             isOpen={this.state.showVerifyModal}
             onClose={() => this.setState({ showVerifyModal: false })}
-            onVerify={() => console.log('verified!')}
+            onVerify={this.verifyUser}
+          />
+          <ReportModal
+            isOpen={this.state.showReportModal}
+            onClose={() => this.setState({ showReportModal: false })}
+            onReport={id => console.log('reported', id)}
+            userId={this.state.reportedUserId}
           />
         </div>
       </ContentContainer>
@@ -199,7 +221,11 @@ ChatScreen.propTypes = {
   members: PropTypes.array,
   subscribeToMore: PropTypes.func,
   meId: PropTypes.string,
+  meImageUrl: PropTypes.string,
+  meIsVerified: PropTypes.bool,
   groupId: PropTypes.string,
   createMessageMutation: PropTypes.func,
+  verifyUserMutation: PropTypes.func,
   history: PropTypes.array,
+  verifyUser: PropTypes.func,
 };

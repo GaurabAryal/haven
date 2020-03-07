@@ -123,12 +123,6 @@ export default class MainPageContainer extends React.Component {
     });
   }
 
-  async test(mutation) {
-    await mutation({
-      variables: { status: USER_STATUSES.NEWLY_MATCHED[1] },
-    });
-  }
-
   render() {
     return (
       <Query query={GET_USER_QUERY}>
@@ -138,6 +132,10 @@ export default class MainPageContainer extends React.Component {
 
           const groupMembersAmount =
             data.membership[0]?.members?.length || 0;
+
+          const newestGroupMembersAmount =
+            data.membership[data.membership.length - 1]?.members
+              ?.length || 0;
 
           if (groupMembersAmount < MIN_GROUP_SIZE) {
             return (
@@ -178,7 +176,8 @@ export default class MainPageContainer extends React.Component {
                       isOpen={
                         (updatedStatus ||
                           data?.me?.profile?.status) ===
-                        USER_STATUSES.NEWLY_MATCHED[0]
+                          USER_STATUSES.NEWLY_MATCHED[0] &&
+                        newestGroupMembersAmount >= MIN_GROUP_SIZE
                       }
                       onAfterOpen={() =>
                         this.onAfterOpenModal(matchedGroup.id)

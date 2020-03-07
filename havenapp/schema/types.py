@@ -21,10 +21,8 @@ class Message(graphene.ObjectType, default_resolver=graphene.types.resolver.dict
     chatroom = graphene.String()
     text = graphene.String()
     author = graphene.String()
+    chat_id = graphene.String()
 
-class SavedMsgType(DjangoObjectType):
-    class Meta:
-        model = SavedMessages
 
 chats: DefaultDict[str, List[str]] = defaultdict(list)
 

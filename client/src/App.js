@@ -3,7 +3,6 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import './App.css';
 import { ApolloClient } from 'apollo-client';
 import { split } from 'apollo-link';
-import { createHttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { setContext } from 'apollo-link-context';
 import { getMainDefinition } from 'apollo-utilities';
@@ -19,7 +18,7 @@ import PrivateRoute from 'src/components/PrivateRoute/PrivateRoute';
 import LoginPage from './Views/Login/LoginPage';
 import OnboardingContainer from './Views/Onboarding/OnboardingContainer';
 import MainPageContainer from './Views/Main/MainPageContainer';
-import { createUploadLink } from "apollo-upload-client";
+import { createUploadLink } from 'apollo-upload-client';
 
 const httpLink = createUploadLink({
   uri: 'http://159.203.36.23/graphql/',

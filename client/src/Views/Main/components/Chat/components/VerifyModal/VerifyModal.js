@@ -7,6 +7,11 @@ import './VerifyModal.css';
 
 export default class VerifyModal extends React.Component {
   state = { step: 1, image: null, imageUrl: '', error: '' };
+  timer = null;
+
+  componentWillUnmount() {
+    clearTimeout(this.timer);
+  }
 
   onSubmit = async () => {
     if (this.state.imageUrl) {
@@ -15,6 +20,12 @@ export default class VerifyModal extends React.Component {
     } else {
       this.setState({ error: 'Please upload your ID.' });
     }
+  };
+
+  onFinishedVerify = () => {
+    this.timer = setTimeout(() => {
+      this.setState({ step: 3 });
+    }, 3000);
   };
 
   onUploadImage = files => {
@@ -39,7 +50,7 @@ export default class VerifyModal extends React.Component {
           width="600px"
           height="600px"
         >
-          <div style={{position: "relative"}}>
+          <div style={{ position: 'relative' }}>
             <div className="spacing-bottom--md">
               To start one-on-one (direct) messages you need to be
               verified. Verify your account by uploading a valid photo
@@ -53,11 +64,14 @@ export default class VerifyModal extends React.Component {
                 fullWidth
               />
             </div>
-            <p className="error-message--relative spacing-top--md">{this.state.error}</p>
+            <p className="error-message--relative spacing-top--md">
+              {this.state.error}
+            </p>
           </div>
         </Modal>
         <Modal
           isOpen={this.props.isOpen && this.state.step === 2}
+          onAfterOpen={this.onFinishedVerify}
           onClose={this.props.onClose}
           buttonText="Got it!"
           onButtonClick={this.props.onClose}
@@ -71,6 +85,23 @@ export default class VerifyModal extends React.Component {
               notify you as soon as possible via email.
             </p>
             <div className="loadingspinner" />
+          </div>
+        </Modal>
+        <Modal
+          isOpen={this.props.isOpen && this.state.step === 3}
+          onClose={this.props.onClose}
+          buttonText="Got it!"
+          onButtonClick={this.props.onClose}
+          header="Verify account"
+          width="600px"
+          height="260px"
+        >
+          <div>
+            <p className="spacing-bottom--lg">
+              You have been verified. You can now directly message
+              other verified members by clicking on their profile
+              picture and clicking &quot;Message&quot;.
+            </p>
           </div>
         </Modal>
       </>
