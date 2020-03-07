@@ -124,6 +124,7 @@ export default class ChatScreen extends React.Component {
         header={
           <ChatHeader
             members={members}
+            isDetailsOpen={this.state.showDetails}
             toggleDetails={() => {
               this.setState(prevState => ({
                 showDetails: !prevState.showDetails,

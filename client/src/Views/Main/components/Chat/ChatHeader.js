@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { getMemberNames } from 'src/utils';
 import { ReactComponent as BookIcon } from './images/book-open.svg';
 import { ReactComponent as SidebarIcon } from './images/sidebar.svg';
+import { ReactComponent as SidebarOpenIcon } from './images/sidebar-open.svg';
 
 export default function ChatHeader(props) {
   return (
-    <div className="group-header-container">
+    <div className="group-header-container noselect">
       <div className=" group-header__text text--lg font-weight--bold add-ellipses">
         {getMemberNames(props.members)}
       </div>
@@ -24,7 +25,7 @@ export default function ChatHeader(props) {
           className="group-header__action"
           onClick={props.toggleDetails}
         >
-          <SidebarIcon />
+          {props.isDetailsOpen ? <SidebarOpenIcon /> : <SidebarIcon />}
           <p className="color--purple group-header__action-text">
             Details
           </p>
@@ -38,4 +39,5 @@ ChatHeader.propTypes = {
   members: PropTypes.array,
   showGuidelines: PropTypes.func,
   toggleDetails: PropTypes.func,
+  isDetailsOpen: PropTypes.bool,
 };
