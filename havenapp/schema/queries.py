@@ -4,7 +4,7 @@ from graphql import GraphQLError
 from django.contrib.auth import get_user_model
 from havenapp.models import Profile, Group, Membership, MatchHistory, Chat, SavedMessages
 
-from .types import UserNode, ProfileNode, GroupNode, chats, Message, MatchHistoryNode, SavedMsgType
+from .types import UserNode, ProfileNode, GroupNode, chats, Message, MatchHistoryNode, ChatNode
 
 # Queries related to MatchHistory
 class MatchHistoryQuery(graphene.AbstractType):
@@ -61,7 +61,7 @@ class UserQuery(graphene.AbstractType):
 class ChatQuery(graphene.AbstractType):
 
     history = graphene.List(Message, chatroom=graphene.String())
-    saved_messages = graphene.List(SavedMsgType)
+    saved_messages = graphene.List(ChatNode, group_id=graphene.String())
 
     def resolve_history(self, info, chatroom):
         """Return chat history."""
@@ -71,13 +71,7 @@ class ChatQuery(graphene.AbstractType):
     def resolve_saved_messages(self, info, group_id):
         """Return chat history."""
 
-        saved_messages = SavedMessages.objects.filter(user=info.context.user, group_id=group_id)
-
-        chat = []
-        for _message in saved_messages:
-            chat.append(_message.chat)
-
-        return chat
+        return SavedMessages.objects.filter(user=info.context.user, group_id=group_id).all()
 
 # Query
 class Query(GroupQuery, UserQuery, MatchHistoryQuery, ChatQuery, graphene.ObjectType):

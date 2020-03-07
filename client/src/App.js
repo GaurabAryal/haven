@@ -22,11 +22,11 @@ import MainPageContainer from './Views/Main/MainPageContainer';
 import { createUploadLink } from "apollo-upload-client";
 
 const httpLink = createUploadLink({
-  uri: 'http://159.203.36.23/graphql/',
+  uri: 'http://localhost:8080/graphql/',
 });
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://159.203.36.23/graphql/',
+  uri: 'ws://localhost:8080/graphql/',
   options: {
     reconnect: true,
   },
