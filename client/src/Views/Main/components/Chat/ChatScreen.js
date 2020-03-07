@@ -121,6 +121,7 @@ export default class ChatScreen extends React.Component {
           <ChatDetails
             members={members}
             meId={this.props.meId}
+            meImageUrl={this.props.meImageUrl}
             openVerifyModal={() =>
               this.setState({ showVerifyModal: true })
             }

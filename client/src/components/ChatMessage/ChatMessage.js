@@ -6,7 +6,7 @@ import { ReactComponent as HeartIcon } from './images/heart.svg';
 import { ReactComponent as StarIcon } from './images/star.svg';
 import { ReactComponent as ReportIcon } from './images/report.svg';
 
-import ProfilePicPlaceholder from 'src/components/ProfilePicPlaceholder/ProfilePicPlaceholder';
+import ProfilePic from 'src/components/ProfilePic/ProfilePic';
 import UserDetails from 'src/Views/Main/components/Chat/components/UserDetails/UserDetails';
 
 export default class ChatMessage extends React.Component {
@@ -75,7 +75,8 @@ export default class ChatMessage extends React.Component {
           className="message-container__profile-pic"
           onClick={this.displayDetails}
         >
-          <ProfilePicPlaceholder
+          <ProfilePic
+            imageUrl={this.props.sender.profile.profilePicture}
             size="md"
             backgroundColor={this.props.backgroundColor || 'grey'}
           />

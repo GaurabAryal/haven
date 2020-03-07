@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Button from 'src/components/Button/Button';
-import ProfilePicPlaceholder from 'src/components/ProfilePicPlaceholder/ProfilePicPlaceholder';
+import ProfilePic from 'src/components/ProfilePic/ProfilePic';
 import { withRouter } from 'react-router-dom';
 import { MIN_GROUP_SIZE } from 'src/constants';
 import { ReactComponent as HavenLogo } from 'src/Views/Onboarding/images/haven-logo-small.svg';
@@ -21,13 +21,15 @@ class Sidebar extends React.Component {
     let offsetStyle = {
       left: `${25}px`,
     };
+    console.log(members)
     profilePics.push(
       <div
         key={members[0].id}
         className="sidebar-pill__profile-pics-wrapper"
         style={offsetStyle}
       >
-        <ProfilePicPlaceholder
+        <ProfilePic
+          imageUrl={members[0].profile.profilePicture}
           backgroundColor={getMemberColor(members[0].id, members)}
           size="sm"
         />
@@ -38,9 +40,8 @@ class Sidebar extends React.Component {
         className="sidebar-pill__profile-pics-wrapper"
         key={members[1].id}
       >
-        <ProfilePicPlaceholder
-          firstName={members[1].firstName}
-          lastName={members[1].lastName}
+        <ProfilePic
+          imageUrl={members[0].profile.profilePicture}
           backgroundColor={getMemberColor(members[1].id, members)}
           size="sm"
         />

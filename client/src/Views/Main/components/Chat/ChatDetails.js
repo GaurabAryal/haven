@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import Button from 'src/components/Button/Button';
-import ProfilePicPlaceholder from 'src/components/ProfilePicPlaceholder/ProfilePicPlaceholder';
+import ProfilePic from 'src/components/ProfilePic/ProfilePic';
 
 import { ReactComponent as ChevronDown } from './images/chevron-down.svg';
 import { getMemberColor } from 'src/utils';
@@ -40,8 +40,9 @@ export default class ChatDetails extends React.Component {
             className="person"
           >
             <div className="person__pic">
-              <ProfilePicPlaceholder
+              <ProfilePic
                 size="sm"
+                imageUrl={member.profile.profilePicture}
                 backgroundColor={getMemberColor(
                   member.id,
                   this.props.members,
@@ -98,13 +99,14 @@ export default class ChatDetails extends React.Component {
           One on One
         </div>
         <div className="chat-details-verify spacing-bottom--md">
-          <ProfilePicPlaceholder
+          <ProfilePic
             size="md"
             backgroundColor={getMemberColor(
               this.props.meId,
               this.props.members,
             )}
             isVerified={true}
+            imageUrl={this.props.meImageUrl}
           />
           <div className="chat-details-verify-desc">
             For your security, you must be a verified member to have
@@ -124,7 +126,8 @@ export default class ChatDetails extends React.Component {
 }
 
 ChatDetails.propTypes = {
-  members: PropTypes.array,
-  meId: PropTypes.string,
+  members: PropTypes.array.isRequired,
+  meId: PropTypes.string.isRequired,
+  meImageUrl: PropTypes.string,
   openVerifyModal: PropTypes.func,
 };
