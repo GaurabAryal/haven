@@ -14,6 +14,12 @@ export default class ChatDetails extends React.Component {
     showVerifyModal: false,
   };
 
+  componentDidMount() {
+    if (this.props.userIdToView) {
+      this.openDetailsAndCloseOthers(this.props.userIdToView);
+    }
+  }
+
   componentDidUpdate() {
     if (this.props.userIdToView) {
       this.openDetailsAndCloseOthers(this.props.userIdToView);
