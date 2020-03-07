@@ -9,7 +9,7 @@ from django.core.files.base import ContentFile
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
-from django.db.models import Count, Q
+from django.utils.dateparse import parse_datetime
 
 from .inputs import UserInput, ProfileInput
 from .types import UserNode, ProfileNode, GroupNode
@@ -17,8 +17,7 @@ from .subscriptions import OnNewChatMessage
 from .types import chats
 from havenapp.matchmaking.matching import UserPreferences, find_best_match, join_group, join_new_group, update_member_status
 from havenapp.constants.constant import UserStatus
-from havenapp.models import Profile, Group, Chat, MatchHistory
-from havenapp.models import SavedMessages
+from havenapp.models import Profile, Group, Chat, MatchHistory, SavedMessages
 
 from graphene_file_upload.scalars import Upload
 
@@ -203,29 +202,28 @@ class SendChatMessage(graphene.Mutation, name="SendChatMessagePayload"):
         author = graphene.String()
         date = graphene.String()
 
-    def mutate(self, info, chatroom, text, author, date ):
+    def mutate(self, info, chatroom, text, author, date):
         """Mutation "resolver" - store and broadcast a message."""
         # Use the username from the connection scope if authorized.
         #username is actually ID
         username = author
-        print("ID below")
-        print(author)
-        print(chatroom)
         user = User.objects.get(id=int(author))
-        print(user)
         group = Group.objects.get(id=chatroom)
         # Store a message.
+        chat_time = parse_datetime(date)
+        save_chat = Chat(message=text, user=user, group=group, chat_time=chat_time)
+
+        save_chat.save()
+
+        save_chat_uuid = str(save_chat.id)
+        #
         chats[chatroom].append({"chatroom": chatroom,
                                 "text": text,
                                 "author": username,
-                                "date": date})
-        print("date")
-        print(date)
-        save_chat = Chat(message=text, user=user, group=group)
-
-        save_chat.save()
+                                "date": date,
+                                "chat_id":save_chat_uuid})
         # Notify subscribers.
-        OnNewChatMessage.new_chat_message(chatroom=chatroom, text=text, author=username, date=date)
+        OnNewChatMessage.new_chat_message(chatroom=chatroom, text=text, author=username, date=date, chat_id=save_chat_uuid)
 
         return SendChatMessage(ok=True)
 
@@ -252,14 +250,14 @@ class SaveMessage(graphene.Mutation):
     class Arguments:
 
         group_id = graphene.String()
+        chat_id = graphene.String()
 
     ok = graphene.Boolean()
 
-    def mutate(self, info, group_id):
-        group = Group.objects.get(group_id=group_id)
+    def mutate(self, info, group_id, chat_id):
         user = info.context.user
-        chat = Chat.objects.get(group=group, user=user)
-        save_msg = SavedMessages(user=user, chat=chat, group_id=group.id)
+        chat = Chat.objects.get(id=chat_id)
+        save_msg = SavedMessages(user=user, chat=chat, group_id=group_id)
         save_msg.save()
         return SaveMessage(ok=True)
 
@@ -272,3 +270,4 @@ class Mutation(graphene.ObjectType):
     login = ObtainJSONWebToken.Field()
     sendChatMessage = SendChatMessage.Field()
     match_group = MatchGroup.Field()
+    save_message = SaveMessage.Field()

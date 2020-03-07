@@ -22,11 +22,9 @@ class Message(graphene.ObjectType, default_resolver=graphene.types.resolver.dict
     text = graphene.String()
     author = graphene.String()
 
-class SavedMsgType(graphene.ObjectType):
+class SavedMsgType(DjangoObjectType):
     class Meta:
         model = SavedMessages
-    """Message GraphQL type."""
-    group_id = graphene.String()
 
 chats: DefaultDict[str, List[str]] = defaultdict(list)
 
@@ -42,3 +40,7 @@ class MembershipNode(DjangoObjectType):
 class MatchHistoryNode(DjangoObjectType):
     class Meta:
         model = MatchHistory
+
+class ChatNode(DjangoObjectType):
+    class Meta:
+        model = Chat

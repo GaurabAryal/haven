@@ -5,6 +5,6 @@ import uuid
 
 
 class SavedMessages(models.Model):
-    group_id = models.UUIDField(default=uuid.uuid4)
+    group_id = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE)

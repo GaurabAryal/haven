@@ -61,7 +61,7 @@ class UserQuery(graphene.AbstractType):
 class ChatQuery(graphene.AbstractType):
 
     history = graphene.List(Message, chatroom=graphene.String())
-    saved_messages = graphene.List(SavedMsgType, group_id=graphene.String())
+    saved_messages = graphene.List(SavedMsgType)
 
     def resolve_history(self, info, chatroom):
         """Return chat history."""
