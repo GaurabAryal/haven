@@ -63,3 +63,17 @@ export const USER_STATUSES = {
   SEARCHING: ['A_2', 2],
   NEWLY_MATCHED: ['A_3', 3],
 };
+
+export const REPORT_REASONS = {
+  HARASSMENT: 'Harassment',
+  PRIVACY: 'Violation of privacy',
+  SPAM: 'Spam',
+  SELF_HARM: 'Self-harm',
+  HATE_SPEECH: 'Hate speech',
+  BULLYING: 'Bullying',
+  LANGUAGE: 'Inappropriate language',
+  RUDE: 'Rude',
+  RELIGIOUS: 'Religious debate',
+  POLITICAL: 'Political debate',
+  OTHER: 'Other',
+};

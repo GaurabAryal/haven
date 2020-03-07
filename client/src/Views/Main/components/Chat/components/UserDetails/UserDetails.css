@@ -9,6 +9,8 @@
   border: 1px solid #ddd;
   box-shadow: 0 3px 10px #ddd;
   z-index: 10;
+  display: flex;
+  flex-direction: column;
 }
 
 .user-details-container--from-self {
@@ -31,13 +33,14 @@
   background-color: #FFEDEB;
 }
 
-.user-details-actions {
-  padding-bottom: 8px;
-  border-bottom: 1px solid #ddd;
+.user-details-action--report {
+  padding-top: 8px;
+  
 }
 
-.user-details-action--report {
-  margin-top: 8px;
+.user-details-divider {
+  margin: 8px 0;
+  border-top: 1px solid #ddd;
 }
 
 .triangle-right {

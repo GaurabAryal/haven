@@ -21,7 +21,6 @@ class Sidebar extends React.Component {
     let offsetStyle = {
       left: `${25}px`,
     };
-    console.log(members)
     profilePics.push(
       <div
         key={members[0].id}
@@ -96,7 +95,10 @@ class Sidebar extends React.Component {
             Join more communities
           </Button>
         </div>
-        <div className="logout text--md color--grey" onClick={this.props.logout}>
+        <div
+          className="logout text--md color--grey"
+          onClick={this.props.logout}
+        >
           Sign out
         </div>
       </div>

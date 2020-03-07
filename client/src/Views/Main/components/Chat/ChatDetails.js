@@ -43,6 +43,7 @@ export default class ChatDetails extends React.Component {
               <ProfilePic
                 size="sm"
                 imageUrl={member.profile.profilePicture}
+                isVerified={member.profile.isVerified}
                 backgroundColor={getMemberColor(
                   member.id,
                   this.props.members,
@@ -67,7 +68,7 @@ export default class ChatDetails extends React.Component {
           {this.state.openDetails[id] && (
             <div>
               <div className="spacing-bottom--sm">{bio}</div>
-              {(position && position !== "other") && (
+              {position && position !== 'other' && (
                 <div className="spacing-bottom--sm">
                   <b>{`${firstName} is`}</b>
                   <div>{`A ${position} of a person with dementia`}</div>
@@ -93,33 +94,39 @@ export default class ChatDetails extends React.Component {
   render() {
     return (
       <div className="chat-details-container">
-        <div className="text--md-lg spacing-bottom--sm">Group Members</div>
-        {this.getMemberDetails()}
-        <div className="text--md-lg spacing-top--lg spacing-bottom--md">
-          One on One
-        </div>
-        <div className="chat-details-verify spacing-bottom--md">
-          <ProfilePic
-            size="md"
-            backgroundColor={getMemberColor(
-              this.props.meId,
-              this.props.members,
-            )}
-            isVerified={true}
-            imageUrl={this.props.meImageUrl}
-          />
-          <div className="chat-details-verify-desc">
-            For your security, you must be a verified member to have
-            one-on-one (direct) messages. Get started below!
+        {!this.props.meIsVerified && (
+          <div className="spacing-bottom--lg">
+            <div className="text--md-lg spacing-bottom--md">
+              One on One
+            </div>
+            <div className="chat-details-verify spacing-bottom--md">
+              <ProfilePic
+                size="md"
+                backgroundColor={getMemberColor(
+                  this.props.meId,
+                  this.props.members,
+                )}
+                isVerified={true}
+                imageUrl={this.props.meImageUrl}
+              />
+              <div className="chat-details-verify-desc">
+                For your security, you must be a verified member to
+                have one-on-one (direct) messages. Get started below!
+              </div>
+            </div>
+            <Button
+              isFullWidth
+              onClick={this.props.openVerifyModal}
+              variant="secondary"
+            >
+              Become a verified member
+            </Button>
           </div>
+        )}
+        <div className="text--md-lg spacing-bottom--sm">
+          Group Members
         </div>
-        <Button
-          isFullWidth
-          onClick={this.props.openVerifyModal}
-          variant="secondary"
-        >
-          Become a verified member
-        </Button>
+        {this.getMemberDetails()}
       </div>
     );
   }
@@ -129,5 +136,6 @@ ChatDetails.propTypes = {
   members: PropTypes.array.isRequired,
   meId: PropTypes.string.isRequired,
   meImageUrl: PropTypes.string,
+  meIsVerified: PropTypes.bool,
   openVerifyModal: PropTypes.func,
 };

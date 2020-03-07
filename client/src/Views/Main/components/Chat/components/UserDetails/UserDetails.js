@@ -4,32 +4,45 @@ import './UserDetails.css';
 
 export default function UserDetails(props) {
   return (
-    <div className={props.isSelf
-      ? "user-details-container user-details-container--from-self"
-      : "user-details-container"
-    }>
-    <div class={props.isSelf
-      ? "triangle-right"
-      : "triangle-left"
-    }>
-      <div class="inner-triangle"></div>
-    </div>
+    <div
+      className={
+        props.isSelf
+          ? 'user-details-container user-details-container--from-self'
+          : 'user-details-container'
+      }
+    >
+      <div
+        className={props.isSelf ? 'triangle-right' : 'triangle-left'}
+      >
+        <div className="inner-triangle"></div>
+      </div>
       <div className="user-details-actions">
         <p className="user-details-action color--purple user-details-action--primary">
           View profile
         </p>
-        <p className="user-details-action color--purple user-details-action--primary">
-          Message
-        </p>
+        {!props.isSelf && (
+          <p className="user-details-action color--purple user-details-action--primary">
+            Message
+          </p>
+        )}
       </div>
-      <p className="user-details-action color--red user-details-action--report">
-        Report
-      </p>
+      {!props.isSelf && (
+        <>
+          <div className="user-details-divider" />
+          <p
+            onClick={() => props.onReportUser(props.user.id)}
+            className="user-details-action color--red user-details-action--report"
+          >
+            Report
+          </p>
+        </>
+      )}
     </div>
   );
 }
 
 UserDetails.propTypes = {
   user: PropTypes.object.isRequired,
-  isSelf: PropTypes.bool
+  isSelf: PropTypes.bool,
+  onReportUser: PropTypes.func,
 };

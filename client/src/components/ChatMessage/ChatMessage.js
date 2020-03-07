@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import 'src/utils.css';
 import './ChatMessage.css';
@@ -57,6 +57,11 @@ export default class ChatMessage extends React.Component {
     }
   };
 
+  onUserDetailsAction(func, params) {
+    this.setState({ showDetails: false });
+    func(params);
+  }
+
   render() {
     return (
       <div
@@ -68,7 +73,16 @@ export default class ChatMessage extends React.Component {
       >
         {this.state.showDetails && (
           <div ref={this.setWrapperRef}>
-            <UserDetails user={this.props.sender} isSelf={this.props.isSelf}/>
+            <UserDetails
+              user={this.props.sender}
+              isSelf={this.props.isSelf}
+              onReportUser={() =>
+                this.onUserDetailsAction(
+                  this.props.onReportUser,
+                  this.props.sender.id,
+                )
+              }
+            />
           </div>
         )}
         <div
@@ -77,6 +91,7 @@ export default class ChatMessage extends React.Component {
         >
           <ProfilePic
             imageUrl={this.props.sender.profile.profilePicture}
+            isVerified={this.props.sender.profile.isVerified}
             size="md"
             backgroundColor={this.props.backgroundColor || 'grey'}
           />
@@ -138,7 +153,7 @@ export default class ChatMessage extends React.Component {
                     <p className="message-text-content__action-text text--xs">
                       Like
                     </p>
-                    <div className="message-triangle"/>
+                    <div className="message-triangle" />
                   </div>
                 </div>
                 <div className="message-text-content__action">
@@ -149,19 +164,24 @@ export default class ChatMessage extends React.Component {
                     <p className="message-text-content__action-text text--xs">
                       Save
                     </p>
-                    <div className="message-triangle"/>
+                    <div className="message-triangle" />
                   </div>
                 </div>
                 {!this.props.isSelf && (
                   <div className="message-text-content__action">
-                    <div className="message-action__icon">
+                    <div
+                      onClick={() =>
+                        this.props.onReportUser(this.props.sender.id)
+                      }
+                      className="message-action__icon"
+                    >
                       <ReportIcon />
                     </div>
                     <div className="message-action-tooltip">
                       <p className="message-text-content__action-text text--xs">
                         Report
                       </p>
-                      <div className="message-triangle"/>
+                      <div className="message-triangle" />
                     </div>
                   </div>
                 )}
@@ -181,4 +201,5 @@ ChatMessage.propTypes = {
   image: PropTypes.string,
   isSelf: PropTypes.bool,
   backgroundColor: PropTypes.string,
+  onReportUser: PropTypes.func,
 };
