@@ -10,6 +10,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.utils.dateparse import parse_datetime
+from django.db.models import Count, Q
+from django.db import Error
 
 from .inputs import UserInput, ProfileInput
 from .types import UserNode, ProfileNode, GroupNode
@@ -117,6 +119,76 @@ class UpdateProfile(graphene.Mutation):
         return UpdateProfile(
             profile=profile
         )
+
+class VerifyUser(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.String(required=True)
+
+    profile = graphene.Field(ProfileNode)
+    error = graphene.Boolean()
+
+    def mutate(self, info, user_id):
+        user = User.objects.get(id=user_id)
+
+        # If can't find user
+        if not user:
+            error = "User does not exist"
+            return VerifyUser (
+                profile=None,
+                error=error,
+            )
+
+        profile = user.profile
+        # Verify user
+        try:
+            profile.is_verified = True
+            profile.save()
+        except Error:
+            error = "Error verifying user"
+            return VerifyUser (
+                profile=profile,
+                error=error,
+            )
+        
+        return VerifyUser (
+            profile=profile
+        )
+
+class BanUser(graphene.Mutation):
+    class Arguments:
+        user_id = graphene.String(required=True)
+
+    profile = graphene.Field(ProfileNode)
+    error = graphene.Boolean()
+
+    def mutate(self, info, user_id):
+        user = User.objects.get(id=user_id)
+
+        # If can't find user
+        if not user:
+            error = "User does not exist"
+            return BanUser (
+                profile=None,
+                error=error,
+            )
+
+        profile = user.profile
+        # Report user
+        try:
+            profile.status = UserStatus.BANNED.value
+            profile.save()
+        except Error:
+            error = "Error banning user"
+            return BanUser (
+                profile=profile,
+                error=error,
+            )
+        
+        return BanUser (
+            profile=profile
+        )
+
+
 
 class MatchGroup(graphene.Mutation):
     class Arguments:
@@ -271,3 +343,5 @@ class Mutation(graphene.ObjectType):
     sendChatMessage = SendChatMessage.Field()
     match_group = MatchGroup.Field()
     save_message = SaveMessage.Field()
+    verify_user = VerifyUser.Field()
+    ban_user = BanUser.Field()

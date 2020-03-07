@@ -13,3 +13,4 @@ class UserStatus(enum.Enum):
     NORMAL_USER = 1
     SEARCHING = 2
     NEWLY_MATCHED = 3
+    BANNED = 4
