@@ -2,14 +2,18 @@
   display: flex;
 }
 
-.new-match {
+.new-match-person {
   display: flex;
-  align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  padding-right: 20px;
 }
 
-.new-match__name {
-  margin-left: 15px;
+.new-match-person__pic {
+  margin-top: 3px;
+}
+
+.new-match-person__details {
+  margin-left: 20px;
 }
 
 .members-list {

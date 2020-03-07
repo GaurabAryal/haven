@@ -27,7 +27,7 @@ export default class ChatDetails extends React.Component {
         dateJoined,
         firstName,
         lastName,
-        profile: { bio, interests, position },
+        profile: { bio, interests, position, profilePicture },
       } = member;
 
       return (
@@ -66,11 +66,18 @@ export default class ChatDetails extends React.Component {
           </div>
           {this.state.openDetails[id] && (
             <div>
+              {
+                member.profile.profilePicture &&
+                <div className="person__profile-pic spacing-bottom--sm"
+                  style={{backgroundImage: `url(https://haven-storage.nyc3.digitaloceanspaces.com/media/${member.profile.profilePicture})`}}
+                />
+              }
               <div className="spacing-bottom--sm">{bio}</div>
-              {(position && position !== "other") && (
+              {(position && position !== 'other' && position !== 'prefer not to say') && (
                 <div className="spacing-bottom--sm">
                   <b>{`${firstName} is`}</b>
-                  <div>{`A ${position} of a person with dementia`}</div>
+                  {position === 'professional' && <div>A professional caregiver</div>}
+                  {position !== 'professional' && <div>A {position} of a person with dementia</div>}
                 </div>
               )}
               {interests && (

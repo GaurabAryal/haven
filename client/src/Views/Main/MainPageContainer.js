@@ -35,6 +35,9 @@ const GET_USER_QUERY = gql`
         profile {
           id
           profilePicture
+          position
+          bio
+          interests
         }
       }
     }
@@ -61,19 +64,49 @@ export default class MainPageContainer extends React.Component {
     this.props.history.push('/login');
   };
 
+  getMemberIntro(member) {
+    let intro = "";
+    console.log(member);
+    const position = member.profile.position;
+    const interests = member.profile.interests;
+    const firstName = member.firstName;
+    if (position === "other" || position ==="prefer not to say") {
+      if (interests) {
+        return `${firstName} is interested in ${interests.toLowerCase()}`;
+      } else {
+        return `${firstName} hasn't added details`;
+      }
+    } else if (position === "professional") {
+      intro = `${firstName} is a professional caregiver`;
+      if (interests) intro += ` and is interested in ${interests.toLowerCase()}`
+      return intro;
+    } else {
+      intro = `${firstName} is a ${position} of a person with dementia`;
+      if (interests) intro += ` and is interested in ${interests.toLowerCase()}`
+      return intro;
+    }
+
+    return `${firstName} hasn't added details`;
+  }
+
   getMembersList(members, meId) {
     return members.map((member, index) =>
       member.id !== meId ? (
-        <div key={member.firstName + index} className="new-match">
-          <div className="new-match__pic">
+        <div key={member.firstName + index} className="new-match-person">
+          <div className="new-match-person__pic">
             <ProfilePic
               imageUrl={member.profile.profilePicture}
               size="md"
               backgroundColor={getMemberColor(member.id, members)}
             />
           </div>
-          <div className="new-match__name text--md font-weight--bold">
-            {member.firstName} {member.lastName}
+          <div className="new-match-person__details">
+            <div className="text--md font-weight--bold">
+              {member.firstName} {member.lastName}
+            </div>
+            <div className="text--md">
+              {this.getMemberIntro(member)}
+            </div>
           </div>
         </div>
       ) : null,
@@ -157,8 +190,12 @@ export default class MainPageContainer extends React.Component {
                         this.onCloseModal(mutation)
                       }
                       width="600px"
-                      height="420px"
+                      height="600px"
                     >
+                      <p className="spacing-bottom--md text--md">
+                        You are matched in this group because your preferences
+                        fit the members’ preferences. Get to know them below!
+                      </p>
                       <div className="members-list">
                         {this.getMembersList(
                           matchedGroup.members,
