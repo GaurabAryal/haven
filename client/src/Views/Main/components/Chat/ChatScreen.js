@@ -23,6 +23,7 @@ export default class ChatScreen extends React.Component {
     showVerifyModal: false,
     showReportModal: false,
     reportedUserId: '',
+    userIdToView: '',
   };
 
   scrollToBottom = (smooth = false) => {
@@ -105,6 +106,17 @@ export default class ChatScreen extends React.Component {
     });
   };
 
+  viewUserProfile = (id) => {
+    localStorage.setItem(
+      'haven_sidebar', true
+    );
+    this.setState({showDetails: true, userIdToView: id});
+  }
+
+  clearUserIdToView = () => {
+    this.setState({userIdToView: ''});
+  }
+
   render() {
     const { history, meId, members } = this.props;
     return (
@@ -135,6 +147,8 @@ export default class ChatScreen extends React.Component {
             openVerifyModal={() =>
               this.setState({ showVerifyModal: true })
             }
+            userIdToView={this.state.userIdToView}
+            clearUserIdToView={() => this.clearUserIdToView()}
           />
         }
         showDetails={this.state.showDetails}
@@ -158,6 +172,7 @@ export default class ChatScreen extends React.Component {
                     reportedUserId,
                   });
                 }}
+                onViewUserProfile={this.viewUserProfile}
               />
             ))}
             <div

@@ -14,6 +14,19 @@ export default class ChatDetails extends React.Component {
     showVerifyModal: false,
   };
 
+  componentDidUpdate() {
+    if (this.props.userIdToView) {
+      this.openDetailsAndCloseOthers(this.props.userIdToView);
+    }
+  }
+
+  openDetailsAndCloseOthers(id) {
+    const openDetails = {};
+    openDetails[id] = true;
+    this.setState({ openDetails });
+    this.props.clearUserIdToView();
+  }
+
   toggleDetails(id) {
     const openDetails = Object.assign({}, this.state.openDetails);
     openDetails[id] = !openDetails[id];
@@ -21,6 +34,7 @@ export default class ChatDetails extends React.Component {
   }
 
   getMemberDetails() {
+    let userIdToView = this.props.userIdToView;
     return this.props.members.map((member, index) => {
       const {
         id,
@@ -33,7 +47,11 @@ export default class ChatDetails extends React.Component {
       return (
         <div
           key={firstName + index}
-          className="person-container noselect"
+          className={
+            member.id === userIdToView
+              ? "person-container person-container--highlighted noselect"
+              : "person-container noselect"
+          }
         >
           <div
             onClick={() => this.toggleDetails(id)}

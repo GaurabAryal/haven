@@ -112,6 +112,24 @@
   border-bottom: 1px solid #ddd;
 }
 
+.person-container--highlighted {
+  animation: temporary-highlight 3s;
+}
+
+@keyframes temporary-highlight {
+  0% {
+    background-color: #E5E7F7;
+  }
+
+  70% {
+    background-color: #E5E7F7;
+  }
+
+  100% {
+    background-color: #fff;
+  }
+}
+
 .person {
   display: flex;
   align-items: center;

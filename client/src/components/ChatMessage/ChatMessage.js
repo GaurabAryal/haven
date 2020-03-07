@@ -82,6 +82,7 @@ export default class ChatMessage extends React.Component {
                   this.props.sender.id,
                 )
               }
+              onViewUserProfile={this.props.onViewUserProfile}
             />
           </div>
         )}
@@ -202,4 +203,5 @@ ChatMessage.propTypes = {
   isSelf: PropTypes.bool,
   backgroundColor: PropTypes.string,
   onReportUser: PropTypes.func,
+  onViewUserProfile: PropTypes.func,
 };

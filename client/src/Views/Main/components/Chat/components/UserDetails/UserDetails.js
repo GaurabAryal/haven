@@ -7,8 +7,8 @@ export default function UserDetails(props) {
     <div
       className={
         props.isSelf
-          ? 'user-details-container user-details-container--from-self'
-          : 'user-details-container'
+          ? 'user-details-container user-details-container--from-self noselect'
+          : 'user-details-container noselect'
       }
     >
       <div
@@ -17,7 +17,14 @@ export default function UserDetails(props) {
         <div className="inner-triangle"></div>
       </div>
       <div className="user-details-actions">
-        <p className="user-details-action color--purple user-details-action--primary">
+        <p
+          onClick={(id) => {
+            if (props.onViewUserProfile) {
+              props.onViewUserProfile(props.user.id)
+            }
+          }}
+          className="user-details-action color--purple user-details-action--primary"
+        >
           View profile
         </p>
         {!props.isSelf && (
@@ -45,4 +52,5 @@ UserDetails.propTypes = {
   user: PropTypes.object.isRequired,
   isSelf: PropTypes.bool,
   onReportUser: PropTypes.func,
+  onViewUserProfile: PropTypes.func,
 };
