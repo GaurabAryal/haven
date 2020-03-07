@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import 'src/utils.css'
+import 'src/utils.css';
 import './TextArea.css';
 
 export default function TextInput(props) {
@@ -8,7 +8,7 @@ export default function TextInput(props) {
     <div className="textarea-container">
       <textarea
         rows={props.initialRowHeight || 3}
-        value={props.bio}
+        value={props.value}
         placeholder={props.placeholder}
         onChange={props.onChange}
       />

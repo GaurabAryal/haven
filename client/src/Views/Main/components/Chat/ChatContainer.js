@@ -21,7 +21,19 @@ const CHAT_QUERY = gql`
           bio
           interests
           profilePicture
+          isVerified
         }
+      }
+    }
+
+    savedMessages(groupId: $groupId) {
+      id
+      message
+      chatTime
+      user {
+        id
+        firstName
+        lastName
       }
     }
 
@@ -35,6 +47,7 @@ const CHAT_QUERY = gql`
       profile {
         id
         profilePicture
+        isVerified
       }
     }
   }
@@ -67,12 +80,26 @@ const CREATE_MESSAGE_MUTATION = gql`
   }
 `;
 
+const SAVE_MESSAGE_MUTATION = gql`
+  mutation saveChatMessage($groupId: String!, $chatId: String!) {
+    saveMessage(groupId: $chatroom, chatId: $chatId) {
+      ok
+    }
+  }
+`;
+
+const VERIFY_USER_MUTATION = gql`
+  mutation verifyUser($userId: String!) {
+    verifyUser(userId: $userId) {
+      profile {
+        id
+      }
+    }
+  }
+`;
+
 const EDIT_PROFILE_MUTATION = gql`
-  mutation editProfile(
-    $chatroom: String!
-    $text: String
-    $author: String!
-  ) {
+  mutation editProfile($status: String) {
     updateProfile(profileInput: { status: $status }) {
       profile {
         id
@@ -98,7 +125,7 @@ const ChatContainer = props => {
               if (!subscriptionData.data) return prev;
               const node = subscriptionData.data.onNewChatMessage;
               return Object.assign({}, prev, {
-                history: [...prev.history, node].slice(-20),
+                history: [...prev.history, node],
               });
             },
           });
@@ -106,11 +133,13 @@ const ChatContainer = props => {
         return (
           <ChatScreen
             members={data.group.members}
-            history={data.history.slice(-20)}
+            history={data.history}
             meId={data.me.id}
             meImageUrl={data.me.profile.profilePicture}
+            meIsVerified={data.me.profile.isVerified}
             groupId={groupId}
             createMessageMutation={props.createMessageMutation}
+            verifyUserMutation={props.verifyUserMutation}
             subscribeToMore={more}
           />
         );
@@ -123,9 +152,12 @@ ChatContainer.propTypes = {
   match: PropTypes.object,
   location: PropTypes.object,
   createMessageMutation: PropTypes.func,
+  verifyUserMutation: PropTypes.func,
 };
 
 export default compose(
   graphql(CREATE_MESSAGE_MUTATION, { name: 'createMessageMutation' }),
-  graphql(EDIT_PROFILE_MUTATION),
+  graphql(VERIFY_USER_MUTATION, { name: 'verifyUserMutation' }),
+  graphql(EDIT_PROFILE_MUTATION, { name: 'editProfileMutation' }),
+  graphql(SAVE_MESSAGE_MUTATION, { name: 'saveMessageMutation' }),
 )(ChatContainer);
