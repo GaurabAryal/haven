@@ -43,7 +43,7 @@ export default class ReportModal extends React.Component {
         buttonText="Submit report"
         disableButton={Boolean(this.state.error)}
         onButtonClick={this.onSubmit}
-        header="Verify account"
+        header="Report"
         width="600px"
         height="600px"
       >
