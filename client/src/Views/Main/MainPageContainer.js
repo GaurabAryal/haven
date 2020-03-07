@@ -13,7 +13,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 import ChatContainer from './components/Chat/ChatContainer';
 import CommunityContainer from './components/Community/CommunityContainer';
 import Modal from 'src/components/Modal/Modal';
-import ProfilePicPlaceholder from 'src/components/ProfilePicPlaceholder/ProfilePicPlaceholder';
+import ProfilePic from 'src/components/ProfilePic/ProfilePic';
 
 const GET_USER_QUERY = gql`
   {
@@ -23,6 +23,7 @@ const GET_USER_QUERY = gql`
       profile {
         id
         status
+        profilePicture
       }
     }
     membership {
@@ -31,6 +32,10 @@ const GET_USER_QUERY = gql`
         id
         firstName
         lastName
+        profile {
+          id
+          profilePicture
+        }
       }
     }
   }
@@ -61,7 +66,8 @@ export default class MainPageContainer extends React.Component {
       member.id !== meId ? (
         <div key={member.firstName + index} className="new-match">
           <div className="new-match__pic">
-            <ProfilePicPlaceholder
+            <ProfilePic
+              imageUrl={member.profile.profilePicture}
               size="md"
               backgroundColor={getMemberColor(member.id, members)}
             />

@@ -20,6 +20,7 @@ const CHAT_QUERY = gql`
           position
           bio
           interests
+          profilePicture
         }
       }
     }
@@ -31,6 +32,10 @@ const CHAT_QUERY = gql`
 
     me {
       id
+      profile {
+        id
+        profilePicture
+      }
     }
   }
 `;
@@ -103,6 +108,7 @@ const ChatContainer = props => {
             members={data.group.members}
             history={data.history.slice(-20)}
             meId={data.me.id}
+            meImageUrl={data.me.profile.profilePicture}
             groupId={groupId}
             createMessageMutation={props.createMessageMutation}
             subscribeToMore={more}
