@@ -39,7 +39,7 @@ export default class WaitingScreen extends React.Component {
     return (
       <div className="waiting-container">
         <h2 className="text--xl font-weight--regular spacing-bottom--md">
-          Hang tight {this.props.firstName}!
+          One moment {this.props.firstName}!
         </h2>
         <p className="text--md spacing-bottom--lg">{bodyText}</p>
         {isWaiting && <div className="loadingspinner" />}
