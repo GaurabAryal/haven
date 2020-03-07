@@ -21,6 +21,7 @@ class Message(graphene.ObjectType, default_resolver=graphene.types.resolver.dict
     chatroom = graphene.String()
     text = graphene.String()
     author = graphene.String()
+    chat_id = graphene.String()
 
 
 chats: DefaultDict[str, List[str]] = defaultdict(list)
