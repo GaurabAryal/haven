@@ -14,7 +14,7 @@ from django.db.models import Count, Q
 from django.db import Error
 
 from .inputs import UserInput, ProfileInput
-from .types import UserNode, ProfileNode, GroupNode
+from .types import UserNode, ProfileNode, GroupNode, ChatNode
 from .subscriptions import OnNewChatMessage
 from .types import chats
 from havenapp.matchmaking.matching import UserPreferences, find_best_match, join_group, join_new_group, update_member_status
@@ -324,14 +324,14 @@ class SaveMessage(graphene.Mutation):
         group_id = graphene.String()
         chat_id = graphene.String()
 
-    ok = graphene.Boolean()
+    chat = graphene.Field(ChatNode)
 
     def mutate(self, info, group_id, chat_id):
         user = info.context.user
         chat = Chat.objects.get(id=chat_id)
         save_msg = SavedMessages(user=user, chat=chat, group_id=group_id)
         save_msg.save()
-        return SaveMessage(ok=True)
+        return SaveMessage(chat=chat)
 
 
 # Registers Users into Mutation
