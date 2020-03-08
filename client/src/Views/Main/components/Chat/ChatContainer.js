@@ -48,6 +48,7 @@ const CHAT_QUERY = gql`
         id
         profilePicture
         isVerified
+        status
       }
     }
   }
@@ -137,6 +138,7 @@ const ChatContainer = props => {
             meId={data.me.id}
             meImageUrl={data.me.profile.profilePicture}
             meIsVerified={data.me.profile.isVerified}
+            meStatus={data.me.profile.status}
             groupId={groupId}
             createMessageMutation={props.createMessageMutation}
             verifyUserMutation={props.verifyUserMutation}
