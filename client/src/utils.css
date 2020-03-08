@@ -66,6 +66,14 @@
   color: #555;
 }
 
+.color--grey {
+  color: #555;
+}
+
+.color--grey-light {
+  color: #aaa;
+}
+
 .color--purple {
   color: #525EC8;
 }

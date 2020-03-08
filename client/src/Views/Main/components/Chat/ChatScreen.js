@@ -87,6 +87,7 @@ export default class ChatScreen extends React.Component {
     this.onCloseIntroMessage();
     this.setState({message: this.getIntroMessage()});
     inputField.style.height = '109px';
+    inputField.focus();
   }
 
   getIntroMessage() {
@@ -211,7 +212,7 @@ export default class ChatScreen extends React.Component {
         {
           !history.length
             ? <div className="no-messages-placeholder-container">
-                <div className="no-messages-placeholder text--lg color--grey">
+                <div className="no-messages-placeholder text--lg color--grey-light">
                   No one has started a conversation yet
                 </div>
               </div>
