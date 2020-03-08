@@ -10,6 +10,7 @@ import Modal from 'src/components/Modal/Modal';
 import Button from 'src/components/Button/Button';
 import VerifyModal from './components/VerifyModal/VerifyModal';
 import ReportModal from './components/ReportModal/ReportModal';
+import { ReactComponent as CloseIcon } from 'src/components/Modal/images/X.svg';
 
 import { getMemberColor } from 'src/utils';
 import './Chat.css';
@@ -19,6 +20,10 @@ export default class ChatScreen extends React.Component {
     message: '',
     showDetails:
       localStorage.getItem('haven_sidebar') === 'true' ? true : false,
+    showIntroMessage:
+      localStorage.getItem(
+        `haven_showintro_userId${this.props.meId}_groupId${this.props.groupId}`
+      ) === 'false' ? false : true,
     showGuidelines: false,
     showVerifyModal: false,
     showReportModal: false,
@@ -35,6 +40,17 @@ export default class ChatScreen extends React.Component {
   componentDidMount() {
     this.scrollToBottom();
     this.props.subscribeToMore();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.groupId !== prevProps.groupId) {
+      this.setState({
+        showIntroMessage:
+        localStorage.getItem(
+          `haven_showintro_userId${this.props.meId}_groupId${this.props.groupId}`
+        ) === 'false' ? false : true
+      });
+    }
   }
 
   onSubmit = async event => {
@@ -57,6 +73,44 @@ export default class ChatScreen extends React.Component {
   };
 
   onCloseGuidelines = () => this.setState({ showGuidelines: false });
+
+  onCloseIntroMessage = () => {
+    this.setState({ showIntroMessage: false });
+    localStorage.setItem(
+      `haven_showintro_userId${this.props.meId}_groupId${this.props.groupId}`,
+      false
+    )
+  }
+
+  onUseIntroMessage = () => {
+    let inputField = document.getElementById('message-composer');
+    this.onCloseIntroMessage();
+    this.setState({message: this.getIntroMessage()});
+    inputField.style.height = '109px';
+  }
+
+  getIntroMessage() {
+    let intro = "";
+    const meId = this.props.meId;
+    const position = this.getSender(meId).profile.position;
+    const interests = this.getSender(meId).profile.interests;
+    const firstName = this.getSender(meId).firstName;
+    if (position === "other" || position ==="prefer not to say") {
+      if (interests) {
+        return `Hi I'm ${firstName} and I'm interested in ${interests.toLowerCase()}`;
+      } else {
+        return null;
+      }
+    } else if (position === "professional") {
+      intro = `Hi I'm ${firstName}! I'm a professional caregiver`;
+      if (interests) intro += ` and am interested in ${interests.toLowerCase()}`
+      return intro;
+    } else {
+      intro = `Hi I'm ${firstName}! I'm a ${position} of a person with dementia`;
+      if (interests) intro += ` and am interested in ${interests.toLowerCase()}`
+      return intro;
+    }
+  }
 
   getSender(id) {
     return this.props.members.find(member => id === member.id);
@@ -154,6 +208,15 @@ export default class ChatScreen extends React.Component {
         }
         showDetails={this.state.showDetails}
       >
+        {
+          !history.length
+            ? <div className="no-messages-placeholder-container">
+                <div className="no-messages-placeholder text--lg color--grey">
+                  No one has started a conversation yet
+                </div>
+              </div>
+            : null
+        }
         <div className="chatContainer">
           <div className="messageContainer">
             {history.map((message, index) => (
@@ -190,7 +253,22 @@ export default class ChatScreen extends React.Component {
                 : 'message-composer message-composer--full-width'
             }
           >
+            { this.state.showIntroMessage && this.getIntroMessage() &&
+              <div className="message-composer__intro-message">
+                <CloseIcon className="close-btn" onClick={this.onCloseIntroMessage}/>
+                <p className="text--md font-weight--bold spacing-bottom--xs">
+                  Introduce yourself to the group
+                </p>
+                <p className="text--md spacing-bottom--sm">
+                  {this.getIntroMessage()}
+                </p>
+                <Button variant="primary" onClick={this.onUseIntroMessage}>
+                  Use and edit
+                </Button>
+              </div>
+            }
             <textarea
+              id="message-composer"
               className="message-composer__input"
               rows="1"
               type="text"
@@ -239,6 +317,7 @@ ChatScreen.propTypes = {
   meId: PropTypes.string,
   meImageUrl: PropTypes.string,
   meIsVerified: PropTypes.bool,
+  meStatus: PropTypes.string,
   groupId: PropTypes.string,
   createMessageMutation: PropTypes.func,
   verifyUserMutation: PropTypes.func,

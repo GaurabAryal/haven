@@ -66,7 +66,6 @@ export default class MainPageContainer extends React.Component {
 
   getMemberIntro(member) {
     let intro = "";
-    console.log(member);
     const position = member.profile.position;
     const interests = member.profile.interests;
     const firstName = member.firstName;
@@ -85,8 +84,6 @@ export default class MainPageContainer extends React.Component {
       if (interests) intro += ` and is interested in ${interests.toLowerCase()}`
       return intro;
     }
-
-    return `${firstName} hasn't added details`;
   }
 
   getMembersList(members, meId) {
