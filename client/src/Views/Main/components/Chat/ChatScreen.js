@@ -86,7 +86,7 @@ export default class ChatScreen extends React.Component {
     let inputField = document.getElementById('message-composer');
     this.onCloseIntroMessage();
     this.setState({message: this.getIntroMessage()});
-    inputField.style.height = '109px';
+    inputField.style.height = '86px';
     inputField.focus();
   }
 
