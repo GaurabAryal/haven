@@ -40,7 +40,7 @@ class Sidebar extends React.Component {
         key={members[1].id}
       >
         <ProfilePic
-          imageUrl={members[0].profile.profilePicture}
+          imageUrl={members[1].profile.profilePicture}
           backgroundColor={getMemberColor(members[1].id, members)}
           size="sm"
         />

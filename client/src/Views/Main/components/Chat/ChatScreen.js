@@ -56,10 +56,18 @@ export default class ChatScreen extends React.Component {
   onSubmit = async event => {
     event.preventDefault();
     this.scrollToBottom(true);
+    const containsUrl = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(this.state.message);
+    const containsPhoneNum = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(this.state.message);
+    const containsEmail = /[\w-]+@([\w-]+\.)+[\w-]+/.test(this.state.message);
+    if ((containsUrl || containsPhoneNum || containsEmail) && !this.props.meIsVerified) {
+      this.setState({showVerifyModal: true});
+      return;
+    }
 
     if (!this.state.message) {
       return;
     }
+
     await this.props.createMessageMutation({
       variables: {
         chatroom: this.props.groupId,
