@@ -160,6 +160,10 @@
 .haven-toast {
   background-color: black !important;
   color: white !important;
+  border-radius: 10px !important;
+  padding: 15px 20px 20px 20px !important;
+  line-height: 1.5 !important;
+  margin-bottom: 65px !important;
 }
 
 .haven-toast-progress {

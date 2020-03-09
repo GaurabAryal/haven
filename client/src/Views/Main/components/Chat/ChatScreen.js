@@ -11,6 +11,7 @@ import Button from 'src/components/Button/Button';
 import VerifyModal from './components/VerifyModal/VerifyModal';
 import ReportModal from './components/ReportModal/ReportModal';
 import { ReactComponent as CloseIcon } from 'src/components/Modal/images/X.svg';
+import { toast } from 'react-toastify';
 
 import { getMemberColor } from 'src/utils';
 import './Chat.css';
@@ -56,15 +57,24 @@ export default class ChatScreen extends React.Component {
   onSubmit = async event => {
     event.preventDefault();
     this.scrollToBottom(true);
-    const containsUrl = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(this.state.message);
-    const containsPhoneNum = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/.test(this.state.message);
+    const containsUrl = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?").test(this.state.message);
+    const containsPhoneNum = /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?/img.test(this.state.message);
     const containsEmail = /[\w-]+@([\w-]+\.)+[\w-]+/.test(this.state.message);
-    if ((containsUrl || containsPhoneNum || containsEmail) && !this.props.meIsVerified) {
-      this.setState({showVerifyModal: true});
+
+    if (!this.state.message) {
       return;
     }
 
-    if (!this.state.message) {
+    if (!this.props.meIsVerified && (containsUrl || containsPhoneNum || containsEmail)) {
+      if (containsUrl) {
+        toast("Verify your account under details to send links!");
+      }
+      else if (containsPhoneNum) {
+        toast("Verify your account under details to send phone numbers!")
+      }
+      else if (containsEmail) {
+        toast("Verify your account under details to send email addresses!")
+      }
       return;
     }
 
@@ -173,6 +183,7 @@ export default class ChatScreen extends React.Component {
     this.props.verifyUserMutation({
       variables: { userId: this.props.meId },
     });
+    toast("You are now a verified member!");
   };
 
   viewUserProfile = id => {

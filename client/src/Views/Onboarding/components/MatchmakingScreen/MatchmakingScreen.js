@@ -168,7 +168,10 @@ export default class MatchmakingScreen extends React.Component {
             matching is based on your answers and their other members’ answers too!
             For example, if you are looking for a mentor we will try to match you
             with a group that has a mentor who can provide help.<br/><br/>
-            If you want to learn more please contact <span className="email"><a href="mailto:info@havenapp.life">info@havenapp.life</a></span>.
+            If you want to learn more please contact&nbsp;
+            <span className="email">
+              <a href="mailto:info@havenapp.life" target="_blank">info@havenapp.life</a>
+            </span>.
           </p>
         </Modal>
         <h2 className="heading--lg font-weight--regular">
