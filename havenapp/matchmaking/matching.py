@@ -64,12 +64,12 @@ def join_group(user_preference: UserPreferences, group_id: uuid.UUID) -> str:
 
     # If a mentor/professional joins, we don't need another one
     if PreferenceFlags.provide_mentor.name in user_preference.preference_flags:
-        group.providers += 1
+        group.mentors += 1
         group.seek_mentor = True
         group.provide_mentor = False
      
     if PreferenceFlags.provide_advice.name in user_preference.preference_flags:
-        group.providers += 1
+        group.professionals += 1
         group.seek_advice = True
         group.provide_advice = False
 
@@ -78,17 +78,28 @@ def join_group(user_preference: UserPreferences, group_id: uuid.UUID) -> str:
     if PreferenceFlags.seek_mentor.name in user_preference.preference_flags:
         group.seekers += 1
 
-        if group.provide_mentor and group.members.count() >= 3:
+        if group.mentors < 1 and group.members.count() >= 3:
             group.seek_mentor = False
             group.provide_mentor = True
+        
+        else:
+            group.seek_mentor = True
+            if group.mentors < 1:
+                group.provide_mentor = True
+
     
     # Same comprimize for seek_advice
     if PreferenceFlags.seek_advice.name in user_preference.preference_flags:
         group.seekers += 1
 
-        if group.provide_advice and group.members.count() >= 3:
+        if group.professionals < 1 and group.members.count() >= 3:
             group.seek_advice = False
             group.provide_advice = True
+        
+        else:
+            group.seek_mentor = True
+            if group.professionals < 1:
+                group.provide_advice = True
 
     return group.id
 

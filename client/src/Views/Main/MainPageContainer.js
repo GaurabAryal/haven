@@ -8,7 +8,6 @@ import { Switch, Route } from 'react-router-dom';
 import './MainPage.css';
 import { AUTH_TOKEN } from 'src/constants';
 import { getMemberColor } from 'src/utils';
-import { toast } from 'react-toastify';
 
 import Sidebar from './components/Sidebar/Sidebar';
 import ChatContainer from './components/Chat/ChatContainer';

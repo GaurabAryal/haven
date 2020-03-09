@@ -70,8 +70,11 @@ class ChatQuery(graphene.AbstractType):
 
     def resolve_saved_messages(self, info, group_id):
         """Return chat history."""
-
-        return SavedMessages.objects.filter(user=info.context.user, group_id=group_id).all()
+        saved_msgs = SavedMessages.objects.filter(user=info.context.user, group_id=group_id).all()
+        chat = []
+        for x in saved_msgs:
+            chat.append(x.chat)
+        return chat
 
 # Query
 class Query(GroupQuery, UserQuery, MatchHistoryQuery, ChatQuery, graphene.ObjectType):
