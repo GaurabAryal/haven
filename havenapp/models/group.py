@@ -5,7 +5,8 @@ from havenapp.constants.constant import PreferenceFlags
 
 class Group(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    providers = models.IntegerField(default=0)
+    mentors = models.IntegerField(default=0)
+    professionals = models.IntegerField(default=0)
     seekers = models.IntegerField(default=0)
     seek_mentor = models.BooleanField(default=False)
     provide_mentor = models.BooleanField(default=False)
@@ -13,6 +14,7 @@ class Group(models.Model):
     provide_advice = models.BooleanField(default=False)
     find_friends = models.BooleanField(default=False)
     socialize = models.BooleanField(default=False)
+    is_dm = models.BooleanField(default=False)
     members = models.ManyToManyField(User, through='Membership')
 
     def get_group_flags(self):
