@@ -98,7 +98,7 @@ export default class VerifyModal extends React.Component {
         >
           <div>
             <p className="spacing-bottom--lg">
-              You have been verified. You can now directly message
+              You have been verified! You can now directly message
               other verified members by clicking on their profile
               picture and clicking &quot;Message&quot;.
             </p>
