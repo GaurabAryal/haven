@@ -65,23 +65,25 @@ export default class MainPageContainer extends React.Component {
   };
 
   getMemberIntro(member) {
-    let intro = "";
+    let intro = '';
     const position = member.profile.position;
     const interests = member.profile.interests;
     const firstName = member.firstName;
-    if (position === "other" || position ==="prefer not to say") {
+    if (position === 'other' || position === 'prefer not to say') {
       if (interests) {
         return `${firstName} is interested in ${interests.toLowerCase()}`;
       } else {
         return `${firstName} hasn't added details`;
       }
-    } else if (position === "professional") {
+    } else if (position === 'professional') {
       intro = `${firstName} is a professional caregiver`;
-      if (interests) intro += ` and is interested in ${interests.toLowerCase()}`
+      if (interests)
+        intro += ` and is interested in ${interests.toLowerCase()}`;
       return intro;
     } else {
       intro = `${firstName} is a ${position} of a person with dementia`;
-      if (interests) intro += ` and is interested in ${interests.toLowerCase()}`
+      if (interests)
+        intro += ` and is interested in ${interests.toLowerCase()}`;
       return intro;
     }
   }
@@ -89,7 +91,10 @@ export default class MainPageContainer extends React.Component {
   getMembersList(members, meId) {
     return members.map((member, index) =>
       member.id !== meId ? (
-        <div key={member.firstName + index} className="new-match-person">
+        <div
+          key={member.firstName + index}
+          className="new-match-person"
+        >
           <div className="new-match-person__pic">
             <ProfilePic
               imageUrl={member.profile.profilePicture}
@@ -188,16 +193,19 @@ export default class MainPageContainer extends React.Component {
                       width="600px"
                       height="600px"
                     >
-                      <p className="spacing-bottom--md text--md">
-                        You are matched in this group because your preferences
-                        fit the members’ preferences. Get to know them below!
-                      </p>
-                      <div className="members-list">
-                        {this.getMembersList(
-                          matchedGroup.members,
-                          data.me.id,
-                        )}
-                      </div>
+                      <>
+                        <p className="spacing-bottom--md text--md">
+                          You are matched in this group because your
+                          preferences fit the members’ preferences.
+                          Get to know them below!
+                        </p>
+                        <div className="members-list">
+                          {this.getMembersList(
+                            matchedGroup.members,
+                            data.me.id,
+                          )}
+                        </div>
+                      </>
                     </Modal>
                   );
                 }}
@@ -213,4 +221,5 @@ export default class MainPageContainer extends React.Component {
 MainPageContainer.propTypes = {
   history: PropTypes.object,
   location: PropTypes.object,
+  createSnackbar: PropTypes.func,
 };

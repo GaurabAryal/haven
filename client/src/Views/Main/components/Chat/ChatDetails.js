@@ -40,14 +40,14 @@ export default class ChatDetails extends React.Component {
   }
 
   getMemberDetails() {
-    let userIdToView = this.props.userIdToView;
+    const userIdToView = this.props.userIdToView;
     return this.props.members.map((member, index) => {
       const {
         id,
         dateJoined,
         firstName,
         lastName,
-        profile: { bio, interests, position, profilePicture },
+        profile: { bio, interests, position },
       } = member;
 
       return (
@@ -55,8 +55,8 @@ export default class ChatDetails extends React.Component {
           key={firstName + index}
           className={
             member.id === userIdToView
-              ? "person-container person-container--highlighted noselect"
-              : "person-container noselect"
+              ? 'person-container person-container--highlighted noselect'
+              : 'person-container noselect'
           }
         >
           <div
@@ -91,20 +91,30 @@ export default class ChatDetails extends React.Component {
           </div>
           {this.state.openDetails[id] && (
             <div>
-              {
-                member.profile.profilePicture &&
-                <div className="person__profile-pic spacing-bottom--sm"
-                  style={{backgroundImage: `url(https://haven-storage.nyc3.digitaloceanspaces.com/media/${member.profile.profilePicture})`}}
+              {member.profile.profilePicture && (
+                <div
+                  className="person__profile-pic spacing-bottom--sm"
+                  style={{
+                    backgroundImage: `url(https://haven-storage.nyc3.digitaloceanspaces.com/media/${member.profile.profilePicture})`,
+                  }}
                 />
-              }
-              <div className="spacing-bottom--sm">{bio}</div>
-              {(position && position !== 'other' && position !== 'prefer not to say') && (
-                <div className="spacing-bottom--sm">
-                  <b>{`${firstName} is`}</b>
-                  {position === 'professional' && <div>A professional caregiver</div>}
-                  {position !== 'professional' && <div>A {position} of a person with dementia</div>}
-                </div>
               )}
+              <div className="spacing-bottom--sm">{bio}</div>
+              {position &&
+                position !== 'other' &&
+                position !== 'prefer not to say' && (
+                  <div className="spacing-bottom--sm">
+                    <b>{`${firstName} is`}</b>
+                    {position === 'professional' && (
+                      <div>A professional caregiver</div>
+                    )}
+                    {position !== 'professional' && (
+                      <div>
+                        A {position} of a person with dementia
+                      </div>
+                    )}
+                  </div>
+                )}
               {interests && (
                 <div>
                   <b>Ask me about</b>
@@ -120,6 +130,27 @@ export default class ChatDetails extends React.Component {
         </div>
       );
     });
+  }
+
+  getSavedMessages() {
+    return this.props.savedMessages.length ? (
+      <div>
+        <div className="text--md-lg spacing-bottom--sm">
+          Saved messages
+        </div>
+        {this.props.savedMessages.map(message => {
+          return (
+            <div key={message.id}>
+              <span>
+                {message.user.firstName} {message.user.lastName}
+              </span>
+              <span>{message.chatTime}</span>
+              <div>{message.text}</div>
+            </div>
+          );
+        })}
+      </div>
+    ) : null;
   }
 
   render() {
@@ -154,6 +185,7 @@ export default class ChatDetails extends React.Component {
             </Button>
           </div>
         )}
+        {this.getSavedMessages()}
         <div className="text--md-lg spacing-bottom--sm">
           Group Members
         </div>
@@ -169,4 +201,7 @@ ChatDetails.propTypes = {
   meImageUrl: PropTypes.string,
   meIsVerified: PropTypes.bool,
   openVerifyModal: PropTypes.func,
+  clearUserIdToView: PropTypes.func,
+  userIdToView: PropTypes.string,
+  savedMessages: PropTypes.array,
 };

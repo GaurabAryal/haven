@@ -156,3 +156,12 @@
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
 }
+
+.haven-toast {
+  background-color: black !important;
+  color: white !important;
+}
+
+.haven-toast-progress {
+  background: #525EC8 !important;
+}

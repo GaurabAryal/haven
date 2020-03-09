@@ -40,6 +40,7 @@ const CHAT_QUERY = gql`
     history(chatroom: $groupId) {
       author
       text
+      chatId
     }
 
     me {
@@ -59,6 +60,7 @@ const SUBSCRIPTION = gql`
     onNewChatMessage(chatroom: $groupId) {
       author
       text
+      chatId
     }
   }
 `;
@@ -83,8 +85,10 @@ const CREATE_MESSAGE_MUTATION = gql`
 
 const SAVE_MESSAGE_MUTATION = gql`
   mutation saveChatMessage($groupId: String!, $chatId: String!) {
-    saveMessage(groupId: $chatroom, chatId: $chatId) {
-      ok
+    saveMessage(groupId: $groupId, chatId: $chatId) {
+      chat {
+        id
+      }
     }
   }
 `;
@@ -142,7 +146,9 @@ const ChatContainer = props => {
             groupId={groupId}
             createMessageMutation={props.createMessageMutation}
             verifyUserMutation={props.verifyUserMutation}
+            saveMessageMutation={props.saveMessageMutation}
             subscribeToMore={more}
+            savedMessages={data.savedMessages}
           />
         );
       }}
@@ -155,6 +161,7 @@ ChatContainer.propTypes = {
   location: PropTypes.object,
   createMessageMutation: PropTypes.func,
   verifyUserMutation: PropTypes.func,
+  saveMessageMutation: PropTypes.func,
 };
 
 export default compose(

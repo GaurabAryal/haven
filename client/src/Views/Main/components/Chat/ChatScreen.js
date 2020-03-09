@@ -125,6 +125,12 @@ export default class ChatScreen extends React.Component {
     return this.props.members.find(member => id === member.id);
   }
 
+  onSaveMessage = async chatId => {
+    await this.props.saveMessageMutation({
+      variables: { chatId, groupId: this.props.groupId },
+    });
+  };
+
   getGuidelines() {
     return [
       'This is a closed community, so your activity will only be seen by your community members',
@@ -169,16 +175,14 @@ export default class ChatScreen extends React.Component {
     });
   };
 
-  viewUserProfile = (id) => {
-    localStorage.setItem(
-      'haven_sidebar', true
-    );
-    this.setState({showDetails: true, userIdToView: id});
-  }
+  viewUserProfile = id => {
+    localStorage.setItem('haven_sidebar', true);
+    this.setState({ showDetails: true, userIdToView: id });
+  };
 
   clearUserIdToView = () => {
-    this.setState({userIdToView: ''});
-  }
+    this.setState({ userIdToView: '' });
+  };
 
   render() {
     const { history, meId, members } = this.props;
@@ -213,6 +217,7 @@ export default class ChatScreen extends React.Component {
             }
             userIdToView={this.state.userIdToView}
             clearUserIdToView={() => this.clearUserIdToView()}
+            savedMessages={this.props.savedMessages}
           />
         }
         showDetails={this.state.showDetails}
@@ -232,7 +237,7 @@ export default class ChatScreen extends React.Component {
               <ChatMessage
                 key={`message ${index}`}
                 sender={this.getSender(message.author)}
-                message={message.text}
+                message={message}
                 isSelf={message.author === meId}
                 time="just now"
                 backgroundColor={getMemberColor(
@@ -246,6 +251,7 @@ export default class ChatScreen extends React.Component {
                   });
                 }}
                 onViewUserProfile={this.viewUserProfile}
+                onSaveMessage={this.onSaveMessage}
               />
             ))}
             <div
@@ -330,6 +336,8 @@ ChatScreen.propTypes = {
   groupId: PropTypes.string,
   createMessageMutation: PropTypes.func,
   verifyUserMutation: PropTypes.func,
+  saveMessageMutation: PropTypes.func,
   history: PropTypes.array,
   verifyUser: PropTypes.func,
+  savedMessages: PropTypes.array,
 };
