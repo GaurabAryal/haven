@@ -4,6 +4,7 @@ import FormRow from 'src/components/FormRow/FormRow';
 import Button from 'src/components/Button/Button';
 import TextInput from 'src/components/TextInput/TextInput';
 import SelectableContainer from 'src/components/SelectableContainer/SelectableContainer';
+import Modal from 'src/components/Modal/Modal';
 
 import { OPTIONS, QUESTION_OPTIONS } from 'src/constants';
 import { getFilteredPreferencesOptions } from 'src/utils';
@@ -14,6 +15,7 @@ import './MatchmakingScreen.css';
 export default class MatchmakingScreen extends React.Component {
   state = {
     error: false,
+    showExplanation: false,
   };
 
   isValidInputs() {
@@ -45,6 +47,10 @@ export default class MatchmakingScreen extends React.Component {
         isLocationPreferred === OPTIONS.isLocationPreferred.NO)
     );
   }
+
+  onShowExplanation = () => this.setState({ showExplanation: true });
+
+  onCloseExplanation = () => this.setState({ showExplanation: false });
 
   onContinue = () => {
     if (this.isValidInputs()) {
@@ -147,10 +153,34 @@ export default class MatchmakingScreen extends React.Component {
 
     return (
       <div>
+        <Modal
+          isOpen={this.state.showExplanation}
+          onClose={this.onCloseExplanation}
+          buttonText="Got it!"
+          header="Why do I need to answer these questions?"
+          onButtonClick={this.onCloseExplanation}
+          width="600px"
+          height="370px"
+        >
+          <p>
+            We will use your answers to find the perfect match for you. You will
+            be matched with a minimum of 2 people and a maximum of 4 people. <br/><br/>The
+            matching is based on your answers and their other members’ answers too!
+            For example, if you are looking for a mentor we will try to match you
+            with a group that has a mentor who can provide help.<br/><br/>
+            If you want to learn more please contact <span className="email"><a href="mailto:info@havenapp.life">info@havenapp.life</a></span>.
+          </p>
+        </Modal>
         <h2 className="heading--lg font-weight--regular">
           Let&apos;s get to know you so we can match you with the
           right people!
         </h2>
+        <div
+          className="spacing-top--md text--md color--purple matchmaking-explanation"
+          onClick={this.onShowExplanation}
+        >
+          Why do I need to answer these questions?
+        </div>
         <FormRow label="What do you consider yourself?">
           <SelectableContainer
             value={position}

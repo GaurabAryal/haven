@@ -52,8 +52,8 @@ export default class VerifyModal extends React.Component {
         >
           <div style={{ position: 'relative' }}>
             <div className="spacing-bottom--md">
-              To start one-on-one (direct) messages you need to be
-              verified. Verify your account by uploading a valid photo
+              To start one-on-one messages and send links, emails, and phone numbers,
+              you need to be verified. Verify your account by uploading a valid photo
               ID (Driver’s license, passport, health card, etc.).
               Please upload a photo ID below.
             </div>
