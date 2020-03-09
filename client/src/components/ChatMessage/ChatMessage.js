@@ -82,7 +82,12 @@ export default class ChatMessage extends React.Component {
                   this.props.sender.id,
                 )
               }
-              onViewUserProfile={this.props.onViewUserProfile}
+              onViewUserProfile={() =>
+                this.onUserDetailsAction(
+                  this.props.onViewUserProfile,
+                  this.props.sender.id,
+                )
+              }
             />
           </div>
         )}
@@ -137,7 +142,7 @@ export default class ChatMessage extends React.Component {
                     : 'message-text__content text--md font-weight--regular'
                 }
               >
-                {this.props.message}
+                {this.props.message.text}
               </div>
               <div
                 className={
@@ -158,7 +163,14 @@ export default class ChatMessage extends React.Component {
                   </div>
                 </div>
                 <div className="message-text-content__action">
-                  <div className="message-action__icon">
+                  <div
+                    className="message-action__icon"
+                    onClick={() =>
+                      this.props.onSaveMessage(
+                        this.props.message.chatId,
+                      )
+                    }
+                  >
                     <StarIcon />
                   </div>
                   <div className="message-action-tooltip">
@@ -197,11 +209,12 @@ export default class ChatMessage extends React.Component {
 
 ChatMessage.propTypes = {
   sender: PropTypes.object.isRequired,
-  message: PropTypes.string.isRequired,
+  message: PropTypes.object.isRequired,
   time: PropTypes.string,
   image: PropTypes.string,
   isSelf: PropTypes.bool,
   backgroundColor: PropTypes.string,
   onReportUser: PropTypes.func,
   onViewUserProfile: PropTypes.func,
+  onSaveMessage: PropTypes.func,
 };

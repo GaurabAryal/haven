@@ -12,6 +12,7 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
 import { AUTH_TOKEN } from 'src/constants';
 import PrivateRoute from 'src/components/PrivateRoute/PrivateRoute';
@@ -19,6 +20,8 @@ import LoginPage from './Views/Login/LoginPage';
 import OnboardingContainer from './Views/Onboarding/OnboardingContainer';
 import MainPageContainer from './Views/Main/MainPageContainer';
 import { createUploadLink } from 'apollo-upload-client';
+
+import 'react-toastify/dist/ReactToastify.min.css';
 
 const httpLink = createUploadLink({
   uri: 'http://159.203.36.23/graphql/',
@@ -75,6 +78,19 @@ function App() {
           />
         </Switch>
       </Router>
+      <ToastContainer
+        type={toast.TYPE.INFO}
+        position="bottom-center"
+        autoClose={5000}
+        pauseOnVisibilityChange
+        pauseOnHover
+        draggable={false}
+        newestOnTop={false}
+        closeButton={false}
+        closeOnClick={false}
+        toastClassName="haven-toast"
+        progressClassName="haven-toast-progress"
+      />
     </ApolloProvider>
   );
 }
