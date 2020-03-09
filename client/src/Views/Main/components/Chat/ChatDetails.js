@@ -159,7 +159,7 @@ export default class ChatDetails extends React.Component {
         {!this.props.meIsVerified && (
           <div className="spacing-bottom--lg">
             <div className="text--md-lg spacing-bottom--md">
-              One on One
+              Verify your account
             </div>
             <div className="chat-details-verify spacing-bottom--md">
               <ProfilePic
@@ -172,8 +172,8 @@ export default class ChatDetails extends React.Component {
                 imageUrl={this.props.meImageUrl}
               />
               <div className="chat-details-verify-desc">
-                For your security, you must be a verified member to
-                have one-on-one (direct) messages. Get started below!
+                Become a verified member to start one-on-one messages and be
+                able to send links, emails, and phone numbers. Get started below!
               </div>
             </div>
             <Button

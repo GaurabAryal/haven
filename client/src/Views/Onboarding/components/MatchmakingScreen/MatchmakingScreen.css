@@ -1,0 +1,14 @@
+.matchmaking-explanation {
+  display: inline-block;
+  border-bottom: 1px solid #525EC8;
+  cursor: pointer;
+}
+
+.email {
+  border-bottom: 1px solid #525EC8;
+}
+
+.email a {
+  color: #525EC8;
+  text-decoration: none;
+}
