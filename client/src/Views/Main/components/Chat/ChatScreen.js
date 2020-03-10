@@ -129,7 +129,7 @@ export default class ChatScreen extends React.Component {
     const position = this.getSender(meId).profile.position;
     const interests = this.getSender(meId).profile.interests;
     const firstName = this.getSender(meId).firstName;
-    if (position === 'other' || position === 'prefer not to say') {
+    if (position === 'other' || position === 'unknown') {
       if (interests) {
         return `Hi I'm ${firstName} and I'm interested in ${interests.toLowerCase()}`;
       } else {
@@ -165,7 +165,7 @@ export default class ChatScreen extends React.Component {
 
   onDirectMessage = userId => {
     if (!this.props.meIsVerified) {
-      toast('To start 1:1 (direct) messages, both users must be verified. Verify your account under details!');
+      toast('To start one-on-one (direct) messages, both users must be verified. Verify your account under details!');
     }
     console.log('one on one message with' + userId);
   };

@@ -112,7 +112,7 @@ export default class ChatDetails extends React.Component {
               <div className="spacing-bottom--sm">{bio}</div>
               {position &&
                 position !== 'other' &&
-                position !== 'prefer not to say' && (
+                position !== 'unknown' && (
                   <div className="spacing-bottom--sm">
                     <b>{`${firstName} is`}</b>
                     {position === 'professional' && (
