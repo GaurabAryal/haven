@@ -91,6 +91,16 @@ export default class ChatDetails extends React.Component {
           </div>
           {this.state.openDetails[id] && (
             <div>
+              {id !== this.props.meId && member.profile.isVerified && (
+                <div
+                  onClick={() =>
+                    this.props.onDirectMessage(member.id)
+                  }
+                  className="spacing-bottom--sm chat-detail-user-action"
+                >
+                  Message
+                </div>
+              )}
               {member.profile.profilePicture && (
                 <div
                   className="person__profile-pic spacing-bottom--sm"
@@ -134,17 +144,17 @@ export default class ChatDetails extends React.Component {
 
   getSavedMessages() {
     return this.props.savedMessages.length ? (
-      <div>
+      <div className="spacing-bottom--lg">
         <div className="text--md-lg spacing-bottom--sm">
           Saved messages
         </div>
-        {this.props.savedMessages.map(message => {
+        {this.props.savedMessages.map((message, index) => {
           return (
-            <div key={message.id}>
+            <div key={message.id + index}>
               <span>
                 {message.user.firstName} {message.user.lastName}
               </span>
-              <span>{message.chatTime}</span>
+              <span>{moment(message.chatTime).calendar()}</span>
               <div>{message.message}</div>
             </div>
           );
@@ -172,8 +182,9 @@ export default class ChatDetails extends React.Component {
                 imageUrl={this.props.meImageUrl}
               />
               <div className="chat-details-verify-desc">
-                Become a verified member to start one-on-one messages and be
-                able to send links, emails, and phone numbers. Get started below!
+                Become a verified member to start one-on-one messages
+                and be able to send links, emails, and phone numbers.
+                Get started below!
               </div>
             </div>
             <Button
@@ -204,4 +215,5 @@ ChatDetails.propTypes = {
   clearUserIdToView: PropTypes.func,
   userIdToView: PropTypes.string,
   savedMessages: PropTypes.array,
+  onDirectMessage: PropTypes.func,
 };

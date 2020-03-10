@@ -118,7 +118,7 @@ const ChatContainer = props => {
   const groupId = props.match.params.id;
   return (
     <Query query={CHAT_QUERY} variables={{ groupId }}>
-      {({ loading, error, data, subscribeToMore }) => {
+      {({ loading, error, data, subscribeToMore, refetch }) => {
         if (loading) return <div />;
         if (error) return `Error! ${error.message}`;
 
@@ -149,6 +149,7 @@ const ChatContainer = props => {
             saveMessageMutation={props.saveMessageMutation}
             subscribeToMore={more}
             savedMessages={data.savedMessages}
+            refetch={refetch}
           />
         );
       }}

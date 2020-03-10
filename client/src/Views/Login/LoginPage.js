@@ -73,7 +73,7 @@ export default class LoginPage extends React.Component {
     this.props.history.push(`/onboarding`);
   };
 
-  login = mutation => {
+  login = (mutation, event) => {
     const {
       isLogin,
       email,
@@ -81,6 +81,8 @@ export default class LoginPage extends React.Component {
       firstName,
       lastName,
     } = this.state;
+
+    if (event) event.preventDefault();
 
     if (!email || !password) {
       this.setState({ isError: true });
@@ -136,70 +138,65 @@ export default class LoginPage extends React.Component {
                 <h2 className="heading--md text-align--center spacing-bottom--md">
                   {isLogin ? 'Sign in' : 'Sign up to get started'}
                 </h2>
-                {!isLogin && (
-                  <div className="form__name spacing-bottom--sm">
+                <form onSubmit={event => this.login(mutation, event)}>
+                  {!isLogin && (
+                    <div className="form__name spacing-bottom--sm">
+                      <TextInput
+                        label="First name"
+                        value={firstName}
+                        isHalfWidth={true}
+                        onChange={e =>
+                          this.onInputChange(
+                            'firstName',
+                            e.target.value,
+                          )
+                        }
+                      />
+                      <TextInput
+                        label="Last name"
+                        value={lastName}
+                        isHalfWidth={true}
+                        onChange={e =>
+                          this.onInputChange(
+                            'lastName',
+                            e.target.value,
+                          )
+                        }
+                      />
+                    </div>
+                  )}
+
+                  <div className="spacing-bottom--sm">
                     <TextInput
-                      label="First name"
-                      value={firstName}
-                      isHalfWidth={true}
+                      label="Email"
+                      value={email}
                       onChange={e =>
-                        this.onInputChange(
-                          'firstName',
-                          e.target.value,
-                        )
-                      }
-                    />
-                    <TextInput
-                      label="Last name"
-                      value={lastName}
-                      isHalfWidth={true}
-                      onChange={e =>
-                        this.onInputChange('lastName', e.target.value)
+                        this.onInputChange('email', e.target.value)
                       }
                     />
                   </div>
-                )}
-
-                <div className="spacing-bottom--sm">
-                  <TextInput
-                    label="Email"
-                    value={email}
-                    onChange={e =>
-                      this.onInputChange('email', e.target.value)
-                    }
-                  />
-                </div>
-                <div className="spacing-bottom--lg">
-                  <TextInput
-                    label="Password"
-                    type="password"
-                    value={password}
-                    onChange={e =>
-                      this.onInputChange('password', e.target.value)
-                    }
-                  />
-                </div>
-                {/* <button
-                onClick={() =>
-                  this.setState(prevState => ({
-                    showPassword: !prevState.showPassword,
-                  }))
-                }
-              >
-                Show password eye picture icon thing
-              </button> */}
-                <div className="button-wrapper">
-                  <p className="error-message">{errorMessage}</p>
-                  <Button
-                    variant="primary"
-                    disabled={isError}
-                    isFullWidth={true}
-                    onClick={() => this.login(mutation)}
-                  >
-                    {isLogin ? 'Sign in' : 'Sign up'}
-                  </Button>
-                </div>
-
+                  <div className="spacing-bottom--lg">
+                    <TextInput
+                      label="Password"
+                      type="password"
+                      value={password}
+                      onChange={e =>
+                        this.onInputChange('password', e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="button-wrapper">
+                    <p className="error-message">{errorMessage}</p>
+                    <Button
+                      variant="primary"
+                      disabled={isError}
+                      isFullWidth={true}
+                      onClick={() => this.login(mutation)}
+                    >
+                      {isLogin ? 'Sign in' : 'Sign up'}
+                    </Button>
+                  </div>
+                </form>
                 {isLogin ? (
                   <div className="text-align--center spacing-top--sm color--grey text--md">
                     Don&apos;t have an account?{' '}

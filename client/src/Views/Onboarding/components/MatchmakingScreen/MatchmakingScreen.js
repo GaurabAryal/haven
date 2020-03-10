@@ -50,7 +50,8 @@ export default class MatchmakingScreen extends React.Component {
 
   onShowExplanation = () => this.setState({ showExplanation: true });
 
-  onCloseExplanation = () => this.setState({ showExplanation: false });
+  onCloseExplanation = () =>
+    this.setState({ showExplanation: false });
 
   onContinue = () => {
     if (this.isValidInputs()) {
@@ -163,15 +164,27 @@ export default class MatchmakingScreen extends React.Component {
           height="370px"
         >
           <p>
-            We will use your answers to find the perfect match for you. You will
-            be matched with a minimum of 2 people and a maximum of 4 people. <br/><br/>The
-            matching is based on your answers and their other members’ answers too!
-            For example, if you are looking for a mentor we will try to match you
-            with a group that has a mentor who can provide help.<br/><br/>
+            We will use your answers to find the perfect match for
+            you. You will be matched with a minimum of 2 people and a
+            maximum of 4 people. <br />
+            <br />
+            The matching is based on your answers and their other
+            members’ answers too! For example, if you are looking for
+            a mentor we will try to match you with a group that has a
+            mentor who can provide help.
+            <br />
+            <br />
             If you want to learn more please contact&nbsp;
             <span className="email">
-              <a href="mailto:info@havenapp.life" target="_blank">info@havenapp.life</a>
-            </span>.
+              <a
+                href="mailto:info@havenapp.life"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                info@havenapp.life
+              </a>
+            </span>
+            .
           </p>
         </Modal>
         <h2 className="heading--lg font-weight--regular">

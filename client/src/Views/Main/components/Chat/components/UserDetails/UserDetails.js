@@ -18,26 +18,27 @@ export default function UserDetails(props) {
       </div>
       <div className="user-details-actions">
         <p
-          onClick={(id) => {
-            if (props.onViewUserProfile) {
-              props.onViewUserProfile(props.user.id)
-            }
-          }}
+          onClick={props.onViewUserProfile}
           className="user-details-action color--purple user-details-action--primary"
         >
           View profile
         </p>
-        {!props.isSelf && (
-          <p className="user-details-action color--purple user-details-action--primary">
-            Message
-          </p>
-        )}
+        {!props.isSelf &&
+          props.user.profile.isVerified &&
+          props.meIsVerified && (
+            <p
+              onClick={props.onDirectMessage}
+              className="user-details-action color--purple user-details-action--primary"
+            >
+              Message
+            </p>
+          )}
       </div>
       {!props.isSelf && (
         <>
           <div className="user-details-divider" />
           <p
-            onClick={() => props.onReportUser(props.user.id)}
+            onClick={props.onReportUser}
             className="user-details-action color--red user-details-action--report"
           >
             Report
@@ -53,4 +54,6 @@ UserDetails.propTypes = {
   isSelf: PropTypes.bool,
   onReportUser: PropTypes.func,
   onViewUserProfile: PropTypes.func,
+  onDirectMessage: PropTypes.func,
+  meIsVerified: PropTypes.bool,
 };

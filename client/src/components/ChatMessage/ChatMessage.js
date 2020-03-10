@@ -88,6 +88,13 @@ export default class ChatMessage extends React.Component {
                   this.props.sender.id,
                 )
               }
+              onDirectMessage={() =>
+                this.onUserDetailsAction(
+                  this.props.onDirectMessage,
+                  this.props.sender.id,
+                )
+              }
+              meIsVerified={this.props.meIsVerified}
             />
           </div>
         )}
@@ -163,16 +170,31 @@ export default class ChatMessage extends React.Component {
                   </div>
                 </div>
                 <div className="message-text-content__action">
-                  <div
-                    className="message-action__icon"
-                    onClick={() =>
-                      this.props.onSaveMessage(
-                        this.props.message.chatId,
-                      )
-                    }
-                  >
-                    <StarIcon />
-                  </div>
+                  {!this.props.isMessageSaved ? (
+                    <div
+                      className="message-action__icon"
+                      onClick={() =>
+                        this.props.onSaveMessage(
+                          this.props.message.chatId,
+                          true,
+                        )
+                      }
+                    >
+                      <StarIcon />
+                    </div>
+                  ) : (
+                    <div
+                      className="message-action__icon"
+                      onClick={() =>
+                        this.props.onSaveMessage(
+                          this.props.message.chatId,
+                          false,
+                        )
+                      }
+                    >
+                      Unsave
+                    </div>
+                  )}
                   <div className="message-action-tooltip">
                     <p className="message-text-content__action-text text--xs">
                       Save
@@ -217,4 +239,7 @@ ChatMessage.propTypes = {
   onReportUser: PropTypes.func,
   onViewUserProfile: PropTypes.func,
   onSaveMessage: PropTypes.func,
+  onDirectMessage: PropTypes.func,
+  isMessageSaved: PropTypes.bool,
+  meIsVerified: PropTypes.bool,
 };
