@@ -145,7 +145,7 @@ export default class ChatDetails extends React.Component {
                 {message.user.firstName} {message.user.lastName}
               </span>
               <span>{message.chatTime}</span>
-              <div>{message.text}</div>
+              <div>{message.message}</div>
             </div>
           );
         })}

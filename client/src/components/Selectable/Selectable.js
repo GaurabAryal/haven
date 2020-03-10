@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ReactComponent as CheckmarkBadge } from 'src/Views/Onboarding/images/check-badge.svg';
+import { ReactComponent as CheckmarkBadge } from 'src/Views/Onboarding/images/check-badge-small.svg';
 import './Selectable.css';
 
 export default function Selectable(props) {

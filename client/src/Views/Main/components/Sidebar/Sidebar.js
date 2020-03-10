@@ -31,6 +31,7 @@ class Sidebar extends React.Component {
           imageUrl={members[0].profile.profilePicture}
           backgroundColor={getMemberColor(members[0].id, members)}
           size="sm"
+          isVerified={members[0].profile.isVerified}
         />
       </div>,
     );
@@ -43,6 +44,7 @@ class Sidebar extends React.Component {
           imageUrl={members[1].profile.profilePicture}
           backgroundColor={getMemberColor(members[1].id, members)}
           size="sm"
+          isVerified={members[1].profile.isVerified}
         />
       </div>,
     );
@@ -70,7 +72,7 @@ class Sidebar extends React.Component {
                 {getMemberNames(group.members)}
               </div>
               <div className="add-ellipses text--sm sidebar-pill-text__message">
-                the latest chat that ill figure out later
+                You: so nice to meet you!
               </div>
             </div>
           </div>
