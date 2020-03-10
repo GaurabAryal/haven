@@ -80,14 +80,14 @@ export default class ChatScreen extends React.Component {
       (containsUrl || containsPhoneNum || containsEmail)
     ) {
       if (containsUrl) {
-        toast('Verify your account under details to send links!');
+        toast('To send links and more, verify your account under details');
       } else if (containsPhoneNum) {
         toast(
-          'Verify your account under details to send phone numbers!',
+          'To send phone numbers and more, verify your account under details',
         );
       } else if (containsEmail) {
         toast(
-          'Verify your account under details to send email addresses!',
+          'To send email addresses and more, verify your account under details',
         );
       }
       return;
@@ -165,7 +165,7 @@ export default class ChatScreen extends React.Component {
 
   onDirectMessage = userId => {
     if (!this.props.meIsVerified) {
-      this.setState({showVerifyModal: true});
+      toast('To start 1:1 (direct) messages, both users must be verified. Verify your account under details!');
     }
     console.log('one on one message with' + userId);
   };
