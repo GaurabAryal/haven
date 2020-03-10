@@ -24,8 +24,7 @@ export default function UserDetails(props) {
           View profile
         </p>
         {!props.isSelf &&
-          props.user.profile.isVerified &&
-          props.meIsVerified && (
+          props.user.profile.isVerified && (
             <p
               onClick={props.onDirectMessage}
               className="user-details-action color--purple user-details-action--primary"

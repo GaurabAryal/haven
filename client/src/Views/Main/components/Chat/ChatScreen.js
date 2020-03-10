@@ -164,6 +164,9 @@ export default class ChatScreen extends React.Component {
   };
 
   onDirectMessage = userId => {
+    if (!this.props.meIsVerified) {
+      this.setState({showVerifyModal: true});
+    }
     console.log('one on one message with' + userId);
   };
 
