@@ -145,17 +145,17 @@ export default class ChatDetails extends React.Component {
   getSavedMessages() {
     return this.props.savedMessages.length ? (
       <div className="spacing-bottom--lg">
-        <div className="text--md-lg spacing-bottom--sm">
+        <div className="text--md-lg spacing-bottom--md">
           Saved messages
         </div>
         {this.props.savedMessages.map((message, index) => {
           return (
-            <div key={message.id + index}>
-              <span>
-                {message.user.firstName} {message.user.lastName}
+            <div className="saved-message-container" key={message.id + index}>
+              <span className="text--sm font-weight--bold">
+                {message.user.firstName} {message.user.id !== this.props.meId && message.user.lastName} {message.user.id === this.props.meId && "(You)"}&nbsp;&nbsp;
               </span>
-              <span>{moment(message.chatTime).calendar()}</span>
-              <div>{message.message}</div>
+              <span className="text--xs color--grey">{moment(message.chatTime).calendar()}</span>
+              <div><div className="spacing-top--xs saved-message">{message.message}</div></div>
             </div>
           );
         })}

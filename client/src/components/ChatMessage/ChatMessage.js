@@ -4,6 +4,7 @@ import 'src/utils.css';
 import './ChatMessage.css';
 import { ReactComponent as HeartIcon } from './images/heart.svg';
 import { ReactComponent as StarIcon } from './images/star.svg';
+import { ReactComponent as StarFilledIcon } from './images/star-filled.svg';
 import { ReactComponent as ReportIcon } from './images/report.svg';
 
 import ProfilePic from 'src/components/ProfilePic/ProfilePic';
@@ -159,17 +160,6 @@ export default class ChatMessage extends React.Component {
                 }
               >
                 <div className="message-text-content__action">
-                  <div className="message-action__icon">
-                    <HeartIcon />
-                  </div>
-                  <div className="message-action-tooltip">
-                    <p className="message-text-content__action-text text--xs">
-                      Like
-                    </p>
-                    <div className="message-triangle" />
-                  </div>
-                </div>
-                <div className="message-text-content__action">
                   {!this.props.isMessageSaved ? (
                     <div
                       className="message-action__icon"
@@ -192,12 +182,12 @@ export default class ChatMessage extends React.Component {
                         )
                       }
                     >
-                      Unsave
+                      <StarFilledIcon />
                     </div>
                   )}
                   <div className="message-action-tooltip">
                     <p className="message-text-content__action-text text--xs">
-                      Save
+                      {!this.props.isMessageSaved ? "Save" : "Unsave"}
                     </p>
                     <div className="message-triangle" />
                   </div>
