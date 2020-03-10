@@ -118,7 +118,7 @@
   border-left-width: 0;
   border-right-width: 0;
   border-color: #ddd;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .message-composer__input:focus {
@@ -225,4 +225,16 @@
   cursor: pointer;
   color: #525EC8;
   display: inline-block;
+}
+
+.saved-message-container {
+  margin-top: 20px;
+}
+
+.saved-message {
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  display: inline-block;
+  min-width: 50px;
 }
