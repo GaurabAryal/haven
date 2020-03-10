@@ -19,7 +19,7 @@ from .subscriptions import OnNewChatMessage
 from .types import chats
 from havenapp.matchmaking.matching import UserPreferences, find_best_match, join_group, join_new_group, update_member_status
 from havenapp.constants.constant import UserStatus
-from havenapp.models import Profile, Group, Chat, MatchHistory, SavedMessages
+from havenapp.models import Profile, Group, Chat, MatchHistory, SavedMessages, Membership
 
 from graphene_file_upload.scalars import Upload
 
@@ -261,6 +261,53 @@ class MatchGroup(graphene.Mutation):
             status=status,
         )
 
+
+class CreatePrivateChat(graphene.Mutation):
+    class Arguments:
+        self_user = graphene.String(required=True)
+        other_user = graphene.String(required=True)
+
+    group = graphene.Field(GroupNode)
+    error = graphene.String()
+
+    def mutate(self, info, self_user, other_user):
+        self_user = User.objects.get(id=self_user)
+        other_user = User.objects.get(id=other_user)
+
+        new_group = None
+        # If can't find user
+        if not self_user or not other_user:
+            error = "Users does not exist"
+            return CreatePrivateChat (
+                group=new_group,
+                error=error,
+            )
+
+        # Ensure user isn't already in a DM
+        private_chat = Group.objects.filter(is_dm=True, members__id__contains=other_user.id)
+        if private_chat.exists():
+            error = f"User is already in a private chat with {other_user.first_name}"
+            return CreatePrivateChat (
+                group=private_chat.get(),
+                error=error,
+            )
+
+        # Try creating DM
+        try:
+            new_group = Group.objects.create(is_dm=True)
+            new_group.members.set([self_user, other_user])
+            new_group.save()
+        except Error:
+            error = "Error creating a private chat"
+            return CreatePrivateChat (
+                group=new_group,
+                error=error,
+            )
+        
+        return CreatePrivateChat (
+            group=new_group,
+        )
+
 class SendChatMessage(graphene.Mutation, name="SendChatMessagePayload"):
     """Send chat message."""
 
@@ -345,3 +392,4 @@ class Mutation(graphene.ObjectType):
     save_message = SaveMessage.Field()
     verify_user = VerifyUser.Field()
     ban_user = BanUser.Field()
+    create_private_chat = CreatePrivateChat.Field()

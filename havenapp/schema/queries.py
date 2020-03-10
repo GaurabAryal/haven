@@ -22,12 +22,21 @@ class GroupQuery(graphene.AbstractType):
     all_groups = graphene.List(GroupNode)
     membership = graphene.List(GroupNode)
     group = graphene.Field(GroupNode, group_id=graphene.String(required=True))
+    private_groups = graphene.List(GroupNode)
 
     def resolve_all_groups(self, info, **kwargs):
         return Group.objects.all()
 
     def resolve_group(self, info, group_id):
         return Group.objects.get(id=group_id)
+    
+    def resolve_private_groups(self, info):
+        user = info.context.user
+        if user.is_anonymous:
+            raise GraphQLError('User is not logged in!')
+
+        dm_groups = user.group_set.filter(is_dm=True).all()
+        return dm_groups
 
     def resolve_membership(self, info, **kwargs):
         user = info.context.user
