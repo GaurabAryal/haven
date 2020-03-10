@@ -38,6 +38,7 @@ const GET_USER_QUERY = gql`
           position
           bio
           interests
+          isVerified
         }
       }
     }

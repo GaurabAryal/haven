@@ -24,7 +24,7 @@
 .selectable--selected {
     border-color: #525EC8;
     background-color: #E9EAF5;
-    color: #000;
+    color: #525EC8;
 }
 
 .selectable--selected .checkmark-badge {
@@ -35,6 +35,6 @@
   opacity: 0;
   position: absolute;
   top: -8px;
-  right: -8px;
+  right: -6px;
   transition: opacity 150ms;
 }

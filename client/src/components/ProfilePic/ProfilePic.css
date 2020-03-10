@@ -55,6 +55,11 @@
   bottom: -9px;
 }
 
+.verified-badge--sm {
+  right: -5px;
+  bottom: -8px;
+}
+
 .profile-pic-container {
   position: relative;
   background: transparent no-repeat center;

@@ -4,6 +4,7 @@ import 'src/utils.css'
 import './ProfilePic.css';
 import { ReactComponent as HavenLogo } from './images/haven-logo-white.svg';
 import { ReactComponent as VerifiedBadge } from './images/check-badge.svg';
+import { ReactComponent as VerifiedBadgeSmall } from 'src/Views/Onboarding/images/check-badge-small.svg';
 
 export default function ProfilePic(props) {
   let backgroundStyle = {
@@ -16,9 +17,13 @@ export default function ProfilePic(props) {
         style={{backgroundImage: `url(https://haven-storage.nyc3.digitaloceanspaces.com/media/${props.imageUrl})`}}
       >
         {
-          props.isVerified && <div className="verified-badge">
-            <VerifiedBadge/>
-          </div>
+          props.isVerified &&
+            <div className={
+              props.size === "sm"
+              ? "verified-badge verified-badge--sm"
+              : "verified-badge"}>
+              {props.size === "sm" ? <VerifiedBadgeSmall/> : <VerifiedBadge/>}
+            </div>
         }
       </div>
       : <div style={backgroundStyle} className={
