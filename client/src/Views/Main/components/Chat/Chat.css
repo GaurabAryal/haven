@@ -118,6 +118,7 @@
   border-left-width: 0;
   border-right-width: 0;
   border-color: #ddd;
+  overflow: hidden; 
 }
 
 .message-composer__input:focus {
@@ -218,4 +219,10 @@
 .chat-details-verify-desc {
   margin-left: 20px;
   flex-shrink: 100;
+}
+
+.chat-detail-user-action {
+  cursor: pointer;
+  color: #525EC8;
+  display: inline-block;
 }

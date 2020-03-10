@@ -60,9 +60,15 @@ export default class OnboardingPage extends React.Component {
     } = this.state;
     const { userId } = this.props;
 
-    const preferenceList = Object.keys(preferences).map(
-      preference => PREFERENCE_MAPPING[preference],
-    );
+    const preferenceList = Object.entries(preferences)
+      .map(([preferenceKey, preferenceValue]) => {
+        if (preferenceValue) {
+          return PREFERENCE_MAPPING[preferenceKey];
+        } else {
+          return null;
+        }
+      })
+      .filter(Boolean);
 
     await this.props.onboardingMutation({
       variables: {

@@ -23,8 +23,10 @@ export default class ChatScreen extends React.Component {
       localStorage.getItem('haven_sidebar') === 'true' ? true : false,
     showIntroMessage:
       localStorage.getItem(
-        `haven_showintro_userId${this.props.meId}_groupId${this.props.groupId}`
-      ) === 'false' ? false : true,
+        `haven_showintro_userId${this.props.meId}_groupId${this.props.groupId}`,
+      ) === 'false'
+        ? false
+        : true,
     showGuidelines: false,
     showVerifyModal: false,
     showReportModal: false,
@@ -47,9 +49,11 @@ export default class ChatScreen extends React.Component {
     if (this.props.groupId !== prevProps.groupId) {
       this.setState({
         showIntroMessage:
-        localStorage.getItem(
-          `haven_showintro_userId${this.props.meId}_groupId${this.props.groupId}`
-        ) === 'false' ? false : true
+          localStorage.getItem(
+            `haven_showintro_userId${this.props.meId}_groupId${this.props.groupId}`,
+          ) === 'false'
+            ? false
+            : true,
       });
     }
   }
@@ -57,23 +61,34 @@ export default class ChatScreen extends React.Component {
   onSubmit = async event => {
     event.preventDefault();
     this.scrollToBottom(true);
-    const containsUrl = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?").test(this.state.message);
-    const containsPhoneNum = /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?/img.test(this.state.message);
-    const containsEmail = /[\w-]+@([\w-]+\.)+[\w-]+/.test(this.state.message);
+    const containsUrl = new RegExp(
+      '([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?',
+    ).test(this.state.message);
+    const containsPhoneNum = /(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?/gim.test(
+      this.state.message,
+    );
+    const containsEmail = /[\w-]+@([\w-]+\.)+[\w-]+/.test(
+      this.state.message,
+    );
 
     if (!this.state.message) {
       return;
     }
 
-    if (!this.props.meIsVerified && (containsUrl || containsPhoneNum || containsEmail)) {
+    if (
+      !this.props.meIsVerified &&
+      (containsUrl || containsPhoneNum || containsEmail)
+    ) {
       if (containsUrl) {
-        toast("Verify your account under details to send links!");
-      }
-      else if (containsPhoneNum) {
-        toast("Verify your account under details to send phone numbers!")
-      }
-      else if (containsEmail) {
-        toast("Verify your account under details to send email addresses!")
+        toast('Verify your account under details to send links!');
+      } else if (containsPhoneNum) {
+        toast(
+          'Verify your account under details to send phone numbers!',
+        );
+      } else if (containsEmail) {
+        toast(
+          'Verify your account under details to send email addresses!',
+        );
       }
       return;
     }
@@ -96,37 +111,39 @@ export default class ChatScreen extends React.Component {
     this.setState({ showIntroMessage: false });
     localStorage.setItem(
       `haven_showintro_userId${this.props.meId}_groupId${this.props.groupId}`,
-      false
-    )
-  }
+      false,
+    );
+  };
 
   onUseIntroMessage = () => {
     let inputField = document.getElementById('message-composer');
     this.onCloseIntroMessage();
-    this.setState({message: this.getIntroMessage()});
+    this.setState({ message: this.getIntroMessage() });
     inputField.style.height = '86px';
     inputField.focus();
-  }
+  };
 
   getIntroMessage() {
-    let intro = "";
+    let intro = '';
     const meId = this.props.meId;
     const position = this.getSender(meId).profile.position;
     const interests = this.getSender(meId).profile.interests;
     const firstName = this.getSender(meId).firstName;
-    if (position === "other" || position ==="prefer not to say") {
+    if (position === 'other' || position === 'prefer not to say') {
       if (interests) {
         return `Hi I'm ${firstName} and I'm interested in ${interests.toLowerCase()}`;
       } else {
         return null;
       }
-    } else if (position === "professional") {
+    } else if (position === 'professional') {
       intro = `Hi I'm ${firstName}! I'm a professional caregiver`;
-      if (interests) intro += ` and am interested in ${interests.toLowerCase()}`
+      if (interests)
+        intro += ` and am interested in ${interests.toLowerCase()}`;
       return intro;
     } else {
       intro = `Hi I'm ${firstName}! I'm a ${position} of a person with dementia`;
-      if (interests) intro += ` and am interested in ${interests.toLowerCase()}`
+      if (interests)
+        intro += ` and am interested in ${interests.toLowerCase()}`;
       return intro;
     }
   }
@@ -135,10 +152,19 @@ export default class ChatScreen extends React.Component {
     return this.props.members.find(member => id === member.id);
   }
 
-  onSaveMessage = async chatId => {
-    await this.props.saveMessageMutation({
-      variables: { chatId, groupId: this.props.groupId },
-    });
+  onSaveMessage = async (chatId, isSave) => {
+    if (isSave) {
+      await this.props.saveMessageMutation({
+        variables: { chatId, groupId: this.props.groupId },
+      });
+      this.props.refetch();
+    } else {
+      console.log('unsave this message!');
+    }
+  };
+
+  onDirectMessage = userId => {
+    console.log('one on one message with' + userId);
   };
 
   getGuidelines() {
@@ -179,11 +205,12 @@ export default class ChatScreen extends React.Component {
     inputField.style.height = inputField.scrollHeight + 'px';
   }
 
-  verifyUser = () => {
-    this.props.verifyUserMutation({
+  verifyUser = async () => {
+    await this.props.verifyUserMutation({
       variables: { userId: this.props.meId },
     });
-    toast("You are now a verified member!");
+    this.props.refetch();
+    toast('You are now a verified member!');
   };
 
   viewUserProfile = id => {
@@ -229,109 +256,128 @@ export default class ChatScreen extends React.Component {
             userIdToView={this.state.userIdToView}
             clearUserIdToView={() => this.clearUserIdToView()}
             savedMessages={this.props.savedMessages}
+            onDirectMessage={this.onDirectMessage}
           />
         }
         showDetails={this.state.showDetails}
       >
-        {
-          !history.length
-            ? <div className="no-messages-placeholder-container">
-                <div className="no-messages-placeholder text--lg color--grey-light">
-                  No one has started a conversation yet
-                </div>
+        <>
+          {!history.length ? (
+            <div className="no-messages-placeholder-container">
+              <div className="no-messages-placeholder text--lg color--grey-light">
+                No one has started a conversation yet
               </div>
-            : null
-        }
-        <div className="chatContainer">
-          <div className="messageContainer">
-            {history.map((message, index) => (
-              <ChatMessage
-                key={`message ${index}`}
-                sender={this.getSender(message.author)}
-                message={message}
-                isSelf={message.author === meId}
-                time="just now"
-                backgroundColor={getMemberColor(
-                  message.author,
-                  members,
-                )}
-                onReportUser={reportedUserId => {
-                  this.setState({
-                    showReportModal: true,
-                    reportedUserId,
-                  });
+            </div>
+          ) : null}
+          <div className="chatContainer">
+            <div className="messageContainer">
+              {history.map((message, index) => {
+                const isMessageSaved = this.props.savedMessages.find(
+                  savedMessage => savedMessage.id === message.chatId,
+                );
+                return (
+                  <ChatMessage
+                    key={`message ${index}`}
+                    sender={this.getSender(message.author)}
+                    message={message}
+                    isSelf={message.author === meId}
+                    isMessageSaved={Boolean(isMessageSaved)}
+                    time="just now"
+                    backgroundColor={getMemberColor(
+                      message.author,
+                      members,
+                    )}
+                    onReportUser={reportedUserId => {
+                      this.setState({
+                        showReportModal: true,
+                        reportedUserId,
+                      });
+                    }}
+                    onViewUserProfile={this.viewUserProfile}
+                    onSaveMessage={this.onSaveMessage}
+                    onDirectMessage={this.onDirectMessage}
+                    meIsVerified={this.props.meIsVerified}
+                  />
+                );
+              })}
+              <div
+                ref={el => {
+                  this.messagesEnd = el;
                 }}
-                onViewUserProfile={this.viewUserProfile}
-                onSaveMessage={this.onSaveMessage}
               />
-            ))}
-            <div
-              ref={el => {
-                this.messagesEnd = el;
-              }}
-            />
-          </div>
-          <form
-            onSubmit={this.onSubmit}
-            className={
-              this.state.showDetails
-                ? 'message-composer message-composer--small-width'
-                : 'message-composer message-composer--full-width'
-            }
-          >
-            { this.state.showIntroMessage && this.getIntroMessage() &&
-              <div className="message-composer__intro-message">
-                <CloseIcon className="close-btn" onClick={this.onCloseIntroMessage}/>
-                <p className="text--md font-weight--bold spacing-bottom--xs">
-                  Introduce yourself to the group
-                </p>
-                <p className="text--md spacing-bottom--sm">
-                  {this.getIntroMessage()}
-                </p>
-                <Button variant="primary" onClick={this.onUseIntroMessage}>
-                  Use and edit
+            </div>
+            <form
+              onSubmit={this.onSubmit}
+              className={
+                this.state.showDetails
+                  ? 'message-composer message-composer--small-width'
+                  : 'message-composer message-composer--full-width'
+              }
+            >
+              {this.state.showIntroMessage && this.getIntroMessage() && (
+                <div className="message-composer__intro-message">
+                  <CloseIcon
+                    className="close-btn"
+                    onClick={this.onCloseIntroMessage}
+                  />
+                  <p className="text--md font-weight--bold spacing-bottom--xs">
+                    Introduce yourself to the group
+                  </p>
+                  <p className="text--md spacing-bottom--sm">
+                    {this.getIntroMessage()}
+                  </p>
+                  <Button
+                    variant="primary"
+                    onClick={this.onUseIntroMessage}
+                  >
+                    Use and edit
+                  </Button>
+                </div>
+              )}
+              <textarea
+                id="message-composer"
+                className="message-composer__input"
+                rows="1"
+                type="text"
+                placeholder="Type a message"
+                value={this.state.message}
+                onChange={e => this.resizeInput(e)}
+                onKeyDown={e => this.handleEnter(e)}
+              />
+              <div className="message-input__button">
+                <Button variant="primary" onClick={this.onSubmit}>
+                  Send
                 </Button>
               </div>
-            }
-            <textarea
-              id="message-composer"
-              className="message-composer__input"
-              rows="1"
-              type="text"
-              placeholder="Type a message"
-              value={this.state.message}
-              onChange={e => this.resizeInput(e)}
-              onKeyDown={e => this.handleEnter(e)}
+            </form>
+            <Modal
+              isOpen={this.state.showGuidelines}
+              onClose={this.onCloseGuidelines}
+              buttonText="Got it!"
+              header="Community guidelines"
+              onButtonClick={this.onCloseGuidelines}
+              width="600px"
+              height="480px"
+            >
+              <>{this.getGuidelines()}</>
+            </Modal>
+            <VerifyModal
+              isOpen={this.state.showVerifyModal}
+              onClose={() =>
+                this.setState({ showVerifyModal: false })
+              }
+              onVerify={this.verifyUser}
             />
-            <div className="message-input__button">
-              <Button variant="primary" onClick={this.onSubmit}>
-                Send
-              </Button>
-            </div>
-          </form>
-          <Modal
-            isOpen={this.state.showGuidelines}
-            onClose={this.onCloseGuidelines}
-            buttonText="Got it!"
-            header="Community guidelines"
-            onButtonClick={this.onCloseGuidelines}
-            width="600px"
-            height="480px"
-          >
-            <>{this.getGuidelines()}</>
-          </Modal>
-          <VerifyModal
-            isOpen={this.state.showVerifyModal}
-            onClose={() => this.setState({ showVerifyModal: false })}
-            onVerify={this.verifyUser}
-          />
-          <ReportModal
-            isOpen={this.state.showReportModal}
-            onClose={() => this.setState({ showReportModal: false })}
-            onReport={id => console.log('reported', id)}
-            userId={this.state.reportedUserId}
-          />
-        </div>
+            <ReportModal
+              isOpen={this.state.showReportModal}
+              onClose={() =>
+                this.setState({ showReportModal: false })
+              }
+              onReport={id => console.log('reported', id)}
+              userId={this.state.reportedUserId}
+            />
+          </div>
+        </>
       </ContentContainer>
     );
   }
@@ -351,4 +397,5 @@ ChatScreen.propTypes = {
   history: PropTypes.array,
   verifyUser: PropTypes.func,
   savedMessages: PropTypes.array,
+  refetch: PropTypes.func,
 };
