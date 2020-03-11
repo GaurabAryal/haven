@@ -152,15 +152,11 @@ export default class ChatScreen extends React.Component {
     return this.props.members.find(member => id === member.id);
   }
 
-  onSaveMessage = async (chatId, isSave) => {
-    if (isSave) {
-      await this.props.saveMessageMutation({
-        variables: { chatId, groupId: this.props.groupId },
-      });
-      this.props.refetch();
-    } else {
-      console.log('unsave this message!');
-    }
+  onSaveMessage = async (chatId) => {
+    await this.props.saveMessageMutation({
+      variables: { chatId, groupId: this.props.groupId },
+    });
+    this.props.refetch();
   };
 
   onDirectMessage = userId => {

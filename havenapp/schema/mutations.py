@@ -427,6 +427,24 @@ class SaveMessage(graphene.Mutation):
         save_msg.save()
         return SaveMessage(chat=chat)
 
+class SaveMessage(graphene.Mutation):
+    class Arguments:
+
+        group_id = graphene.String()
+        chat_id = graphene.String()
+
+    chat = graphene.Field(ChatNode)
+
+    def mutate(self, info, group_id, chat_id):
+        user = info.context.user
+        chat = Chat.objects.get(id=chat_id)
+        try:
+            saved = SavedMessages.objects.get(user=user, chat=chat, group_id=group_id)
+            saved.delete()
+        except SavedMessages.DoesNotExist:
+            save_msg = SavedMessages(user=user, chat=chat, group_id=group_id)
+            save_msg.save()
+        return SaveMessage(chat=chat)
 
 # Registers Users into Mutation
 class Mutation(graphene.ObjectType):
