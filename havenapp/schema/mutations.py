@@ -33,6 +33,7 @@ class Register(graphene.Mutation):
     error = graphene.String()
 
     def mutate(self, info, user_input=None):
+        error = None
         try:
             user = get_user_model()(
                 email=user_input.email,
@@ -109,6 +110,7 @@ class UpdateProfile(graphene.Mutation):
     error = graphene.String()
 
     def mutate(self, info, profile_input=None, profile_picture=None):
+        error = None
         # Check if user is logged in
         curr_user = info.context.user
         if curr_user.is_anonymous:
@@ -131,6 +133,10 @@ class UpdateProfile(graphene.Mutation):
             profile_query.update(**field_updates)
         except:
             error = "Error updating user profile"
+            return UpdateProfile(
+                profile=None,
+                error=error
+            )
 
         profile = profile_query.get()
         
@@ -149,10 +155,8 @@ class UpdateProfile(graphene.Mutation):
                 error=error
             )
 
-
         return UpdateProfile(
             profile=profile,
-            error=error
         )
 
 class VerifyUser(graphene.Mutation):
@@ -197,6 +201,7 @@ class BanUser(graphene.Mutation):
     error = graphene.String()
 
     def mutate(self, info, user_id):
+        error = None
         user = User.objects.get(id=user_id)
 
         # If can't find user
