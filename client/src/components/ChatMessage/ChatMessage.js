@@ -165,8 +165,7 @@ export default class ChatMessage extends React.Component {
                       className="message-action__icon"
                       onClick={() =>
                         this.props.onSaveMessage(
-                          this.props.message.chatId,
-                          true,
+                          this.props.message.chatId
                         )
                       }
                     >
@@ -177,8 +176,7 @@ export default class ChatMessage extends React.Component {
                       className="message-action__icon"
                       onClick={() =>
                         this.props.onSaveMessage(
-                          this.props.message.chatId,
-                          false,
+                          this.props.message.chatId
                         )
                       }
                     >

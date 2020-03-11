@@ -6,6 +6,7 @@ import os
 
 from graphql import GraphQLError
 from django.core.files.base import ContentFile
+from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
@@ -29,16 +30,25 @@ class Register(graphene.Mutation):
         user_input = UserInput(required=True)
 
     user = graphene.Field(UserNode)
+    error = graphene.String()
 
     def mutate(self, info, user_input=None):
-        user = get_user_model()(
-            email=user_input.email,
-            username=user_input.email,
-            first_name=user_input.first_name,
-            last_name=user_input.last_name,
-        )
-        user.set_password(user_input.password)
-        user.save()
+        error = None
+        try:
+            user = get_user_model()(
+                email=user_input.email,
+                username=user_input.email,
+                first_name=user_input.first_name,
+                last_name=user_input.last_name,
+            )
+            user.set_password(user_input.password)
+            user.save()
+        except ValidationError:
+            error = "An error had occurred, please try again in a few minutes"
+            return Register (
+                user=user,
+                error=error
+            )
 
         return Register(user=user)
 
@@ -49,16 +59,22 @@ class CreateProfile(graphene.Mutation):
         profile_picture = Upload()
 
     profile = graphene.Field(ProfileNode)
+    error = graphene.String()
 
     def mutate(self, info, profile_input=None, profile_picture=None):
         # Check if user is logged in
         curr_user = info.context.user
         if curr_user.is_anonymous:
-            raise GraphQLError('User must be logged in!')
+            error = "User is not logged in"
+            return UpdateProfile(
+                profile=None,
+                error=error,
+            )
 
-        profile = Profile.objects.filter(user=curr_user)
+        profile_query = Profile.objects.filter(user=curr_user)
+        profile = None
         # Check if profile exists
-        if not profile.exists():
+        if not profile_query.exists():
             # Create profile object
             profile = Profile(
                 position=profile_input.position,
@@ -76,15 +92,13 @@ class CreateProfile(graphene.Mutation):
                 profile.profile_picture.save(slugify(f'{curr_user.username}_profile') + image_ext, ContentFile(image_file.read()), save=False)
 
             profile.save()
-
-            # This ensures that everything goes well
-            return CreateProfile(
-                profile=profile
-            )
         else:
-            return CreateProfile(
-                profile=profile.get()
-            )
+            profile = profile_query.get()
+
+        # This ensures that everything goes well
+        return CreateProfile(
+            profile=profile
+        )
             
 
 class UpdateProfile(graphene.Mutation):
@@ -93,31 +107,56 @@ class UpdateProfile(graphene.Mutation):
         profile_picture = Upload()
     
     profile = graphene.Field(ProfileNode)
+    error = graphene.String()
 
     def mutate(self, info, profile_input=None, profile_picture=None):
+        error = None
         # Check if user is logged in
         curr_user = info.context.user
         if curr_user.is_anonymous:
-            raise GraphQLError('User must be logged in!')
+            error = "User is not logged in" 
+            return UpdateProfile(
+                profile=None,
+                error=error
+            )
 
         profile_query = Profile.objects.filter(user=curr_user)
         if not profile_query.exists():
-            raise GraphQLError("Error, user does not have a profile...")
+            error = "Error, user does not have a profile"
+            return UpdateProfile(
+                profile=None,
+                error=error
+            )
 
-        field_updates = {k:v for k, v in profile_input.items()}
-        profile_query.update(**field_updates)
+        try:
+            field_updates = {k:v for k, v in profile_input.items()}
+            profile_query.update(**field_updates)
+        except:
+            error = "Error updating user profile"
+            return UpdateProfile(
+                profile=None,
+                error=error
+            )
 
         profile = profile_query.get()
-        # Check if there is am image payload
-        if profile_picture:
-            image_file = profile_picture
-            _, image_ext = os.path.splitext(image_file.name)
+        
+        try:
+            # Check if there is am image payload
+            if profile_picture:
+                image_file = profile_picture
+                _, image_ext = os.path.splitext(image_file.name)
 
-            # if 'image' in image_file.content_type:
-            profile.profile_picture.save(slugify(f'{curr_user.username}_profile') + image_ext, ContentFile(image_file.read()), save=True)
+                # if 'image' in image_file.content_type:
+                profile.profile_picture.save(slugify(f'{curr_user.username}_profile') + image_ext, ContentFile(image_file.read()), save=True)
+        except:
+            error = "Error updating profile picture"
+            return UpdateProfile(
+                profile=profile,
+                error=error
+            )
 
         return UpdateProfile(
-            profile=profile
+            profile=profile,
         )
 
 class VerifyUser(graphene.Mutation):
@@ -125,7 +164,7 @@ class VerifyUser(graphene.Mutation):
         user_id = graphene.String(required=True)
 
     profile = graphene.Field(ProfileNode)
-    error = graphene.Boolean()
+    error = graphene.String()
 
     def mutate(self, info, user_id):
         user = User.objects.get(id=user_id)
@@ -159,9 +198,10 @@ class BanUser(graphene.Mutation):
         user_id = graphene.String(required=True)
 
     profile = graphene.Field(ProfileNode)
-    error = graphene.Boolean()
+    error = graphene.String()
 
     def mutate(self, info, user_id):
+        error = None
         user = User.objects.get(id=user_id)
 
         # If can't find user
@@ -189,7 +229,6 @@ class BanUser(graphene.Mutation):
         )
 
 
-
 class MatchGroup(graphene.Mutation):
     class Arguments:
         user_id = graphene.String(required=True)
@@ -198,6 +237,7 @@ class MatchGroup(graphene.Mutation):
         city = graphene.String()
 
     group = graphene.Field(GroupNode)
+    error = graphene.String()
     status = graphene.String()
 
     def mutate(self, info, user_id, city='', country='', preference_list=[]):
@@ -208,12 +248,18 @@ class MatchGroup(graphene.Mutation):
 
         # If no user exists
         if not user:
-            raise GraphQLError('User does not exist')
+            error = 'User does not exist'
+            return MatchGroup (
+                error=error
+            )
 
         try:
             user_pref = UserPreferences(user_id, preference_list, city, country)
         except:
-            raise GraphQLError('Please enter valid preferences')
+            error = 'Please enter valid preferences'
+            return MatchGroup (
+                error=error
+            )
        
         match_entry = MatchHistory.objects.create(
                     user=user, 
@@ -233,7 +279,10 @@ class MatchGroup(graphene.Mutation):
             profile.status=UserStatus.SEARCHING.value
             profile.save()
         except:
-            raise GraphQLError('Error updating user profile')
+            error = 'Matching error, unable to update user profile'
+            return MatchGroup (
+                error=error
+            )
 
         # Match to Group
         group_id: str = find_best_match(user_pref)
@@ -245,7 +294,10 @@ class MatchGroup(graphene.Mutation):
                 group_id = join_group(user_pref, group_id)
                 status = "Joined existing group"
             except:
-                raise GraphQLError('Error matching user with a group, please try again later')
+                error = 'Error matching user with a group, please try again later'
+                return MatchGroup (
+                    error=error
+                )
         
         # Update Entry
         match_entry.completed = True
@@ -380,6 +432,24 @@ class SaveMessage(graphene.Mutation):
         save_msg.save()
         return SaveMessage(chat=chat)
 
+class SaveMessage(graphene.Mutation):
+    class Arguments:
+
+        group_id = graphene.String()
+        chat_id = graphene.String()
+
+    chat = graphene.Field(ChatNode)
+
+    def mutate(self, info, group_id, chat_id):
+        user = info.context.user
+        chat = Chat.objects.get(id=chat_id)
+        try:
+            saved = SavedMessages.objects.get(user=user, chat=chat, group_id=group_id)
+            saved.delete()
+        except SavedMessages.DoesNotExist:
+            save_msg = SavedMessages(user=user, chat=chat, group_id=group_id)
+            save_msg.save()
+        return SaveMessage(chat=chat)
 
 # Registers Users into Mutation
 class Mutation(graphene.ObjectType):

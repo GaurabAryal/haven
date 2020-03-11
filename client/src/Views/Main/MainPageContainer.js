@@ -71,7 +71,7 @@ export default class MainPageContainer extends React.Component {
     const position = member.profile.position;
     const interests = member.profile.interests;
     const firstName = member.firstName;
-    if (position === 'other' || position === 'prefer not to say') {
+    if (position === 'other' || position === 'unknown') {
       if (interests) {
         return `${firstName} is interested in ${interests.toLowerCase()}`;
       } else {

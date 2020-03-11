@@ -61,7 +61,6 @@ class ChatScreen extends React.Component {
 
   onSubmit = async event => {
     event.preventDefault();
-    this.scrollToBottom(true);
     const containsUrl = new RegExp(
       '([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?',
     ).test(this.state.message);
@@ -105,6 +104,7 @@ class ChatScreen extends React.Component {
       },
     });
 
+    this.scrollToBottom(true);
     this.setState({ message: '' });
   };
 
@@ -155,15 +155,11 @@ class ChatScreen extends React.Component {
     return this.props.members.find(member => id === member.id);
   }
 
-  onSaveMessage = async (chatId, isSave) => {
-    if (isSave) {
-      await this.props.saveMessageMutation({
-        variables: { chatId, groupId: this.props.groupId },
-      });
-      this.props.refetch();
-    } else {
-      console.log('unsave this message!');
-    }
+  onSaveMessage = async (chatId) => {
+    await this.props.saveMessageMutation({
+      variables: { chatId, groupId: this.props.groupId },
+    });
+    this.props.refetch();
   };
 
   onDirectMessage = async userId => {
@@ -409,7 +405,7 @@ class ChatScreen extends React.Component {
               onClose={() =>
                 this.setState({ showReportModal: false })
               }
-              onReport={id => console.log('reported', id)}
+              onReport={id => toast(`${this.getSender(this.state.reportedUserId).firstName} has been reported. We'll notify you once we've reviewed the report.`)}
               userId={this.state.reportedUserId}
             />
           </div>
