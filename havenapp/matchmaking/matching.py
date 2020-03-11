@@ -104,6 +104,7 @@ def join_group(user_preference: UserPreferences, group_id: uuid.UUID) -> str:
             if group.professionals < 1:
                 group.provide_advice = True
 
+    group.save()
     return group.id
 
 def join_new_group(user_preference: UserPreferences) -> str:
