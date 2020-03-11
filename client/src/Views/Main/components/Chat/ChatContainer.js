@@ -10,6 +10,7 @@ import ChatScreen from './ChatScreen.js';
 const CHAT_QUERY = gql`
   query Chat($groupId: String!) {
     group(groupId: $groupId) {
+      isDm
       members {
         id
         firstName
@@ -83,6 +84,19 @@ const CREATE_MESSAGE_MUTATION = gql`
   }
 `;
 
+const CREATE_PRIVATE_CHAT_MUTATION = gql`
+  mutation createPrivateChat(
+    $otherUser: String!
+    $selfUser: String!
+  ) {
+    createPrivateChat(otherUser: $otherUser, selfUser: $selfUser) {
+      group {
+        id
+      }
+    }
+  }
+`;
+
 const SAVE_MESSAGE_MUTATION = gql`
   mutation saveChatMessage($groupId: String!, $chatId: String!) {
     saveMessage(groupId: $groupId, chatId: $chatId) {
@@ -138,7 +152,7 @@ const ChatContainer = props => {
         return (
           <ChatScreen
             members={data.group.members}
-            history={data.history}
+            chatHistory={data.history}
             meId={data.me.id}
             meImageUrl={data.me.profile.profilePicture}
             meIsVerified={data.me.profile.isVerified}
@@ -147,9 +161,13 @@ const ChatContainer = props => {
             createMessageMutation={props.createMessageMutation}
             verifyUserMutation={props.verifyUserMutation}
             saveMessageMutation={props.saveMessageMutation}
+            createPrivateChatMutation={
+              props.createPrivateChatMutation
+            }
             subscribeToMore={more}
             savedMessages={data.savedMessages}
             refetch={refetch}
+            isDirectMessage={data.group.isDm}
           />
         );
       }}
@@ -163,6 +181,7 @@ ChatContainer.propTypes = {
   createMessageMutation: PropTypes.func,
   verifyUserMutation: PropTypes.func,
   saveMessageMutation: PropTypes.func,
+  createPrivateChatMutation: PropTypes.func,
 };
 
 export default compose(
@@ -170,4 +189,7 @@ export default compose(
   graphql(VERIFY_USER_MUTATION, { name: 'verifyUserMutation' }),
   graphql(EDIT_PROFILE_MUTATION, { name: 'editProfileMutation' }),
   graphql(SAVE_MESSAGE_MUTATION, { name: 'saveMessageMutation' }),
+  graphql(CREATE_PRIVATE_CHAT_MUTATION, {
+    name: 'createPrivateChatMutation',
+  }),
 )(ChatContainer);

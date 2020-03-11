@@ -39,17 +39,77 @@ export default class ChatDetails extends React.Component {
     this.setState({ openDetails });
   }
 
+  getMemberDetail(member) {
+    const {
+      id,
+      dateJoined,
+      firstName,
+      profile: { bio, interests, position },
+    } = member;
+
+    return (
+      <div>
+        {id !== this.props.meId && !this.props.isDirectMessage && (
+          <div
+            onClick={() => this.props.onDirectMessage(member.id)}
+            className="spacing-bottom--sm chat-detail-user-action"
+          >
+            Message
+          </div>
+        )}
+        {member.profile.profilePicture && (
+          <div
+            className="person__profile-pic spacing-bottom--sm"
+            style={{
+              backgroundImage: `url(https://haven-storage.nyc3.digitaloceanspaces.com/media/${member.profile.profilePicture})`,
+            }}
+          />
+        )}
+        <div className="spacing-bottom--sm">{bio}</div>
+        {position && position !== 'other' && position !== 'unknown' && (
+          <div className="spacing-bottom--sm">
+            <b>{`${firstName} is`}</b>
+            {position === 'professional' && (
+              <div>A professional caregiver</div>
+            )}
+            {position !== 'professional' && (
+              <div>A {position} of a person with dementia</div>
+            )}
+          </div>
+        )}
+        {interests && (
+          <div>
+            <b>Ask me about</b>
+            <div>{interests}</div>
+          </div>
+        )}
+        <div className="spacing-top--sm spacing-bottom--md">
+          <b>Joined Haven</b>
+          <div>{moment(dateJoined).format('MMMM YYYY')}</div>
+        </div>
+      </div>
+    );
+  }
+
   getMemberDetails() {
     const userIdToView = this.props.userIdToView;
-    return this.props.members.map((member, index) => {
-      const {
-        id,
-        dateJoined,
-        firstName,
-        lastName,
-        profile: { bio, interests, position },
-      } = member;
 
+    if (this.props.isDirectMessage) {
+      const otherUser = this.props.members.find(
+        member => member.id !== this.props.meId,
+      );
+      return (
+        <>
+          <div className="text--md-lg spacing-bottom--md">
+            {`${otherUser.firstName} ${otherUser.lastName}'s profile`}
+          </div>
+          {this.getMemberDetail(otherUser)}
+        </>
+      );
+    }
+
+    return this.props.members.map((member, index) => {
+      const { id, firstName, lastName, profile } = member;
       return (
         <div
           key={firstName + index}
@@ -89,54 +149,7 @@ export default class ChatDetails extends React.Component {
               />
             </span>
           </div>
-          {this.state.openDetails[id] && (
-            <div>
-              {id !== this.props.meId && member.profile.isVerified && (
-                <div
-                  onClick={() =>
-                    this.props.onDirectMessage(member.id)
-                  }
-                  className="spacing-bottom--sm chat-detail-user-action"
-                >
-                  Message
-                </div>
-              )}
-              {member.profile.profilePicture && (
-                <div
-                  className="person__profile-pic spacing-bottom--sm"
-                  style={{
-                    backgroundImage: `url(https://haven-storage.nyc3.digitaloceanspaces.com/media/${member.profile.profilePicture})`,
-                  }}
-                />
-              )}
-              <div className="spacing-bottom--sm">{bio}</div>
-              {position &&
-                position !== 'other' &&
-                position !== 'unknown' && (
-                  <div className="spacing-bottom--sm">
-                    <b>{`${firstName} is`}</b>
-                    {position === 'professional' && (
-                      <div>A professional caregiver</div>
-                    )}
-                    {position !== 'professional' && (
-                      <div>
-                        A {position} of a person with dementia
-                      </div>
-                    )}
-                  </div>
-                )}
-              {interests && (
-                <div>
-                  <b>Ask me about</b>
-                  <div>{interests}</div>
-                </div>
-              )}
-              <div className="spacing-top--sm spacing-bottom--md">
-                <b>Joined Haven</b>
-                <div>{moment(dateJoined).format('MMMM YYYY')}</div>
-              </div>
-            </div>
-          )}
+          {this.state.openDetails[id] && this.getMemberDetail(member)}
         </div>
       );
     });
@@ -150,12 +163,25 @@ export default class ChatDetails extends React.Component {
         </div>
         {this.props.savedMessages.map((message, index) => {
           return (
-            <div className="saved-message-container" key={message.id + index}>
+            <div
+              className="saved-message-container"
+              key={message.id + index}
+            >
               <span className="text--sm font-weight--bold">
-                {message.user.firstName} {message.user.id !== this.props.meId && message.user.lastName} {message.user.id === this.props.meId && "(You)"}&nbsp;&nbsp;
+                {message.user.firstName}{' '}
+                {message.user.id !== this.props.meId &&
+                  message.user.lastName}{' '}
+                {message.user.id === this.props.meId && '(You)'}
+                &nbsp;&nbsp;
               </span>
-              <span className="text--xs color--grey">{moment(message.chatTime).calendar()}</span>
-              <div><div className="spacing-top--xs saved-message">{message.message}</div></div>
+              <span className="text--xs color--grey">
+                {moment(message.chatTime).calendar()}
+              </span>
+              <div>
+                <div className="spacing-top--xs saved-message">
+                  {message.message}
+                </div>
+              </div>
             </div>
           );
         })}
@@ -197,9 +223,11 @@ export default class ChatDetails extends React.Component {
           </div>
         )}
         {this.getSavedMessages()}
-        <div className="text--md-lg spacing-bottom--sm">
-          Group Members
-        </div>
+        {!this.props.isDirectMessage && (
+          <div className="text--md-lg spacing-bottom--sm">
+            Group Members
+          </div>
+        )}
         {this.getMemberDetails()}
       </div>
     );
@@ -216,4 +244,5 @@ ChatDetails.propTypes = {
   userIdToView: PropTypes.string,
   savedMessages: PropTypes.array,
   onDirectMessage: PropTypes.func,
+  isDirectMessage: PropTypes.bool,
 };
