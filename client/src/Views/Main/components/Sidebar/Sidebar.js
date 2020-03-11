@@ -30,8 +30,8 @@ class Sidebar extends React.Component {
       profilePics.push(
         <div
           key={members[0].id}
-          className="sidebar-pill__profile-pics-wrapper"
-          style={offsetStyle}
+          className="sidebar-pill__profile-pics-wrapper sidebar-pill__profile-pics-wrapper--isDM"
+          style={{left: '8px', top: '-5px'}}
         >
           <ProfilePic
             imageUrl={members[0].profile.profilePicture}

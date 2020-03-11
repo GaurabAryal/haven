@@ -287,6 +287,7 @@ class ChatScreen extends React.Component {
             savedMessages={savedMessages}
             onDirectMessage={this.onDirectMessage}
             isDirectMessage={isDirectMessage}
+            onSaveMessage={this.onSaveMessage}
           />
         }
         showDetails={this.state.showDetails}

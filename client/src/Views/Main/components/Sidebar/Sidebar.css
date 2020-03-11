@@ -44,6 +44,10 @@
   width: 75px;
 }
 
+.sidebar-pill__profile-pics-wrapper--isDM {
+  left: -20px;
+}
+
 .sidebar-pill__text {
   max-width: calc(100% - 80px);
   flex: 1;
