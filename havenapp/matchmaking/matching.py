@@ -15,8 +15,9 @@ class UserPreferences():
 
     def parse_preferences(self, user_pref: List[int]) -> Dict[str, bool]:
         # If no pref, toggle all flags that is not providing
-        if PreferenceFlags.no_preference.value in user_pref:
+        if not user_pref or (PreferenceFlags.no_preference.value in user_pref):
             return {'find_friends': True, 'socialize': True, 'seek_mentor': True, 'seek_advice': True}
+
         return {PreferenceFlags(p).name: True for p in user_pref}
 
     def build_query(self):
@@ -29,7 +30,7 @@ def find_best_match(user_preference: UserPreferences) -> str:
     # Build query and create groups
     query = user_preference.build_query()
     matching_groups = Group.objects.annotate(num_members=Count('members')) \
-                        .exclude(members__id=user_preference.user_id) \
+                        .exclude(members__id=user_preference.user_id, is_dm=False) \
                         .filter(Q(num_members__lt=5)) \
                         .filter(query)
 
@@ -38,9 +39,12 @@ def find_best_match(user_preference: UserPreferences) -> str:
     best_similarity_score: float = 0
     for g in matching_groups:
         group_flags = g.get_group_flags()
+        sim_score = 0
+        try:
+            sim_score = get_jaccard_sim(user_preference.preference_flags, group_flags)
+        except ZeroDivisionError:
+            sim_score = 0
 
-        sim_score = get_jaccard_sim(user_preference.preference_flags, group_flags)
-        
         if best_similarity_score < sim_score:
             best_similarity_score = sim_score
             best_group = g.id
