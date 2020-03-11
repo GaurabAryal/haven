@@ -60,7 +60,6 @@ export default class ChatScreen extends React.Component {
 
   onSubmit = async event => {
     event.preventDefault();
-    this.scrollToBottom(true);
     const containsUrl = new RegExp(
       '([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?',
     ).test(this.state.message);
@@ -102,6 +101,7 @@ export default class ChatScreen extends React.Component {
       },
     });
 
+    this.scrollToBottom(true);
     this.setState({ message: '' });
   };
 
@@ -213,7 +213,6 @@ export default class ChatScreen extends React.Component {
       variables: { userId: this.props.meId },
     });
     this.props.refetch();
-    toast('You are now a verified member!');
   };
 
   viewUserProfile = id => {
@@ -376,7 +375,7 @@ export default class ChatScreen extends React.Component {
               onClose={() =>
                 this.setState({ showReportModal: false })
               }
-              onReport={id => console.log('reported', id)}
+              onReport={id => toast(`${this.getSender(this.state.reportedUserId).firstName} has been reported. We'll notify you once we've reviewed the report.`)}
               userId={this.state.reportedUserId}
             />
           </div>
