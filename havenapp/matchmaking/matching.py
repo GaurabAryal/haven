@@ -61,7 +61,6 @@ def join_group(user_preference: UserPreferences, group_id: uuid.UUID) -> str:
     # Get groups
     user = User.objects.get(id=user_preference.user_id)
     group = Group.objects.get(id=group_id)
-    print(user)
 
     # Add user to group
     group.members.add(user)
@@ -119,5 +118,6 @@ def update_member_status(group_id: uuid.UUID):
 
     if group.members.count() >= 3:
         for u in group.members.all():
-            u.profile.status=UserStatus.NEWLY_MATCHED.value
-            u.profile.save()
+            if u.profile.status == UserStatus.SEARCHING.value:
+                u.profile.status=UserStatus.NEWLY_MATCHED.value
+                u.profile.save()
