@@ -70,7 +70,7 @@ class CreateProfile(graphene.Mutation):
                 error=error,
             )
 
-        profile = Profile.objects.get(user=curr_user)
+        profile = Profile.objects.filter(user=curr_user).get()
         # Check if profile exists
         if not profile:
             # Create profile object
