@@ -70,9 +70,10 @@ class CreateProfile(graphene.Mutation):
                 error=error,
             )
 
-        profile = Profile.objects.filter(user=curr_user).get()
+        profile_query = Profile.objects.filter(user=curr_user)
+        profile = None
         # Check if profile exists
-        if not profile:
+        if not profile_query.exists():
             # Create profile object
             profile = Profile(
                 position=profile_input.position,
@@ -90,6 +91,8 @@ class CreateProfile(graphene.Mutation):
                 profile.profile_picture.save(slugify(f'{curr_user.username}_profile') + image_ext, ContentFile(image_file.read()), save=False)
 
             profile.save()
+        else:
+            profile = profile_query.get()
 
         # This ensures that everything goes well
         return CreateProfile(
