@@ -231,10 +231,23 @@
   margin-top: 20px;
 }
 
+.saved-message-container__heading {
+  display: flex;
+  align-items: center;
+}
+
 .saved-message {
   padding: 10px;
   background-color: #f1f1f1;
   border-radius: 10px;
   display: inline-block;
   min-width: 50px;
+}
+
+.chat-details__unsave {
+  cursor: pointer;
+  padding: 5px 5px 3px 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  display: inline-block;
 }

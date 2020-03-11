@@ -6,6 +6,7 @@ import Button from 'src/components/Button/Button';
 import ProfilePic from 'src/components/ProfilePic/ProfilePic';
 
 import { ReactComponent as ChevronDown } from './images/chevron-down.svg';
+import { ReactComponent as StarFilledIcon } from 'src/components/ChatMessage/images/star-filled.svg';
 import { getMemberColor } from 'src/utils';
 
 export default class ChatDetails extends React.Component {
@@ -101,7 +102,11 @@ export default class ChatDetails extends React.Component {
       return (
         <>
           <div className="text--md-lg spacing-bottom--md">
-            {`${otherUser.firstName} ${otherUser.lastName}'s profile`}
+            {
+              otherUser.firstName[otherUser.firstName.length - 1] === 's'
+                ? `${otherUser.firstName}' profile`
+                : `${otherUser.firstName}'s profile`
+            }
           </div>
           {this.getMemberDetail(otherUser)}
         </>
@@ -167,16 +172,23 @@ export default class ChatDetails extends React.Component {
               className="saved-message-container"
               key={message.id + index}
             >
-              <span className="text--sm font-weight--bold">
-                {message.user.firstName}{' '}
-                {message.user.id !== this.props.meId &&
-                  message.user.lastName}{' '}
-                {message.user.id === this.props.meId && '(You)'}
-                &nbsp;&nbsp;
-              </span>
-              <span className="text--xs color--grey">
-                {moment(message.chatTime).calendar()}
-              </span>
+              <div className="saved-message-container__heading">
+                <span className="text--sm font-weight--bold">
+                  {message.user.firstName}{' '}
+                  {message.user.id !== this.props.meId &&
+                    message.user.lastName}{' '}
+                  {message.user.id === this.props.meId && '(You)'}
+                  &nbsp;&nbsp;
+                </span>
+                <span className="text--xs color--grey">
+                  {moment(message.chatTime).fromNow()}
+                </span>
+                <div className="chat-details__unsave" onClick={() =>
+                  this.props.onSaveMessage(message.id)
+                }>
+                  <StarFilledIcon/>
+                </div>
+              </div>
               <div>
                 <div className="spacing-top--xs saved-message">
                   {message.message}
