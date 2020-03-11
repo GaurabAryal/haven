@@ -31,6 +31,12 @@
   margin-right: 12px;
 }
 
+@media (min-width: 1200px) {
+  .message-text-container {
+    max-width: 65%;
+  }
+}
+
 .message-text {
   display: flex;
   align-items: center;

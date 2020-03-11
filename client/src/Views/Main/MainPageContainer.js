@@ -192,7 +192,7 @@ export default class MainPageContainer extends React.Component {
                         this.onCloseModal(mutation)
                       }
                       width="600px"
-                      height="600px"
+                      height="630px"
                     >
                       <>
                         <p className="spacing-bottom--md text--md">
