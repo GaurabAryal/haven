@@ -28,6 +28,7 @@ const GET_USER_QUERY = gql`
     }
     membership {
       id
+      isDm
       members {
         id
         firstName
@@ -133,14 +134,14 @@ export default class MainPageContainer extends React.Component {
           if (loading) return <div />;
           if (error) return <div />;
 
-          const groupMembersAmount =
+          const firstGroupMembersAmount =
             data.membership[0]?.members?.length || 0;
 
           const newestGroupMembersAmount =
             data.membership[data.membership.length - 1]?.members
               ?.length || 0;
 
-          if (groupMembersAmount < MIN_GROUP_SIZE) {
+          if (firstGroupMembersAmount < MIN_GROUP_SIZE) {
             return (
               <Redirect
                 to={{
@@ -154,6 +155,7 @@ export default class MainPageContainer extends React.Component {
           return (
             <div className="mainpage-container">
               <Sidebar
+                meId={data.me.id}
                 groups={data.membership}
                 logout={() => this.logout(client)}
               />

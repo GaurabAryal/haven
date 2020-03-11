@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getMemberNames } from 'src/utils';
+import { getMemberNames, getOtherMembers } from 'src/utils';
 import { ReactComponent as BookIcon } from './images/book-open.svg';
 import { ReactComponent as SidebarIcon } from './images/sidebar.svg';
 import { ReactComponent as SidebarOpenIcon } from './images/sidebar-open.svg';
 
 export default function ChatHeader(props) {
+  const otherMembers = getOtherMembers(props.meId, props.members);
+
   return (
     <div className="group-header-container noselect">
       <div className=" group-header__text text--lg font-weight--bold add-ellipses">
-        {getMemberNames(props.members)}
+        {getMemberNames(otherMembers, true)}
       </div>
       <div className="group-header__actions">
         <div
@@ -25,7 +27,11 @@ export default function ChatHeader(props) {
           className="group-header__action"
           onClick={props.toggleDetails}
         >
-          {props.isDetailsOpen ? <SidebarOpenIcon /> : <SidebarIcon />}
+          {props.isDetailsOpen ? (
+            <SidebarOpenIcon />
+          ) : (
+            <SidebarIcon />
+          )}
           <p className="color--purple group-header__action-text">
             Details
           </p>
@@ -40,4 +46,5 @@ ChatHeader.propTypes = {
   showGuidelines: PropTypes.func,
   toggleDetails: PropTypes.func,
   isDetailsOpen: PropTypes.bool,
+  isDirectMessage: PropTypes.bool,
 };

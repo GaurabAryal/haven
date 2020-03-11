@@ -12,11 +12,12 @@ import VerifyModal from './components/VerifyModal/VerifyModal';
 import ReportModal from './components/ReportModal/ReportModal';
 import { ReactComponent as CloseIcon } from 'src/components/Modal/images/X.svg';
 import { toast } from 'react-toastify';
+import { withRouter } from 'react-router-dom';
 
 import { getMemberColor } from 'src/utils';
 import './Chat.css';
 
-export default class ChatScreen extends React.Component {
+class ChatScreen extends React.Component {
   state = {
     message: '',
     showDetails:
@@ -79,7 +80,9 @@ export default class ChatScreen extends React.Component {
       (containsUrl || containsPhoneNum || containsEmail)
     ) {
       if (containsUrl) {
-        toast('To send links and more, verify your account under details');
+        toast(
+          'To send links and more, verify your account under details',
+        );
       } else if (containsPhoneNum) {
         toast(
           'To send phone numbers and more, verify your account under details',
@@ -159,11 +162,26 @@ export default class ChatScreen extends React.Component {
     this.props.refetch();
   };
 
-  onDirectMessage = userId => {
+  onDirectMessage = async userId => {
+    const user = this.getSender(userId);
     if (!this.props.meIsVerified) {
-      toast('To start one-on-one (direct) messages, both users must be verified. Verify your account under details!');
+      toast(
+        'To start one-on-one (direct) messages, both users must be verified. Verify your account under details!',
+      );
+    } else if (!user.profile.isVerified) {
+      toast('You can only directly message other verified users.');
+    } else {
+      const {
+        data: {
+          createPrivateChat: {
+            group: { id },
+          },
+        },
+      } = await this.props.createPrivateChatMutation({
+        variables: { otherUser: userId, selfUser: this.props.meId },
+      });
+      this.props.history.push(`/t/${id}`);
     }
-    console.log('one on one message with' + userId);
   };
 
   getGuidelines() {
@@ -221,12 +239,25 @@ export default class ChatScreen extends React.Component {
   };
 
   render() {
-    const { history, meId, members } = this.props;
+    const {
+      chatHistory,
+      meId,
+      members,
+      isDirectMessage,
+      meImageUrl,
+      meIsVerified,
+      savedMessages,
+    } = this.props;
+
+    const introMessage = this.getIntroMessage();
+
     return (
       <ContentContainer
         header={
           <ChatHeader
+            meId={this.props.meId}
             members={members}
+            isDirectMessage={isDirectMessage}
             isDetailsOpen={this.state.showDetails}
             toggleDetails={() => {
               this.setState(prevState => ({
@@ -246,21 +277,22 @@ export default class ChatScreen extends React.Component {
           <ChatDetails
             members={members}
             meId={meId}
-            meImageUrl={this.props.meImageUrl}
-            meIsVerified={this.props.meIsVerified}
+            meImageUrl={meImageUrl}
+            meIsVerified={meIsVerified}
             openVerifyModal={() =>
               this.setState({ showVerifyModal: true })
             }
             userIdToView={this.state.userIdToView}
             clearUserIdToView={() => this.clearUserIdToView()}
-            savedMessages={this.props.savedMessages}
+            savedMessages={savedMessages}
             onDirectMessage={this.onDirectMessage}
+            isDirectMessage={isDirectMessage}
           />
         }
         showDetails={this.state.showDetails}
       >
         <>
-          {!history.length ? (
+          {!chatHistory.length ? (
             <div className="no-messages-placeholder-container">
               <div className="no-messages-placeholder text--lg color--grey-light">
                 No one has started a conversation yet
@@ -269,8 +301,8 @@ export default class ChatScreen extends React.Component {
           ) : null}
           <div className="chatContainer">
             <div className="messageContainer">
-              {history.map((message, index) => {
-                const isMessageSaved = this.props.savedMessages.find(
+              {chatHistory.map((message, index) => {
+                const isMessageSaved = savedMessages.find(
                   savedMessage => savedMessage.id === message.chatId,
                 );
                 return (
@@ -294,7 +326,7 @@ export default class ChatScreen extends React.Component {
                     onViewUserProfile={this.viewUserProfile}
                     onSaveMessage={this.onSaveMessage}
                     onDirectMessage={this.onDirectMessage}
-                    meIsVerified={this.props.meIsVerified}
+                    meIsVerified={meIsVerified}
                   />
                 );
               })}
@@ -312,26 +344,28 @@ export default class ChatScreen extends React.Component {
                   : 'message-composer message-composer--full-width'
               }
             >
-              {this.state.showIntroMessage && this.getIntroMessage() && (
-                <div className="message-composer__intro-message">
-                  <CloseIcon
-                    className="close-btn"
-                    onClick={this.onCloseIntroMessage}
-                  />
-                  <p className="text--md font-weight--bold spacing-bottom--xs">
-                    Introduce yourself to the group
-                  </p>
-                  <p className="text--md spacing-bottom--sm">
-                    {this.getIntroMessage()}
-                  </p>
-                  <Button
-                    variant="primary"
-                    onClick={this.onUseIntroMessage}
-                  >
-                    Use and edit
-                  </Button>
-                </div>
-              )}
+              {this.state.showIntroMessage &&
+                introMessage &&
+                !isDirectMessage && (
+                  <div className="message-composer__intro-message">
+                    <CloseIcon
+                      className="close-btn"
+                      onClick={this.onCloseIntroMessage}
+                    />
+                    <p className="text--md font-weight--bold spacing-bottom--xs">
+                      Introduce yourself to the group
+                    </p>
+                    <p className="text--md spacing-bottom--sm">
+                      {introMessage}
+                    </p>
+                    <Button
+                      variant="primary"
+                      onClick={this.onUseIntroMessage}
+                    >
+                      Use and edit
+                    </Button>
+                  </div>
+                )}
               <textarea
                 id="message-composer"
                 className="message-composer__input"
@@ -381,6 +415,8 @@ export default class ChatScreen extends React.Component {
   }
 }
 
+export default withRouter(ChatScreen);
+
 ChatScreen.propTypes = {
   members: PropTypes.array,
   subscribeToMore: PropTypes.func,
@@ -392,8 +428,11 @@ ChatScreen.propTypes = {
   createMessageMutation: PropTypes.func,
   verifyUserMutation: PropTypes.func,
   saveMessageMutation: PropTypes.func,
-  history: PropTypes.array,
+  createPrivateChatMutation: PropTypes.func,
+  chatHistory: PropTypes.array,
+  history: PropTypes.object,
   verifyUser: PropTypes.func,
   savedMessages: PropTypes.array,
   refetch: PropTypes.func,
+  isDirectMessage: PropTypes.bool,
 };

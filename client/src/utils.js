@@ -1,15 +1,27 @@
 import { OPTIONS, QUESTION_OPTIONS } from 'src/constants';
 
-export function getMemberNames(members) {
+export function getMemberNames(members, isFullName) {
   let membersString = '';
   members.forEach((member, index) => {
     if (index === members.length - 1) {
-      membersString += member.firstName;
+      membersString += `${
+        isFullName
+          ? member.firstName + ' ' + member.lastName
+          : member.firstName
+      }`;
     } else {
-      membersString += `${member.firstName}, `;
+      membersString += `${
+        isFullName
+          ? member.firstName + ' ' + member.lastName
+          : member.firstName
+      }, `;
     }
   });
   return membersString;
+}
+
+export function getOtherMembers(meId, members) {
+  return members.filter(member => member.id !== meId);
 }
 
 export function getFilteredPreferencesOptions(position) {

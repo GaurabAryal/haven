@@ -7,7 +7,11 @@ import { withRouter } from 'react-router-dom';
 import { MIN_GROUP_SIZE } from 'src/constants';
 import { ReactComponent as HavenLogo } from 'src/Views/Onboarding/images/haven-logo-small.svg';
 
-import { getMemberNames, getMemberColor } from 'src/utils';
+import {
+  getMemberNames,
+  getOtherMembers,
+  getMemberColor,
+} from 'src/utils';
 
 import './Sidebar.css';
 
@@ -19,45 +23,69 @@ class Sidebar extends React.Component {
   renderProfilePics(members) {
     const profilePics = [];
     let offsetStyle = {
-      left: `${25}px`,
+      left: '25px',
     };
-    profilePics.push(
-      <div
-        key={members[0].id}
-        className="sidebar-pill__profile-pics-wrapper"
-        style={offsetStyle}
-      >
-        <ProfilePic
-          imageUrl={members[0].profile.profilePicture}
-          backgroundColor={getMemberColor(members[0].id, members)}
-          size="sm"
-          isVerified={members[0].profile.isVerified}
-        />
-      </div>,
-    );
-    profilePics.push(
-      <div
-        className="sidebar-pill__profile-pics-wrapper"
-        key={members[1].id}
-      >
-        <ProfilePic
-          imageUrl={members[1].profile.profilePicture}
-          backgroundColor={getMemberColor(members[1].id, members)}
-          size="sm"
-          isVerified={members[1].profile.isVerified}
-        />
-      </div>,
-    );
+
+    if (members.length < 2) {
+      profilePics.push(
+        <div
+          key={members[0].id}
+          className="sidebar-pill__profile-pics-wrapper"
+          style={offsetStyle}
+        >
+          <ProfilePic
+            imageUrl={members[0].profile.profilePicture}
+            backgroundColor={getMemberColor(members[0].id, members)}
+            size="md"
+            isVerified={members[0].profile.isVerified}
+          />
+        </div>,
+      );
+    } else {
+      profilePics.push(
+        <div
+          key={members[0].id}
+          className="sidebar-pill__profile-pics-wrapper"
+          style={offsetStyle}
+        >
+          <ProfilePic
+            imageUrl={members[0].profile.profilePicture}
+            backgroundColor={getMemberColor(members[0].id, members)}
+            size="sm"
+            isVerified={members[0].profile.isVerified}
+          />
+        </div>,
+      );
+      profilePics.push(
+        <div
+          className="sidebar-pill__profile-pics-wrapper"
+          key={members[1].id}
+        >
+          <ProfilePic
+            imageUrl={members[1].profile.profilePicture}
+            backgroundColor={getMemberColor(members[1].id, members)}
+            size="sm"
+            isVerified={members[1].profile.isVerified}
+          />
+        </div>,
+      );
+    }
+
     return profilePics;
   }
 
   renderGroups() {
     const id = this.props.match.params?.id || null;
-    return this.props.groups.map(group =>
-      group.members?.length >= MIN_GROUP_SIZE ? (
+
+    return this.props.groups.map(group => {
+      const otherMembers = getOtherMembers(
+        this.props.meId,
+        group.members,
+      );
+      return group.members?.length >= MIN_GROUP_SIZE || group.isDm ? (
         <Link
           to={`/t/${group.id}`}
-          key={group.id}
+          key={'sidebar' + group.id}
           style={{ textDecoration: 'none', color: 'black' }}
         >
           <div
@@ -65,11 +93,11 @@ class Sidebar extends React.Component {
               'sidebar-pill--selected'}`}
           >
             <div className="sidebar-pill__profile-pics">
-              {this.renderProfilePics(group.members)}
+              {this.renderProfilePics(otherMembers)}
             </div>
             <div className="sidebar-pill__text">
               <div className="add-ellipses text--md sidebar-pill-text__names">
-                {getMemberNames(group.members)}
+                {getMemberNames(otherMembers, group.isDm)}
               </div>
               <div className="add-ellipses text--sm sidebar-pill-text__message">
                 You: so nice to meet you!
@@ -77,8 +105,8 @@ class Sidebar extends React.Component {
             </div>
           </div>
         </Link>
-      ) : null,
-    );
+      ) : null;
+    });
   }
 
   render() {
@@ -113,6 +141,7 @@ Sidebar.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
   logout: PropTypes.func,
+  meId: PropTypes.string,
 };
 
 export default withRouter(Sidebar);
