@@ -11,7 +11,7 @@ export default function ChatHeader(props) {
   return (
     <div className="group-header-container noselect">
       <div className=" group-header__text text--lg font-weight--bold add-ellipses">
-        {getMemberNames(otherMembers, true)}
+        {getMemberNames(otherMembers, props.isDirectMessage)}
       </div>
       <div className="group-header__actions">
         <div
