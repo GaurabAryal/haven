@@ -414,18 +414,35 @@ class SendIsTyping(graphene.Mutation, name="SendIsTypingPayload"):
         """Mutation "resolver" - store and broadcast a message."""
         # Use the username from the connection scope if authorized.
         #username is actually ID
+        print("here is how many times i get called")
         username = author
         #
         rooms = is_typing[chatroom]
+        ind = 0
+        room_n = None
+        print(f'rooms: {rooms}')
         for i, room in enumerate(rooms):
-            if room["chatroom"] == chatroom and room["author"] == author:
-                del rooms[i]
-                
-        is_typing[chatroom].append({
-                                "chatroom": chatroom,
-                                "author": username
-                                })
+            print(f"room:{room}")
+            print(f'chatroom dict{room["chatroom"]}')
+            print(f"chatroom norm {chatroom}")
+            print(f'author dict{room["author"]}')
+            print(f"author norm {author}")
+            if (room["chatroom"] == chatroom) and (room["author"] == author):
+                print("do we even get here")
+                room_n = room
+                ind = i
+        if room_n:
+            print("get ponnu")
+            rooms.pop(ind)
+            room_n = None
+        else:
+            is_typing[chatroom].append({
+                "chatroom": chatroom,
+                "author": username
+            })
         # Notify subscribers.
+        room_n = None
+        print(f"room:{rooms}")
         OnNewTypingMessage.new_typing_message(chatroom=chatroom, author=username)
 
         return SendChatMessage(ok=True)
