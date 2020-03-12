@@ -105,7 +105,7 @@ class ChatScreen extends React.Component {
         date: moment().format('YYYY-MM-DD HH:mm:ss'),
       },
     });
-    await this.props.sendTypingMutation({variables: {author: this.props.meId, chatroom: this.props.groupId}});
+    // await this.props.sendTypingMutation({variables: {author: this.props.meId, chatroom: this.props.groupId}});
 
     this.scrollToBottom(true);
     this.setState({ message: '' });
@@ -217,9 +217,9 @@ class ChatScreen extends React.Component {
   onInputChange = (e) => {
     let inputField = e.target;
 
-    if ((!e.target.value && this.state.message) || (e.target.value && !this.state.message)){
-      this.props.sendTypingMutation({variables: {author: this.props.meId, chatroom: this.props.groupId}});
-    }
+    // if ((!e.target.value && this.state.message) || (e.target.value && !this.state.message)){
+    //   this.props.sendTypingMutation({variables: {author: this.props.meId, chatroom: this.props.groupId}});
+    // }
 
     this.setState({
       message: e.target.value,
@@ -439,7 +439,7 @@ ChatScreen.propTypes = {
   verifyUserMutation: PropTypes.func,
   saveMessageMutation: PropTypes.func,
   createPrivateChatMutation: PropTypes.func,
-  sendTypingMutation: PropTypes.func,
+  // sendTypingMutation: PropTypes.func,
   chatHistory: PropTypes.array,
   history: PropTypes.object,
   verifyUser: PropTypes.func,
