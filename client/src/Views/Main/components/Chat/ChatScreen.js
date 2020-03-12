@@ -106,6 +106,7 @@ class ChatScreen extends React.Component {
         date: moment().format('YYYY-MM-DD HH:mm:ss'),
       },
     });
+    await this.props.sendTypingMutation({variables: {author: this.props.meId, chatroom: this.props.groupId}});
 
     this.scrollToBottom(true);
     this.setState({ message: '' });
