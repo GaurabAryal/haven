@@ -98,11 +98,11 @@ class OnNewTypingMessage(channels_graphql_ws.Subscription):
         assert chatroom is None or chatroom == new_msg_chatroom
 
         # Avoid self-notifications.
-        # if (
-        #     info.context.user.is_authenticated
-        #     and new_msg_sender == info.context.user.username
-        # ):
-        #     return OnNewChatMessage.SKIP
+        if (
+            info.context.user.is_authenticated
+            and new_msg_typer == info.context.user.id
+        ):
+            return OnNewChatMessage.SKIP
 
         return OnNewTypingMessage(
             chatroom=chatroom, author=new_msg_typer
