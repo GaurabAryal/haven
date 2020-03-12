@@ -25,6 +25,7 @@ class Message(graphene.ObjectType, default_resolver=graphene.types.resolver.dict
 
 
 chats: DefaultDict[str, List[str]] = defaultdict(list)
+is_typing: DefaultDict[str, List[str]] = defaultdict(list)
 
 class GroupNode(DjangoObjectType):
     class Meta:
