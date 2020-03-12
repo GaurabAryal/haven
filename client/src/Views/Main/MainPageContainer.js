@@ -140,7 +140,7 @@ export default class MainPageContainer extends React.Component {
   render() {
     return (
       <Query query={GET_USER_QUERY}>
-        {({ client, loading, error, data }) => {
+        {({ client, loading, error, data, refetch }) => {
           if (loading) return <div />;
           if (error) return <div />;
 
@@ -175,7 +175,7 @@ export default class MainPageContainer extends React.Component {
                   path="/community"
                   component={CommunityContainer}
                 />
-                <Route path="/t/:id" component={ChatContainer} />
+                <Route path="/t/:id" render={(props) => <ChatContainer {...props} mainPageRefetch={refetch}/>} />
                 <Route exact path="/">
                   <Redirect to={`/t/${data.membership[0].id}`} />
                 </Route>
