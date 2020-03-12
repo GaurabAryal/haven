@@ -416,6 +416,8 @@ class SendIsTyping(graphene.Mutation, name="SendIsTypingPayload"):
         #username is actually ID
         username = author
         #
+        if is_typing[chatroom]["author"]:
+            del is_typing[chatroom][author]
         is_typing[chatroom].append({
                                 "chatroom": chatroom,
                                 "author": username
