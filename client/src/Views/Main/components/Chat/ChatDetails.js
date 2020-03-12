@@ -131,10 +131,10 @@ export default class ChatDetails extends React.Component {
             <div className="person__pic">
               <ProfilePic
                 size="sm"
-                imageUrl={member.profile.profilePicture}
-                isVerified={member.profile.isVerified}
+                imageUrl={profile.profilePicture}
+                isVerified={profile.isVerified}
                 backgroundColor={getMemberColor(
-                  member.id,
+                  id,
                   this.props.members,
                 )}
               />

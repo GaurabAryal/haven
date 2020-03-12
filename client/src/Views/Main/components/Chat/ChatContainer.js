@@ -53,6 +53,11 @@ const CHAT_QUERY = gql`
         status
       }
     }
+
+    typing(groupId: $groupId) {
+      chatroom
+      author
+    }
   }
 `;
 
@@ -65,6 +70,15 @@ const SUBSCRIPTION = gql`
     }
   }
 `;
+
+const TYPING_SUBSCRIPTION = gql`
+subscription NewTypingSubscription($groupId: String!) {
+  onNewTypingMessage(chatroom: $groupId) {
+    author
+    chatroom
+  }
+}
+`
 
 const CREATE_MESSAGE_MUTATION = gql`
   mutation sendChatMessage(
@@ -83,6 +97,14 @@ const CREATE_MESSAGE_MUTATION = gql`
     }
   }
 `;
+
+const SEND_TYPING_MUTATION = gql`
+  mutation sendTypingMessage($author: String, $chatroom: String) {
+    sendTypingMessage(author: $author, chatroom: $chatroom) {
+      ok
+    }
+  }
+`
 
 const CREATE_PRIVATE_CHAT_MUTATION = gql`
   mutation createPrivateChat(
@@ -149,6 +171,19 @@ const ChatContainer = props => {
             },
           });
 
+        const typingMore = () =>
+          subscribeToMore({
+            document: TYPING_SUBSCRIPTION,
+            variables: { groupId },
+            updateQuery: (prev, { subscriptionData }) => {
+              console.log('hellooo');
+              if (!subscriptionData.data) return prev;
+              return Object.assign({}, prev, {
+                typing: subscriptionData.data.onNewTypingMessage,
+              });
+            },
+          });
+
         return (
           <ChatScreen
             members={data.group.members}
@@ -161,10 +196,13 @@ const ChatContainer = props => {
             createMessageMutation={props.createMessageMutation}
             verifyUserMutation={props.verifyUserMutation}
             saveMessageMutation={props.saveMessageMutation}
+            sendTypingMutation={props.sendTypingMutation}
             createPrivateChatMutation={
               props.createPrivateChatMutation
             }
             subscribeToMore={more}
+            typingSubscribeToMore={typingMore}
+            typing={data.typing}
             savedMessages={data.savedMessages}
             refetch={refetch}
             isDirectMessage={data.group.isDm}
@@ -182,6 +220,7 @@ ChatContainer.propTypes = {
   verifyUserMutation: PropTypes.func,
   saveMessageMutation: PropTypes.func,
   createPrivateChatMutation: PropTypes.func,
+  sendTypingMutation: PropTypes.func,
 };
 
 export default compose(
@@ -189,6 +228,7 @@ export default compose(
   graphql(VERIFY_USER_MUTATION, { name: 'verifyUserMutation' }),
   graphql(EDIT_PROFILE_MUTATION, { name: 'editProfileMutation' }),
   graphql(SAVE_MESSAGE_MUTATION, { name: 'saveMessageMutation' }),
+  graphql(SEND_TYPING_MUTATION, { name: 'sendTypingMutation' }),
   graphql(CREATE_PRIVATE_CHAT_MUTATION, {
     name: 'createPrivateChatMutation',
   }),

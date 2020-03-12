@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import 'src/utils.css';
 import './ChatMessage.css';
-import { ReactComponent as HeartIcon } from './images/heart.svg';
 import { ReactComponent as StarIcon } from './images/star.svg';
 import { ReactComponent as StarFilledIcon } from './images/star-filled.svg';
 import { ReactComponent as ReportIcon } from './images/report.svg';

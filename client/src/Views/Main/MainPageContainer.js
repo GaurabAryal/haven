@@ -43,6 +43,16 @@ const GET_USER_QUERY = gql`
         }
       }
     }
+    recentMessages {
+      message
+      user {
+        id
+        firstName
+      }
+      group {
+        id
+      }
+    }
   }
 `;
 
@@ -158,6 +168,7 @@ export default class MainPageContainer extends React.Component {
                 meId={data.me.id}
                 groups={data.membership}
                 logout={() => this.logout(client)}
+                recentMessages={data.recentMessages}
               />
               <Switch>
                 <Route
