@@ -78,9 +78,9 @@ class ChatQuery(graphene.AbstractType):
         del info
         return chats[chatroom] if chatroom in chats else []
 
-    def resolve_typing(self, info, chatroom):
+    def resolve_typing(self, info, group_id):
         del info
-        return is_typing[chatroom] if chatroom in is_typing else []
+        return is_typing[group_id] if group_id in is_typing else []
 
     def resolve_saved_messages(self, info, group_id):
         """Return chat history."""
