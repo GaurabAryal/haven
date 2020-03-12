@@ -4,7 +4,7 @@ from graphql import GraphQLError
 from django.contrib.auth import get_user_model
 from havenapp.models import Profile, Group, Membership, MatchHistory, Chat, SavedMessages
 
-from .types import UserNode, ProfileNode, GroupNode, chats, Message, MatchHistoryNode, ChatNode
+from .types import UserNode, ProfileNode, GroupNode, chats, Message, MatchHistoryNode, ChatNode, is_typing
 
 # Queries related to MatchHistory
 class MatchHistoryQuery(graphene.AbstractType):
@@ -76,6 +76,10 @@ class ChatQuery(graphene.AbstractType):
         """Return chat history."""
         del info
         return chats[chatroom] if chatroom in chats else []
+
+    def resolve_typing(self, info, chatroom):
+        del info
+        return is_typing[chatroom] if chatroom in is_typing else []
 
     def resolve_saved_messages(self, info, group_id):
         """Return chat history."""
