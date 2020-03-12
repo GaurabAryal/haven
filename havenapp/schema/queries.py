@@ -2,9 +2,9 @@ import graphene
 import graphene_django
 from graphql import GraphQLError
 from django.contrib.auth import get_user_model
-from havenapp.models import Profile, Group, Membership, MatchHistory, Chat, SavedMessages
 
 from .types import UserNode, ProfileNode, GroupNode, chats, Message, MatchHistoryNode, ChatNode, is_typing, IsTyping
+from havenapp.models import Profile, Group, Membership, MatchHistory, Chat, SavedMessages
 
 # Queries related to MatchHistory
 class MatchHistoryQuery(graphene.AbstractType):
@@ -72,6 +72,7 @@ class ChatQuery(graphene.AbstractType):
     history = graphene.List(Message, chatroom=graphene.String())
     saved_messages = graphene.List(ChatNode, group_id=graphene.String())
     typing = graphene.List(IsTyping, group_id=graphene.String())
+    recent_messages = graphene.List(ChatNode)
 
     def resolve_history(self, info, chatroom):
         """Return chat history."""
@@ -89,6 +90,14 @@ class ChatQuery(graphene.AbstractType):
         for x in saved_msgs:
             chat.append(x.chat)
         return chat
+    
+    def resolve_recent_messages(self, info):
+        user = info.context.user
+        if user.is_anonymous:
+            raise GraphQLError('User is not logged in!')
+
+        msgs = Chat.objects.filter(user=user).order_by('group__id', '-chat_time').distinct('group__id')
+        return msgs
 
 # Query
 class Query(GroupQuery, UserQuery, MatchHistoryQuery, ChatQuery, graphene.ObjectType):
