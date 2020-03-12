@@ -28,6 +28,7 @@ class MyGraphqlWsConsumer(channels_graphql_ws.GraphqlWsConsumer):
 
     async def on_connect(self, payload):
         """Handle WebSocket connection event."""
+        print("connected")
         # Use auxiliary Channels function `get_user` to replace an
         # instance of `channels.auth.UserLazyObject` with a native
         # Django user object (user model instance or `AnonymousUser`)
@@ -38,5 +39,9 @@ class MyGraphqlWsConsumer(channels_graphql_ws.GraphqlWsConsumer):
         # `channels.auth.UserLazyObject` instances.
         # https://github.com/datadvance/DjangoChannelsGraphqlWs/issues/23
         #self.scope["user"] = await channels.auth.get_user(self.scope)
+
+    async def disconnect(self, payload):
+        print("hi")
+
     schema = schema
     middleware = [demo_middleware]

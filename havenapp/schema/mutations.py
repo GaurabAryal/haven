@@ -16,8 +16,8 @@ from django.db import Error
 
 from .inputs import UserInput, ProfileInput
 from .types import UserNode, ProfileNode, GroupNode, ChatNode
-from .subscriptions import OnNewChatMessage
-from .types import chats
+from .subscriptions import OnNewChatMessage, OnNewTypingMessage
+from .types import chats, is_typing
 from havenapp.matchmaking.matching import UserPreferences, find_best_match, join_group, join_new_group, update_member_status
 from havenapp.constants.constant import UserStatus
 from havenapp.models import Profile, Group, Chat, MatchHistory, SavedMessages, Membership
@@ -114,7 +114,7 @@ class UpdateProfile(graphene.Mutation):
         # Check if user is logged in
         curr_user = info.context.user
         if curr_user.is_anonymous:
-            error = "User is not logged in" 
+            error = "User is not logged in"
             return UpdateProfile(
                 profile=None,
                 error=error
@@ -139,7 +139,7 @@ class UpdateProfile(graphene.Mutation):
             )
 
         profile = profile_query.get()
-        
+
         try:
             # Check if there is am image payload
             if profile_picture:
@@ -360,6 +360,7 @@ class CreatePrivateChat(graphene.Mutation):
             group=new_group,
         )
 
+
 class SendChatMessage(graphene.Mutation, name="SendChatMessagePayload"):
     """Send chat message."""
 
@@ -397,6 +398,33 @@ class SendChatMessage(graphene.Mutation, name="SendChatMessagePayload"):
         OnNewChatMessage.new_chat_message(chatroom=chatroom, text=text, author=username, date=date, chat_id=save_chat_uuid)
 
         return SendChatMessage(ok=True)
+
+class SendIsTyping(graphene.Mutation, name="SendIsTypingPayload"):
+    """Send chat message."""
+
+    ok = graphene.Boolean()
+
+    class Arguments:
+        """Mutation arguments."""
+
+        chatroom = graphene.String()
+        author = graphene.String()
+
+    def mutate(self, info, chatroom, author):
+        """Mutation "resolver" - store and broadcast a message."""
+        # Use the username from the connection scope if authorized.
+        #username is actually ID
+        username = author
+        #
+        is_typing[chatroom].append({
+                                "chatroom": chatroom,
+                                "author": username
+                                })
+        # Notify subscribers.
+        OnNewTypingMessage.new_typing_message(chatroom=chatroom, author=username)
+
+        return SendChatMessage(ok=True)
+
 
 
 class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
@@ -463,3 +491,4 @@ class Mutation(graphene.ObjectType):
     verify_user = VerifyUser.Field()
     ban_user = BanUser.Field()
     create_private_chat = CreatePrivateChat.Field()
+    send_typing_message = SendIsTyping.Field()
