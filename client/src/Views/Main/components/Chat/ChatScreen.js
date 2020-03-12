@@ -106,7 +106,7 @@ class ChatScreen extends React.Component {
       },
     });
     // await this.props.sendTypingMutation({variables: {author: this.props.meId, chatroom: this.props.groupId}});
-
+    this.props.mainPageRefetch();
     this.scrollToBottom(true);
     this.setState({ message: '' });
   };

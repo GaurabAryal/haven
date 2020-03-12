@@ -205,6 +205,7 @@ const ChatContainer = props => {
             typing={data.typing}
             savedMessages={data.savedMessages}
             refetch={refetch}
+            mainPageRefetch={props.mainPageRefetch}
             isDirectMessage={data.group.isDm}
           />
         );
