@@ -34,7 +34,6 @@ class ChatScreen extends React.Component {
     showReportModal: false,
     reportedUserId: '',
     userIdToView: '',
-    someoneIsTyping: "Gaurab",
   };
 
   scrollToBottom = (smooth = false) => {
@@ -340,25 +339,10 @@ class ChatScreen extends React.Component {
                 );
               })}
               <div
-                style={{height: "50px"}}
                 ref={el => {
                   this.messagesEnd = el;
                 }}
               >
-                {
-                  this.props.typing.length ?
-                    <div className="is-typing">
-                      <ProfilePic size="sm" backgroundColor="black"/>
-                      <div className="fb-chat">
-                        <div className="fb-chat--bubbles">
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                        </div>
-                      </div>
-                      <div className="is-typing__text text--xs color--grey">{this.props.typing.length > 1 ? "Multiple people are" : `${this.getSender(this.props.typing[0].author).firstName} is`}  typing...</div>
-                    </div> : null
-                }
               </div>
             </div>
             <form

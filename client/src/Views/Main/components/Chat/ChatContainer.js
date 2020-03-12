@@ -72,7 +72,7 @@ const SUBSCRIPTION = gql`
 `;
 
 const TYPING_SUBSCRIPTION = gql`
-subscription ChatSubscription($groupId: String!) {
+subscription NewTypingSubscription($groupId: String!) {
   onNewTypingMessage(chatroom: $groupId) {
     author
     chatroom
@@ -176,6 +176,7 @@ const ChatContainer = props => {
             document: TYPING_SUBSCRIPTION,
             variables: { groupId },
             updateQuery: (prev, { subscriptionData }) => {
+              console.log('hellooo');
               if (!subscriptionData.data) return prev;
               return Object.assign({}, prev, {
                 typing: subscriptionData.data.onNewTypingMessage,
