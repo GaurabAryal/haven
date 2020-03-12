@@ -23,6 +23,10 @@ class Message(graphene.ObjectType, default_resolver=graphene.types.resolver.dict
     author = graphene.String()
     chat_id = graphene.String()
 
+class IsTyping(graphene.ObjectType, default_resolver=graphene.types.resolver.dict_resolver):
+    """Message GraphQL type."""
+    chatroom = graphene.String()
+    author = graphene.String()
 
 chats: DefaultDict[str, List[str]] = defaultdict(list)
 is_typing: DefaultDict[str, List[str]] = defaultdict(list)
