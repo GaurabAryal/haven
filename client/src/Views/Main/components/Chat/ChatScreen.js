@@ -214,11 +214,11 @@ class ChatScreen extends React.Component {
     }
   }
 
-  onInputChange = async (e) => {
+  onInputChange = (e) => {
     let inputField = e.target;
 
     if ((!e.target.value && this.state.message) || (e.target.value && !this.state.message)){
-      await this.props.sendTypingMutation({variables: {author: this.props.meId, chatroom: this.props.groupId}});
+      this.props.sendTypingMutation({variables: {author: this.props.meId, chatroom: this.props.groupId}});
     }
 
     this.setState({
@@ -257,8 +257,6 @@ class ChatScreen extends React.Component {
     } = this.props;
 
     const introMessage = this.getIntroMessage();
-
-    console.log('huh', this.props.typing)
 
     return (
       <ContentContainer

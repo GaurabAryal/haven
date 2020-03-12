@@ -20,6 +20,17 @@ class Sidebar extends React.Component {
     selectedGroup: null,
   };
 
+  getRecentMessage(groupId) {
+    const recentMessage = this.props.recentMessages.find(message => message.group.id === groupId);
+
+    if (recentMessage) {
+      const isSelf = this.props.meId === recentMessage.user.id;
+      return `${isSelf ? 'You' : recentMessage.user.firstName}: ${recentMessage.message}`
+    } else {
+      return 'No one has started a conversation yet';
+    }
+  }
+
   renderProfilePics(members) {
     const profilePics = [];
     let offsetStyle = {
@@ -100,7 +111,7 @@ class Sidebar extends React.Component {
                 {getMemberNames(otherMembers, group.isDm)}
               </div>
               <div className="add-ellipses text--sm sidebar-pill-text__message">
-                You: so nice to meet you!
+                {this.getRecentMessage(group.id)}
               </div>
             </div>
           </div>
@@ -142,6 +153,7 @@ Sidebar.propTypes = {
   match: PropTypes.object,
   logout: PropTypes.func,
   meId: PropTypes.string,
+  recentMessages: PropTypes.array,
 };
 
 export default withRouter(Sidebar);
