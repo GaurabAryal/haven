@@ -8,6 +8,7 @@ import ContentContainer from '../ContentContainer/ContentContainer';
 import ChatMessage from 'src/components/ChatMessage/ChatMessage';
 import Modal from 'src/components/Modal/Modal';
 import Button from 'src/components/Button/Button';
+import ProfilePic from 'src/components/ProfilePic/ProfilePic';
 import VerifyModal from './components/VerifyModal/VerifyModal';
 import ReportModal from './components/ReportModal/ReportModal';
 import { ReactComponent as CloseIcon } from 'src/components/Modal/images/X.svg';
@@ -33,6 +34,7 @@ class ChatScreen extends React.Component {
     showReportModal: false,
     reportedUserId: '',
     userIdToView: '',
+    someoneIsTyping: "Gaurab",
   };
 
   scrollToBottom = (smooth = false) => {
@@ -44,6 +46,7 @@ class ChatScreen extends React.Component {
   componentDidMount() {
     this.scrollToBottom();
     this.props.subscribeToMore();
+    this.props.typingSubscribeToMore();
   }
 
   componentDidUpdate(prevProps) {
@@ -169,7 +172,7 @@ class ChatScreen extends React.Component {
         'To start one-on-one (direct) messages, both users must be verified. Verify your account under details!',
       );
     } else if (!user.profile.isVerified) {
-      toast('You can only directly message other verified users.');
+      toast('You can only directly message other verified users');
     } else {
       const {
         data: {
@@ -201,7 +204,7 @@ class ChatScreen extends React.Component {
     ));
   }
 
-  handleEnter(e) {
+  handleEnter = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       let inputField = e.target;
@@ -211,8 +214,12 @@ class ChatScreen extends React.Component {
     }
   }
 
-  resizeInput(e) {
+  onInputChange = async (e) => {
     let inputField = e.target;
+
+    if ((!e.target.value && this.state.message) || (e.target.value && !this.state.message)){
+      await this.props.sendTypingMutation({variables: {author: this.props.meId, chatroom: this.props.groupId}});
+    }
 
     this.setState({
       message: e.target.value,
@@ -250,6 +257,8 @@ class ChatScreen extends React.Component {
     } = this.props;
 
     const introMessage = this.getIntroMessage();
+
+    console.log('huh', this.props.typing)
 
     return (
       <ContentContainer
@@ -332,10 +341,26 @@ class ChatScreen extends React.Component {
                 );
               })}
               <div
+                style={{height: "50px"}}
                 ref={el => {
                   this.messagesEnd = el;
                 }}
-              />
+              >
+                {
+                  this.props.typing.length ?
+                    <div className="is-typing">
+                      <ProfilePic size="sm" backgroundColor="black"/>
+                      <div className="fb-chat">
+                        <div className="fb-chat--bubbles">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </div>
+                      </div>
+                      <div className="is-typing__text text--xs color--grey">{this.props.typing.length > 1 ? "Multiple people are" : `${this.getSender(this.props.typing[0].author).firstName} is`}  typing...</div>
+                    </div> : null
+                }
+              </div>
             </div>
             <form
               onSubmit={this.onSubmit}
@@ -374,8 +399,8 @@ class ChatScreen extends React.Component {
                 type="text"
                 placeholder="Type a message"
                 value={this.state.message}
-                onChange={e => this.resizeInput(e)}
-                onKeyDown={e => this.handleEnter(e)}
+                onChange={this.onInputChange}
+                onKeyDown={this.handleEnter}
               />
               <div className="message-input__button">
                 <Button variant="primary" onClick={this.onSubmit}>
@@ -421,6 +446,7 @@ export default withRouter(ChatScreen);
 ChatScreen.propTypes = {
   members: PropTypes.array,
   subscribeToMore: PropTypes.func,
+  typingSubscribeToMore: PropTypes.func,
   meId: PropTypes.string,
   meImageUrl: PropTypes.string,
   meIsVerified: PropTypes.bool,
@@ -430,10 +456,12 @@ ChatScreen.propTypes = {
   verifyUserMutation: PropTypes.func,
   saveMessageMutation: PropTypes.func,
   createPrivateChatMutation: PropTypes.func,
+  sendTypingMutation: PropTypes.func,
   chatHistory: PropTypes.array,
   history: PropTypes.object,
   verifyUser: PropTypes.func,
   savedMessages: PropTypes.array,
   refetch: PropTypes.func,
   isDirectMessage: PropTypes.bool,
+  typing: PropTypes.array,
 };
