@@ -7,7 +7,7 @@ autobahn==20.2.1
 Automat==0.8.0
 boto3==1.12.14
 botocore==1.15.14
-certifi==2019.11.28
+certifi==2022.12.7
 cffi==1.14.0
 channels==2.4.0
 chardet==3.0.4
